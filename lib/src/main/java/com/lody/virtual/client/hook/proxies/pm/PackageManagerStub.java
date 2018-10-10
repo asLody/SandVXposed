@@ -10,6 +10,7 @@ import com.lody.virtual.client.hook.base.MethodInvocationProxy;
 import com.lody.virtual.client.hook.base.MethodInvocationStub;
 import com.lody.virtual.client.hook.base.ResultStaticMethodProxy;
 import com.lody.virtual.helper.compat.BuildCompat;
+import com.lody.virtual.helper.utils.Reflect;
 
 import mirror.android.app.ActivityThread;
 
