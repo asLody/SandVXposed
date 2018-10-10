@@ -1243,4 +1243,18 @@ class MethodProxies {
         }
     }
 
+    static class GetPackageUidAsUser extends MethodProxy {
+
+        @Override
+        public String getMethodName() {
+            return "getPackageUidAsUser";
+        }
+
+        @Override
+        public Object call(Object who, Method method, Object... args) throws Throwable {
+            MethodParameterUtils.replaceFirstAppPkg(args);
+            return method.invoke(who, args);
+        }
+    }
+
 }
