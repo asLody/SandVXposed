@@ -25,6 +25,7 @@ import android.os.Parcelable;
 import android.os.Process;
 import android.os.RemoteException;
 import android.os.StrictMode;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.lody.virtual.client.core.CrashHandler;
@@ -50,6 +51,7 @@ import com.lody.virtual.os.VUserHandle;
 import com.lody.virtual.remote.InstalledAppInfo;
 import com.lody.virtual.remote.PendingResultData;
 import com.lody.virtual.remote.VDeviceInfo;
+import com.swift.sandhook.xposedcompat.XposedCompat;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -59,6 +61,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import de.robv.android.xposed.XposedBridge;
 import mirror.android.app.ActivityThread;
 import mirror.android.app.ActivityThreadNMR1;
 import mirror.android.app.ContextImpl;
@@ -313,7 +316,10 @@ public final class VClientImpl extends IVClient.Stub {
         if (!conflict) {
             InvocationStubManager.getInstance().checkEnv(AppInstrumentation.class);
         }
+
         mInitialApplication = LoadedApk.makeApplication.call(data.info, false, null);
+
+
         mirror.android.app.ActivityThread.mInitialApplication.set(mainThread, mInitialApplication);
         ContextFixer.fixContext(mInitialApplication);
         if (Build.VERSION.SDK_INT >= 24 && "com.tencent.mm:recovery".equals(processName)) {
@@ -327,6 +333,28 @@ public final class VClientImpl extends IVClient.Stub {
             mTempLock = null;
         }
         VirtualCore.get().getComponentDelegate().beforeApplicationCreate(mInitialApplication);
+
+        List<InstalledAppInfo> appInfos = VirtualCore.get().getInstalledApps(0);
+
+        ClassLoader classLoader = context.getClassLoader();
+
+        for (InstalledAppInfo module:appInfos) {
+            if (TextUtils.equals(packageName, module.packageName))
+                continue;
+            XposedCompat.loadModule(module.apkPath, module.getOdexFile().getParent(), module.libPath, XposedBridge.class.getClassLoader());
+        }
+
+        XposedCompat.context = context;
+        XposedCompat.cacheDir = context.getCacheDir();
+        XposedCompat.classLoader = XposedCompat.getSandHookXposedClassLoader(classLoader, XposedBridge.class.getClassLoader());
+        XposedCompat.isFirstApplication = true;
+
+        try {
+            XposedCompat.callXposedModuleInit();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+
         try {
             mInstrumentation.callApplicationOnCreate(mInitialApplication);
             InvocationStubManager.getInstance().checkEnv(HCallbackStub.class);

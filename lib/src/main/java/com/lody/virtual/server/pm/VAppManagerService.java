@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
+import android.util.Log;
 
 import com.lody.virtual.client.core.InstallStrategy;
 import com.lody.virtual.client.core.VirtualCore;
@@ -242,10 +243,12 @@ public class VAppManagerService implements IAppManager {
             boolean runDexOpt = false;
             if (VirtualRuntime.isArt()) {
                 try {
+                    Log.e("ArtDexOptimizer", "run dex2oat");
                     ArtDexOptimizer.interpretDex2Oat(ps.apkPath, VEnvironment.getOdexFile(ps.packageName).getPath());
                 } catch (IOException e) {
                     e.printStackTrace();
                     runDexOpt = true;
+                    Log.e("ArtDexOptimizer", "dex2oat error");
                 }
             } else {
                 runDexOpt = true;
