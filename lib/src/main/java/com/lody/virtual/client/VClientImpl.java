@@ -51,10 +51,13 @@ import com.lody.virtual.os.VUserHandle;
 import com.lody.virtual.remote.InstalledAppInfo;
 import com.lody.virtual.remote.PendingResultData;
 import com.lody.virtual.remote.VDeviceInfo;
+import com.swift.sandhook.SandHook;
+import com.swift.sandhook.annotation.HookMode;
 import com.swift.sandhook.xposedcompat.XposedCompat;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -317,6 +320,37 @@ public final class VClientImpl extends IVClient.Stub {
             InvocationStubManager.getInstance().checkEnv(AppInstrumentation.class);
         }
 
+        List<InstalledAppInfo> appInfos = VirtualCore.get().getInstalledApps(0);
+
+        ClassLoader classLoader = context.getClassLoader();
+
+        for (InstalledAppInfo module:appInfos) {
+            if (TextUtils.equals(packageName, module.packageName))
+                continue;
+            XposedCompat.loadModule(module.apkPath, module.getOdexFile().getParent(), module.libPath, XposedBridge.class.getClassLoader());
+        }
+
+        XposedCompat.context = context;
+        XposedCompat.cacheDir = context.getCacheDir();
+        XposedCompat.classLoader = XposedCompat.getSandHookXposedClassLoader(classLoader, XposedBridge.class.getClassLoader());
+        XposedCompat.isFirstApplication = true;
+
+        SandHook.setHookModeCallBack(new SandHook.HookModeCallBack() {
+            @Override
+            public int hookMode(Member originMethod) {
+                if (TextUtils.equals("public void android.app.Application.onCreate()", originMethod.toString())) {
+                    return HookMode.REPLACE;
+                }
+                return HookMode.AUTO;
+            }
+        });
+
+        try {
+            XposedCompat.callXposedModuleInit();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+
         mInitialApplication = LoadedApk.makeApplication.call(data.info, false, null);
 
 
@@ -334,26 +368,6 @@ public final class VClientImpl extends IVClient.Stub {
         }
         VirtualCore.get().getComponentDelegate().beforeApplicationCreate(mInitialApplication);
 
-        List<InstalledAppInfo> appInfos = VirtualCore.get().getInstalledApps(0);
-
-        ClassLoader classLoader = context.getClassLoader();
-
-        for (InstalledAppInfo module:appInfos) {
-            if (TextUtils.equals(packageName, module.packageName))
-                continue;
-            XposedCompat.loadModule(module.apkPath, module.getOdexFile().getParent(), module.libPath, XposedBridge.class.getClassLoader());
-        }
-
-        XposedCompat.context = context;
-        XposedCompat.cacheDir = context.getCacheDir();
-        XposedCompat.classLoader = XposedCompat.getSandHookXposedClassLoader(classLoader, XposedBridge.class.getClassLoader());
-        XposedCompat.isFirstApplication = true;
-
-        try {
-            XposedCompat.callXposedModuleInit();
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
 
         try {
             mInstrumentation.callApplicationOnCreate(mInitialApplication);

@@ -35,6 +35,6 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.swift.sandhook:hooklib:2.1.3'
-    compile project(':xposedcompat')
+    compile 'com.swift.sandhook:hooklib:2.3.1'
+    compile 'com.swift.sandhook:xposedcompat:2.3.1'
 }
