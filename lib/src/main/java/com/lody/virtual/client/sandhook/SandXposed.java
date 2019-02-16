@@ -2,6 +2,7 @@ package com.lody.virtual.client.sandhook;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.remote.InstalledAppInfo;
@@ -23,8 +24,9 @@ public class SandXposed {
         ClassLoader classLoader = context.getClassLoader();
 
         for (InstalledAppInfo module:appInfos) {
-            if (TextUtils.equals(packageName, module.packageName))
-                continue;
+            if (TextUtils.equals(packageName, module.packageName)) {
+                Log.d("injectXposedModule", "injectSelf : " + processName);
+            }
             XposedCompat.loadModule(module.apkPath, module.getOdexFile().getParent(), module.libPath, XposedBridge.class.getClassLoader());
         }
 
