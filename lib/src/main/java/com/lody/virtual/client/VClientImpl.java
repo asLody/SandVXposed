@@ -42,6 +42,7 @@ import com.lody.virtual.client.ipc.VActivityManager;
 import com.lody.virtual.client.ipc.VDeviceManager;
 import com.lody.virtual.client.ipc.VPackageManager;
 import com.lody.virtual.client.ipc.VirtualStorageManager;
+import com.lody.virtual.client.sandhook.SandXposed;
 import com.lody.virtual.client.stub.VASettings;
 import com.lody.virtual.helper.compat.BuildCompat;
 import com.lody.virtual.helper.compat.StorageManagerCompat;
@@ -226,17 +227,6 @@ public final class VClientImpl extends IVClient.Stub {
         }
     }
 
-    public static String MD5(String source) {
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            messageDigest.update(source.getBytes());
-            return new BigInteger(1, messageDigest.digest()).toString(32);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return source;
-    }
-
     private void bindApplicationNoCheck(String packageName, String processName, ConditionVariable lock) {
         VDeviceInfo deviceInfo = getDeviceInfo();
         if (processName == null) {
@@ -334,37 +324,7 @@ public final class VClientImpl extends IVClient.Stub {
             InvocationStubManager.getInstance().checkEnv(AppInstrumentation.class);
         }
 
-        List<InstalledAppInfo> appInfos = VirtualCore.get().getInstalledApps(0);
-
-        ClassLoader classLoader = context.getClassLoader();
-
-        for (InstalledAppInfo module:appInfos) {
-            if (TextUtils.equals(packageName, module.packageName))
-                continue;
-            XposedCompat.loadModule(module.apkPath, module.getOdexFile().getParent(), module.libPath, XposedBridge.class.getClassLoader());
-        }
-
-        XposedCompat.context = context;
-        XposedCompat.cacheDir = new File(context.getCacheDir(), MD5(processName));
-        XposedCompat.classLoader = XposedCompat.getSandHookXposedClassLoader(classLoader, XposedBridge.class.getClassLoader());
-        XposedCompat.isFirstApplication = true;
-        
-        SandHook.setHookModeCallBack(new SandHook.HookModeCallBack() {
-            @Override
-            public int hookMode(Member originMethod) {
-                if (TextUtils.equals("public void android.app.Application.onCreate()", originMethod.toString())) {
-                    return HookMode.REPLACE;
-                }
-                return HookMode.AUTO;
-            }
-        });
-
-
-        try {
-            XposedCompat.callXposedModuleInit();
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
+        SandXposed.injectXposedModule(context, packageName, processName);
 
         mInitialApplication = LoadedApk.makeApplication.call(data.info, false, null);
 
