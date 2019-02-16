@@ -58,6 +58,9 @@ import com.swift.sandhook.xposedcompat.XposedCompat;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -223,6 +226,17 @@ public final class VClientImpl extends IVClient.Stub {
         }
     }
 
+    public static String MD5(String source) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+            messageDigest.update(source.getBytes());
+            return new BigInteger(1, messageDigest.digest()).toString(32);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return source;
+    }
+
     private void bindApplicationNoCheck(String packageName, String processName, ConditionVariable lock) {
         VDeviceInfo deviceInfo = getDeviceInfo();
         if (processName == null) {
@@ -331,10 +345,10 @@ public final class VClientImpl extends IVClient.Stub {
         }
 
         XposedCompat.context = context;
-        XposedCompat.cacheDir = context.getCacheDir();
+        XposedCompat.cacheDir = new File(context.getCacheDir(), MD5(processName));
         XposedCompat.classLoader = XposedCompat.getSandHookXposedClassLoader(classLoader, XposedBridge.class.getClassLoader());
         XposedCompat.isFirstApplication = true;
-
+        
         SandHook.setHookModeCallBack(new SandHook.HookModeCallBack() {
             @Override
             public int hookMode(Member originMethod) {
@@ -344,6 +358,7 @@ public final class VClientImpl extends IVClient.Stub {
                 return HookMode.AUTO;
             }
         });
+
 
         try {
             XposedCompat.callXposedModuleInit();
