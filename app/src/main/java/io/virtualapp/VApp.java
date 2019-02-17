@@ -7,6 +7,8 @@ import android.support.multidex.MultiDexApplication;
 import com.flurry.android.FlurryAgent;
 import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.stub.VASettings;
+import com.trend.lazyinject.buildmap.Auto_ComponentBuildMap;
+import com.trend.lazyinject.lib.LazyInject;
 import com.yc.nonsdk.NonSdkManager;
 
 import io.virtualapp.delegate.MyAppRequestListener;
@@ -45,6 +47,7 @@ public class VApp extends MultiDexApplication {
     public void onCreate() {
         gApp = this;
         super.onCreate();
+        lazyInjectInit();
         VirtualCore virtualCore = VirtualCore.get();
         virtualCore.initialize(new VirtualCore.VirtualInitializer() {
 
@@ -86,6 +89,11 @@ public class VApp extends MultiDexApplication {
 
     public static SharedPreferences getPreferences() {
         return getApp().mPreferences;
+    }
+
+    private void lazyInjectInit() {
+        LazyInject.init(this);
+        LazyInject.addBuildMap(Auto_ComponentBuildMap.class);
     }
 
 }

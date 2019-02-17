@@ -34,3 +34,42 @@
 #导航
 -keep class com.amap.api.navi.**{*;}
 -keep class com.autonavi.**{*;}
+
+#lazyinject
+-ignorewarning
+-keepattributes *Annotation*
+#保留部分泛型信息，必要!
+-keepattributes Signature
+#手动启用support keep注解
+#http://tools.android.com/tech-docs/support-annotations
+-dontskipnonpubliclibraryclassmembers
+-keep,allowobfuscation @interface android.support.annotation.Keep
+
+-keep @android.support.annotation.Keep class * {
+*;
+}
+
+-keepclassmembers class * {
+    @android.support.annotation.Keep *;
+}
+#手动启用Component注解
+#http://tools.android.com/tech-docs/support-annotations
+-keep,allowobfuscation @interface com.trend.lazyinject.annotation.Component
+
+-keep,allowobfuscation @com.trend.lazyinject.annotation.Component class * {
+*;
+}
+
+-keepclassmembers,allowobfuscation class * {
+    @com.trend.lazyinject.annotation.Provide <methods>;
+}
+
+-keepclassmembers class * {
+     @com.trend.lazyinject.annotation.Inject <fields>;
+}
+
+-keepclassmembers class * {
+     @com.trend.lazyinject.annotation.InjectComponent <fields>;
+}
+
+-dontwarn javassist.**

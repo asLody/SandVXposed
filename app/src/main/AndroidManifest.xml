@@ -49,6 +49,13 @@
             android:name=".home.location.MarkerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/UITheme" />
+
+        <provider
+            android:authorities="io.virtualapp.sandvxposed"
+            android:name=".sandxposed.SandHookConfigProvider"
+            android:exported="false"
+            android:process="io.virtualapp.sandvxposed" />
+
     </application>
 
 

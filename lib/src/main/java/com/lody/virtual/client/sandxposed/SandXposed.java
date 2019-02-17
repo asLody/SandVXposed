@@ -1,4 +1,4 @@
-package com.lody.virtual.client.sandhook;
+package com.lody.virtual.client.sandxposed;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -13,8 +13,8 @@ import java.util.List;
 
 import de.robv.android.xposed.XposedBridge;
 
-import static com.lody.virtual.client.sandhook.SandHookHelper.MD5;
-import static com.lody.virtual.client.sandhook.SandHookHelper.initHookPolicy;
+import static com.lody.virtual.client.sandxposed.SandHookHelper.MD5;
+import static com.lody.virtual.client.sandxposed.SandHookHelper.initHookPolicy;
 
 public class SandXposed {
 

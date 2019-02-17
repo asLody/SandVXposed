@@ -35,6 +35,8 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.swift.sandhook:hooklib:2.4.1'
-    compile 'com.swift.sandhook:xposedcompat:2.4.1'
+    compile 'com.swift.sandhook:hooklib:2.4.5'
+    compile 'com.swift.sandhook:xposedcompat:2.4.5'
+    compile "com.trend.lazyinject:lib:3.4.0-beta"
+    annotationProcessor 'com.trend.lazyinject:compiler:3.4.0-beta'
 }

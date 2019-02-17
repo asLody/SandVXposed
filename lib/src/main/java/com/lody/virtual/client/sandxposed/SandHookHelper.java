@@ -1,4 +1,4 @@
-package com.lody.virtual.client.sandhook;
+package com.lody.virtual.client.sandxposed;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,7 +8,6 @@ import com.swift.sandhook.SandHook;
 import com.swift.sandhook.annotation.HookMode;
 import com.swift.sandhook.wrapper.HookWrapper;
 import com.swift.sandhook.xposedcompat.XposedCompat;
-import com.swift.sandhook.xposedcompat.utils.ProcessUtils;
 
 import java.lang.reflect.Member;
 import java.math.BigInteger;
