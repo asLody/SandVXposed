@@ -46,6 +46,8 @@ public class SandHookHelper {
             }
         });
 
+        XposedCompat.clearOatCache();
+
     }
 
 

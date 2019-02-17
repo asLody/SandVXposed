@@ -7,6 +7,7 @@ import android.support.multidex.MultiDexApplication;
 import com.flurry.android.FlurryAgent;
 import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.stub.VASettings;
+import com.swift.sandhook.SandHook;
 import com.trend.lazyinject.buildmap.Auto_ComponentBuildMap;
 import com.trend.lazyinject.lib.LazyInject;
 import com.yc.nonsdk.NonSdkManager;
@@ -32,6 +33,7 @@ public class VApp extends MultiDexApplication {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+        SandHook.skipAllSafeCheck(false);
         mPreferences = base.getSharedPreferences("va", Context.MODE_MULTI_PROCESS);
         VASettings.ENABLE_IO_REDIRECT = true;
         VASettings.ENABLE_INNER_SHORTCUT = false;
