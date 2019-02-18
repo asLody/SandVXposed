@@ -46,7 +46,7 @@ public class SandHookHelper {
             }
         });
 
-        XposedCompat.clearOatCache();
+        //XposedCompat.clearOatCache();
 
     }
 
