@@ -38,6 +38,7 @@ public class SandXposed {
         XposedCompat.isFirstApplication = true;
 
         initHookPolicy();
+        EnvironmentSetup.init(context, packageName, processName);
 
         try {
             XposedCompat.callXposedModuleInit();
