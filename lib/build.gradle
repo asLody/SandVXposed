@@ -16,7 +16,7 @@ android {
         }
     }
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -35,8 +35,10 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.swift.sandhook:hooklib:2.6.0'
-    compile 'com.swift.sandhook:xposedcompat:2.6.0'
+//    compile project(':hooklib')
+//    compile project(':xposedcompat')
+    compile 'com.swift.sandhook:hooklib:2.7.8'
+    compile 'com.swift.sandhook:xposedcompat:2.7.8'
     compile "com.trend.lazyinject:lib:3.4.0-beta"
     annotationProcessor 'com.trend.lazyinject:compiler:3.4.0-beta'
 }
