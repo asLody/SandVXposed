@@ -37,8 +37,8 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
 //    compile project(':hooklib')
 //    compile project(':xposedcompat')
-    compile 'com.swift.sandhook:hooklib:2.9.0'
-    compile 'com.swift.sandhook:xposedcompat:2.9.0'
+    compile 'com.swift.sandhook:hooklib:2.9.6'
+    compile 'com.swift.sandhook:xposedcompat:2.9.6'
     compile "com.trend.lazyinject:lib:3.4.0-beta"
     annotationProcessor 'com.trend.lazyinject:compiler:3.4.0-beta'
 }
