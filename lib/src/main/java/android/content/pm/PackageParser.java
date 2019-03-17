@@ -39,6 +39,19 @@ public class PackageParser {
         public ActivityInfo info;
     }
 
+    public interface Callback {
+
+    }
+
+    public static final class CallbackImpl implements Callback {
+        public CallbackImpl(PackageManager packageManager) {
+        }
+    }
+
+    public void setCallback(Callback callback) {
+
+    }
+
     public class Package {
         public final ArrayList<Activity> activities = new ArrayList<Activity>(0);
         public final ArrayList<Activity> receivers = new ArrayList<Activity>(0);

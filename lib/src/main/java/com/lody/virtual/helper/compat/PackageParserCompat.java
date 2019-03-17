@@ -15,6 +15,7 @@ import android.os.Process;
 import android.util.DisplayMetrics;
 
 import com.lody.virtual.client.core.VirtualCore;
+import com.lody.virtual.helper.utils.OSUtils;
 import com.lody.virtual.os.VUserHandle;
 
 import java.io.File;
@@ -48,7 +49,11 @@ public class PackageParserCompat {
 
 
     public static PackageParser createParser(File packageFile) {
-        if (API_LEVEL >= 28) {
+        if (OSUtils.getInstance().isAndroidQ()) {
+            PackageParser packageParser = PackageParserP.ctor.newInstance();
+            packageParser.setCallback(new PackageParser.CallbackImpl(VirtualCore.getPM()));
+            return packageParser;
+        } else if (API_LEVEL >= 28) {
             return PackageParserP.ctor.newInstance();
         } else if (API_LEVEL >= M) {
             return PackageParserMarshmallow.ctor.newInstance();

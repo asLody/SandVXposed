@@ -23,6 +23,7 @@ public class OSUtils {
 	private boolean emui;
 	private boolean miui;
 	private boolean flyme;
+	private boolean androidQ = false;
 	private String miuiVersion;
 	private OSUtils() {
 		Properties properties;
@@ -39,6 +40,13 @@ public class OSUtils {
 					|| !TextUtils.isEmpty(properties.getProperty(KEY_MIUI_INTERNAL_STORAGE));
 		}
 		flyme = hasFlyme();
+
+
+		try {
+			Class.forName("android.content.pm.PackageParser$CallbackImpl");
+			androidQ = true;
+		} catch (ClassNotFoundException e) {
+		}
 	}
 
 	public static OSUtils getInstance() {
@@ -59,6 +67,10 @@ public class OSUtils {
 
 	public boolean isFlyme() {
 		return flyme;
+	}
+
+	public boolean isAndroidQ() {
+		return androidQ;
 	}
 
 	private boolean hasFlyme() {
