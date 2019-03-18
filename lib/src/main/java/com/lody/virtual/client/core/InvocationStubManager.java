@@ -11,6 +11,7 @@ import com.lody.virtual.client.hook.proxies.am.ActivityManagerStub;
 import com.lody.virtual.client.hook.proxies.am.HCallbackStub;
 import com.lody.virtual.client.hook.proxies.appops.AppOpsManagerStub;
 import com.lody.virtual.client.hook.proxies.appwidget.AppWidgetManagerStub;
+import com.lody.virtual.client.hook.proxies.atm.ActivityTaskManagerStub;
 import com.lody.virtual.client.hook.proxies.audio.AudioManagerStub;
 import com.lody.virtual.client.hook.proxies.backup.BackupManagerStub;
 import com.lody.virtual.client.hook.proxies.bluetooth.BluetoothStub;
@@ -52,6 +53,7 @@ import com.lody.virtual.client.hook.proxies.wifi.WifiManagerStub;
 import com.lody.virtual.client.hook.proxies.wifi_scanner.WifiScannerStub;
 import com.lody.virtual.client.hook.proxies.window.WindowManagerStub;
 import com.lody.virtual.client.interfaces.IInjector;
+import com.lody.virtual.helper.utils.OSUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -182,6 +184,9 @@ public final class InvocationStubManager {
             }
             if (Build.VERSION.SDK_INT >= 26) {
 				addInjector(new AutoFillManagerStub());
+			}
+			if (OSUtils.getInstance().isAndroidQ()) {
+				addInjector(new ActivityTaskManagerStub());
 			}
 		}
 	}
