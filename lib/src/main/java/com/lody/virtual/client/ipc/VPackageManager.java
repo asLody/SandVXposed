@@ -167,13 +167,23 @@ public class VPackageManager {
 
     public ApplicationInfo getApplicationInfo(String packageName, int flags, int userId) {
         try {
-            ApplicationInfo info =  getService().getApplicationInfo(packageName, flags, userId);
-            if (info != null) {
-                if (Build.VERSION.SDK_INT >= 28) {
-                    info.sharedLibraryFiles = new String[]{"/system/framework/android.test.base.jar",
-                            "/system/framework/android.test.mock.jar", "/system/framework/android.test.runner.jar", "/system/framework/javax.obex.jar",
-                            "/system/framework/org.apache.http.legacy.boot.jar"};
+            ApplicationInfo info = getService().getApplicationInfo(packageName, flags, userId);
+            if (info == null) {
+                return null;
+            }
+            final int P = 28;
+            final String APACHE_LEGACY = "/system/framework/org.apache.http.legacy.boot.jar";
+            if (android.os.Build.VERSION.SDK_INT >= P && info.targetSdkVersion < P) {
+                String[] newSharedLibraryFiles;
+                if (info.sharedLibraryFiles == null) {
+                    newSharedLibraryFiles = new String[]{APACHE_LEGACY};
+                } else {
+                    int newLength = info.sharedLibraryFiles.length + 1;
+                    newSharedLibraryFiles = new String[newLength];
+                    System.arraycopy(info.sharedLibraryFiles, 0, newSharedLibraryFiles, 0, newLength - 1);
+                    newSharedLibraryFiles[newLength - 1] = APACHE_LEGACY;
                 }
+                info.sharedLibraryFiles = newSharedLibraryFiles;
             }
             return info;
         } catch (RemoteException e) {
