@@ -43,7 +43,7 @@ public class OSUtils {
 
 
 		try {
-			Class.forName("android.content.pm.PackageParser$CallbackImpl");
+			Class.forName("android.app.IActivityTaskManager");
 			androidQ = true;
 		} catch (ClassNotFoundException e) {
 		}
