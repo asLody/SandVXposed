@@ -849,6 +849,26 @@ class MethodProxies {
     }
 
 
+    static class BindServiceQ extends BindService {
+
+        @Override
+        public String getMethodName() {
+            return "bindIsolatedService";
+        }
+
+        @Override
+        public Object call(Object who, Method method, Object... args) throws Throwable {
+            args[7] = VirtualCore.get().getHostPkg();
+            return super.call(who, method, args);
+        }
+
+        @Override
+        public boolean isEnable() {
+            return isAppProcess() || isServerProcess();
+        }
+    }
+
+
     static class BindService extends MethodProxy {
 
         @Override
