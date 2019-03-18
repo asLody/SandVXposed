@@ -1360,7 +1360,7 @@ class MethodProxies {
             int nameIdx = getProviderNameIndex();
             String name = (String) args[nameIdx];
             if (OSUtils.getInstance().isAndroidQ()) {
-                args[1] = "io.virtualapp.sandvxposed";
+                MethodParameterUtils.replaceFirstAppPkg(args);
             }
             int userId = VUserHandle.myUserId();
             ProviderInfo info = VPackageManager.get().resolveContentProvider(name, 0, userId);
