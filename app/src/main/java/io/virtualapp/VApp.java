@@ -37,6 +37,7 @@ public class VApp extends MultiDexApplication {
         super.attachBaseContext(base);
         SandHookConfig.DEBUG = BuildConfig.DEBUG;
         SandHookConfig.SDK_INT = OSUtils.getInstance().isAndroidQ() ? 29 : Build.VERSION.SDK_INT;
+        SandHookConfig.compiler = SandHookConfig.SDK_INT < Build.VERSION_CODES.O;
         SandHook.passApiCheck();
         mPreferences = base.getSharedPreferences("va", Context.MODE_MULTI_PROCESS);
         VASettings.ENABLE_IO_REDIRECT = true;

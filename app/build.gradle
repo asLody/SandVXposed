@@ -23,7 +23,7 @@ android {
         android {
             defaultConfig {
                 ndk {
-                    abiFilters "armeabi", "armeabi-v7a", "x86"
+                    abiFilters "armeabi-v7a", "x86"
                 }
             }
         }
@@ -36,6 +36,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            minifyEnabled false
+        }
         release {
             minifyEnabled false
         }
