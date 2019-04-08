@@ -132,7 +132,7 @@ HOOK_DEF(int, fchmod, const char *pathname, mode_t mode) {
 }
 
 
-// int fstatat(int dirfd, const char *pathname, struct stat *buf, int flags);
+// int fstatat(int dirfd, const char *pathname, struct sthook_dlopenat *buf, int flags);
 HOOK_DEF(int, fstatat, int dirfd, const char *pathname, struct stat *buf, int flags) {
     int res;
     const char *redirect_path = relocate_path(pathname, &res);
@@ -643,6 +643,10 @@ void hook_dlopen(int api_level) {
                        (unsigned long *) &symbol) == 0) {
             MSHookFunction(symbol, (void *) new_do_dlopen_V24,
                           (void **) &orig_do_dlopen_V24);
+        } else if (findSymbol("__dl__Z9do_dlopenPKciPK17android_dlextinfoPKv", "linker",
+                              (unsigned long *) &symbol) == 0) {
+            MSHookFunction(symbol, (void *) new_do_dlopen_V24,
+                           (void **) &orig_do_dlopen_V24);
         }
     } else if (api_level >= 19) {
         if (findSymbol("__dl__Z9do_dlopenPKciPK17android_dlextinfo", "linker",
