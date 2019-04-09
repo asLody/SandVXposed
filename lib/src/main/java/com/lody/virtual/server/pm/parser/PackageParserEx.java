@@ -19,6 +19,7 @@ import android.text.TextUtils;
 
 import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.fixer.ComponentFixer;
+import com.lody.virtual.client.ipc.VPackageManager;
 import com.lody.virtual.helper.collection.ArrayMap;
 import com.lody.virtual.helper.compat.PackageParserCompat;
 import com.lody.virtual.helper.utils.FileUtils;
@@ -190,7 +191,52 @@ public class PackageParserEx {
         cache.configPreferences = p.configPreferences;
         cache.reqFeatures = p.reqFeatures;
         addOwner(cache);
+        injectXposedModuleInfo(cache);
         return cache;
+    }
+
+    private static void injectXposedModuleInfo(VPackage vPackage) {
+
+        if (vPackage.mAppMetaData == null || !vPackage.mAppMetaData.containsKey("xposedmodule"))
+            return;
+
+        VPackage.XposedModule module = new VPackage.XposedModule();
+        Object descriptionRaw = vPackage.mAppMetaData.get("xposeddescription");
+        String descriptionTmp = null;
+        if (descriptionRaw instanceof String) {
+            descriptionTmp = ((String) descriptionRaw).trim();
+        } else if (descriptionRaw instanceof Integer) {
+            try {
+                int resId = (Integer) descriptionRaw;
+                if (resId != 0)
+                    descriptionTmp = VirtualCore.getPM().getResourcesForApplication(vPackage.applicationInfo).getString(resId).trim();
+            } catch (Exception ignored) {
+            }
+        }
+        module.desc = (descriptionTmp != null) ? descriptionTmp : "";
+        Object minVersionRaw = vPackage.mAppMetaData.get("xposedminversion");
+        if (minVersionRaw instanceof Integer) {
+            module.minVersion = (Integer) minVersionRaw;
+        } else if (minVersionRaw instanceof String) {
+            module.minVersion = extractIntPart((String) minVersionRaw);
+        } else {
+            module.minVersion = 0;
+        }
+
+        vPackage.xposedModule = module;
+
+    }
+
+    private static int extractIntPart(String str) {
+        int result = 0, length = str.length();
+        for (int offset = 0; offset < length; offset++) {
+            char c = str.charAt(offset);
+            if ('0' <= c && c <= '9')
+                result = result * 10 + (c - '0');
+            else
+                break;
+        }
+        return result;
     }
 
     public static void initApplicationInfoBase(PackageSetting ps, VPackage p) {

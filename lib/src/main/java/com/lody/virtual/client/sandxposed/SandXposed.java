@@ -23,7 +23,7 @@ public class SandXposed {
         if (BlackList.canNotInject(packageName, processName))
             return;
 
-        List<InstalledAppInfo> appInfos = VirtualCore.get().getInstalledApps(0);
+        List<InstalledAppInfo> appInfos = VirtualCore.get().getInstalledApps(InstalledAppInfo.FLAG_XPOSED_MODULE);
         ClassLoader classLoader = context.getClassLoader();
 
         for (InstalledAppInfo module:appInfos) {
