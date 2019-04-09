@@ -17,6 +17,7 @@ import java.io.File;
 public final class InstalledAppInfo implements Parcelable {
 
     public final static int FLAG_XPOSED_MODULE = 1 << 28;
+    public final static int FLAG_EXCLUDE_XPOSED_MODULE = 1 << 29;
 
     public String packageName;
     public String apkPath;

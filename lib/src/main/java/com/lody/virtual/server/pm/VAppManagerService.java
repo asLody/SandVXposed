@@ -394,8 +394,14 @@ public class VAppManagerService implements IAppManager {
     public List<InstalledAppInfo> getInstalledApps(int flags) {
         List<InstalledAppInfo> infoList = new ArrayList<>(getInstalledAppCount());
         boolean filterXposedModules = (flags & InstalledAppInfo.FLAG_XPOSED_MODULE) != 0;
+        boolean excludeXposedModules = (flags & InstalledAppInfo.FLAG_EXCLUDE_XPOSED_MODULE) != 0;
         for (VPackage p : PackageCacheManager.PACKAGE_CACHE.values()) {
-            if (!filterXposedModules || p.xposedModule != null) {
+            if (excludeXposedModules) {
+                if (p.xposedModule == null) {
+                    PackageSetting setting = (PackageSetting) p.mExtras;
+                    infoList.add(setting.getAppInfo());
+                }
+            } else if (!filterXposedModules || p.xposedModule != null) {
                 PackageSetting setting = (PackageSetting) p.mExtras;
                 infoList.add(setting.getAppInfo());
             }
