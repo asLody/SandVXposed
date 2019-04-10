@@ -1,4 +1,4 @@
-package com.lody.virtual.client.sandxposed;
+package com.lody.virtual.sandxposed;
 
 import java.util.HashSet;
 import java.util.Set;

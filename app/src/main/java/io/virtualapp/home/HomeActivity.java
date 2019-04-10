@@ -101,6 +101,10 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         mPopupMenu = new PopupMenu(new ContextThemeWrapper(this, R.style.Theme_AppCompat_Light), mMenuView);
         Menu menu = mPopupMenu.getMenu();
         setIconEnable(menu, true);
+        menu.add("Xposed Manager").setIcon(R.drawable.ic_xposed).setOnMenuItemClickListener(item -> {
+            startActivity(new Intent(this, XposedManagerActivity.class));
+            return false;
+        });
         menu.add("Accounts").setIcon(R.drawable.ic_account).setOnMenuItemClickListener(item -> {
             List<VUserInfo> users = VUserManager.get().getUsers();
             List<String> names = new ArrayList<>(users.size());

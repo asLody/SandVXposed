@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 
 import com.lody.virtual.remote.InstalledAppInfo;
+import com.lody.virtual.server.pm.parser.VPackage;
 
 /**
  * @author Lody
@@ -14,14 +15,18 @@ public class PackageAppData implements AppData {
 
     public String packageName;
     public String name;
+    public String versionName;
     public Drawable icon;
     public boolean fastOpen;
     public boolean isFirstOpen;
     public boolean isLoading;
+    public VPackage.XposedModule xposedModule;
 
     public PackageAppData(Context context, InstalledAppInfo installedAppInfo) {
         this.packageName = installedAppInfo.packageName;
         this.isFirstOpen = !installedAppInfo.isLaunched(0);
+        this.xposedModule = installedAppInfo.xposedModule;
+        versionName = installedAppInfo.getPackageInfo(0).versionName;
         loadData(context, installedAppInfo.getApplicationInfo(installedAppInfo.getInstalledUsers()[0]));
     }
 
@@ -62,6 +67,16 @@ public class PackageAppData implements AppData {
     }
 
     @Override
+    public String getPackageName() {
+        return packageName;
+    }
+
+    @Override
+    public String versionName() {
+        return versionName;
+    }
+
+    @Override
     public boolean canReorder() {
         return true;
     }
@@ -79,5 +94,10 @@ public class PackageAppData implements AppData {
     @Override
     public boolean canCreateShortcut() {
         return true;
+    }
+
+    @Override
+    public VPackage.XposedModule getXposedModule() {
+        return xposedModule;
     }
 }

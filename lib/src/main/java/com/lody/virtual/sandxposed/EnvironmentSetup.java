@@ -1,4 +1,4 @@
-package com.lody.virtual.client.sandxposed;
+package com.lody.virtual.sandxposed;
 
 import android.content.Context;
 import android.text.TextUtils;

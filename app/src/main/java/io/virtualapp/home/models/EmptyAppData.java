@@ -2,6 +2,8 @@ package io.virtualapp.home.models;
 
 import android.graphics.drawable.Drawable;
 
+import com.lody.virtual.server.pm.parser.VPackage;
+
 /**
  * @author Lody
  */
@@ -29,6 +31,16 @@ public class EmptyAppData implements AppData {
     }
 
     @Override
+    public String getPackageName() {
+        return null;
+    }
+
+    @Override
+    public String versionName() {
+        return null;
+    }
+
+    @Override
     public boolean canReorder() {
         return false;
     }
@@ -46,5 +58,10 @@ public class EmptyAppData implements AppData {
     @Override
     public boolean canCreateShortcut() {
         return false;
+    }
+
+    @Override
+    public VPackage.XposedModule getXposedModule() {
+        return null;
     }
 }

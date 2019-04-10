@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 
 import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.remote.InstalledAppInfo;
+import com.lody.virtual.server.pm.parser.VPackage;
 
 /**
  * @author Lody
@@ -17,11 +18,15 @@ public class MultiplePackageAppData implements AppData {
     public boolean isLoading;
     public Drawable icon;
     public String name;
+    public String versionName;
+    public VPackage.XposedModule xposedModule;
 
     public MultiplePackageAppData(PackageAppData target, int userId) {
         this.userId = userId;
         this.appInfo = VirtualCore.get().getInstalledAppInfo(target.packageName, 0);
         this.isFirstOpen = !appInfo.isLaunched(userId);
+        this.xposedModule = target.getXposedModule();
+        this.versionName = target.versionName();
         if (target.icon != null) {
             Drawable.ConstantState state = target.icon.getConstantState();
             if (state != null) {
@@ -52,6 +57,16 @@ public class MultiplePackageAppData implements AppData {
     }
 
     @Override
+    public String getPackageName() {
+        return appInfo.packageName;
+    }
+
+    @Override
+    public String versionName() {
+        return versionName;
+    }
+
+    @Override
     public boolean canReorder() {
         return true;
     }
@@ -69,5 +84,10 @@ public class MultiplePackageAppData implements AppData {
     @Override
     public boolean canCreateShortcut() {
         return true;
+    }
+
+    @Override
+    public VPackage.XposedModule getXposedModule() {
+        return xposedModule;
     }
 }

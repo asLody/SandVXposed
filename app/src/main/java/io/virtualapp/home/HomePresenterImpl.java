@@ -125,6 +125,8 @@ class HomePresenterImpl implements HomeContract.HomePresenter {
             addResult.appData = PackageAppDataStorage.get().acquire(info.packageName);
         }).done(res -> {
             boolean multipleVersion = addResult.justEnableHidden && addResult.userId != 0;
+            if (addResult.appData.getXposedModule() != null)
+                return;
             if (!multipleVersion) {
                 PackageAppData data = addResult.appData;
                 data.isLoading = true;

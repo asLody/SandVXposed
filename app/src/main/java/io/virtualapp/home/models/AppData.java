@@ -2,6 +2,8 @@ package io.virtualapp.home.models;
 
 import android.graphics.drawable.Drawable;
 
+import com.lody.virtual.server.pm.parser.VPackage;
+
 /**
  * @author Lody
  */
@@ -16,6 +18,10 @@ public interface AppData {
 
     String getName();
 
+    String getPackageName();
+
+    String versionName();
+
     boolean canReorder();
 
     boolean canLaunch();
@@ -23,4 +29,6 @@ public interface AppData {
     boolean canDelete();
 
     boolean canCreateShortcut();
+
+    VPackage.XposedModule getXposedModule();
 }

@@ -50,7 +50,7 @@ public class PackageSetting implements Parcelable {
     }
 
     public InstalledAppInfo getAppInfo() {
-        return new InstalledAppInfo(packageName, apkPath, libPath, dependSystem, skipDexOpt, appId);
+        return new InstalledAppInfo(packageName, apkPath, libPath, dependSystem, skipDexOpt, appId, PackageCacheManager.get(packageName).xposedModule);
     }
 
     PackageUserState modifyUserState(int userId) {

@@ -26,7 +26,14 @@
     </integer-array>
 
     <color name="transparent">#00000000</color>
+    <color name="text_grey">#222222</color>
     <color name="black_20_transparent">#55000000</color>
 
     <color name="md_transparent">#00FFFFFF</color>
+
+    <color name="red_500">#F44336</color>
+    <color name="warning">@color/red_500</color>
+    <color name="list_download_item_color">#fff</color>
+    <color name="background_white">#F6F6F6</color>
+
 </resources>

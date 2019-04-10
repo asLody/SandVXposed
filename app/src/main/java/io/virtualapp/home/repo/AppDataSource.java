@@ -24,11 +24,15 @@ public interface AppDataSource {
      */
     Promise<List<AppData>, Throwable, Void> getVirtualApps();
 
+    Promise<List<AppData>, Throwable, Void> getVirtualXposedModules();
+
     /**
      * @param context Context
      * @return All the Applications we Installed.
      */
     Promise<List<AppInfo>, Throwable, Void> getInstalledApps(Context context);
+
+    Promise<List<AppInfo>, Throwable, Void> getInstalledXposedModules(Context context);
 
     Promise<List<AppInfo>, Throwable, Void> getStorageApps(Context context, File rootDir);
 

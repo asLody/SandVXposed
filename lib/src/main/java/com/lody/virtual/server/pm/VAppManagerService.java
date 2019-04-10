@@ -21,6 +21,7 @@ import com.lody.virtual.os.VEnvironment;
 import com.lody.virtual.os.VUserHandle;
 import com.lody.virtual.remote.InstallResult;
 import com.lody.virtual.remote.InstalledAppInfo;
+import com.lody.virtual.sandxposed.XposedModuleProfile;
 import com.lody.virtual.server.accounts.VAccountManagerService;
 import com.lody.virtual.server.am.BroadcastSystem;
 import com.lody.virtual.server.am.UidSystem;
@@ -395,6 +396,7 @@ public class VAppManagerService implements IAppManager {
         List<InstalledAppInfo> infoList = new ArrayList<>(getInstalledAppCount());
         boolean filterXposedModules = (flags & InstalledAppInfo.FLAG_XPOSED_MODULE) != 0;
         boolean excludeXposedModules = (flags & InstalledAppInfo.FLAG_EXCLUDE_XPOSED_MODULE) != 0;
+        boolean enabledXposedModules = (flags & InstalledAppInfo.FLAG_ENABLED_XPOSED_MODULE) != 0;
         for (VPackage p : PackageCacheManager.PACKAGE_CACHE.values()) {
             if (excludeXposedModules) {
                 if (p.xposedModule == null) {
@@ -402,8 +404,10 @@ public class VAppManagerService implements IAppManager {
                     infoList.add(setting.getAppInfo());
                 }
             } else if (!filterXposedModules || p.xposedModule != null) {
-                PackageSetting setting = (PackageSetting) p.mExtras;
-                infoList.add(setting.getAppInfo());
+                if (!enabledXposedModules || (XposedModuleProfile.isXposedEnable() && XposedModuleProfile.isModuleEnable(p.packageName))) {
+                    PackageSetting setting = (PackageSetting) p.mExtras;
+                    infoList.add(setting.getAppInfo());
+                }
             }
         }
         return infoList;

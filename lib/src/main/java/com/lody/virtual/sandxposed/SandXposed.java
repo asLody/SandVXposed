@@ -1,4 +1,4 @@
-package com.lody.virtual.client.sandxposed;
+package com.lody.virtual.sandxposed;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -13,8 +13,7 @@ import java.util.List;
 
 import de.robv.android.xposed.XposedBridge;
 
-import static com.lody.virtual.client.sandxposed.SandHookHelper.MD5;
-import static com.lody.virtual.client.sandxposed.SandHookHelper.initHookPolicy;
+import static com.swift.sandhook.xposedcompat.utils.DexMakerUtils.MD5;
 
 public class SandXposed {
 
@@ -23,7 +22,7 @@ public class SandXposed {
         if (BlackList.canNotInject(packageName, processName))
             return;
 
-        List<InstalledAppInfo> appInfos = VirtualCore.get().getInstalledApps(InstalledAppInfo.FLAG_XPOSED_MODULE);
+        List<InstalledAppInfo> appInfos = VirtualCore.get().getInstalledApps(InstalledAppInfo.FLAG_XPOSED_MODULE | InstalledAppInfo.FLAG_ENABLED_XPOSED_MODULE);
         ClassLoader classLoader = context.getClassLoader();
 
         for (InstalledAppInfo module:appInfos) {
@@ -40,7 +39,7 @@ public class SandXposed {
         XposedCompat.classLoader = XposedCompat.getSandHookXposedClassLoader(classLoader, XposedBridge.class.getClassLoader());
         XposedCompat.isFirstApplication = true;
 
-        initHookPolicy();
+        SandHookHelper.initHookPolicy();
         EnvironmentSetup.init(context, packageName, processName);
 
         try {

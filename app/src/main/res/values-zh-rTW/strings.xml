@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">SandVXposed</string>
     <string name="desktop">桌面</string>
-    <string name="add_app">新增App</string>
+    <string name="add_app">新增App/Module</string>
     <string name="preparing">正在打開App，請稍候…</string>
     <string name="delete">刪除</string>
     <string name="create_shortcut">建立捷徑</string>
@@ -21,4 +21,6 @@
     <string name="external_storage">外部空間</string>
     <string name="install_d">安裝 (%d)</string>
     <string name="install_too_much_once_time">不能一次性安裝超過 9 個程式！</string>
+
+    <string name="enable_xposed">激活 xposed 框架</string>
 </resources>

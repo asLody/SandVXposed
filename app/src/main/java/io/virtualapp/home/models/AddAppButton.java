@@ -3,6 +3,8 @@ package io.virtualapp.home.models;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 
+import com.lody.virtual.server.pm.parser.VPackage;
+
 import io.virtualapp.R;
 
 /**
@@ -40,6 +42,16 @@ public class AddAppButton implements AppData {
     }
 
     @Override
+    public String getPackageName() {
+        return null;
+    }
+
+    @Override
+    public String versionName() {
+        return null;
+    }
+
+    @Override
     public boolean canReorder() {
         return false;
     }
@@ -57,5 +69,10 @@ public class AddAppButton implements AppData {
     @Override
     public boolean canCreateShortcut() {
         return false;
+    }
+
+    @Override
+    public VPackage.XposedModule getXposedModule() {
+        return null;
     }
 }

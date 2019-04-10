@@ -8,6 +8,7 @@ import android.os.Parcelable;
 import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.ipc.VPackageManager;
 import com.lody.virtual.os.VEnvironment;
+import com.lody.virtual.server.pm.parser.VPackage;
 
 import java.io.File;
 
@@ -16,6 +17,7 @@ import java.io.File;
  */
 public final class InstalledAppInfo implements Parcelable {
 
+    public final static int FLAG_ENABLED_XPOSED_MODULE = 1 << 30;
     public final static int FLAG_XPOSED_MODULE = 1 << 28;
     public final static int FLAG_EXCLUDE_XPOSED_MODULE = 1 << 29;
 
@@ -24,13 +26,15 @@ public final class InstalledAppInfo implements Parcelable {
     public String libPath;
     public boolean dependSystem;
     public int appId;
+    public VPackage.XposedModule xposedModule;
 
-    public InstalledAppInfo(String packageName, String apkPath, String libPath, boolean dependSystem, boolean skipDexOpt, int appId) {
+    public InstalledAppInfo(String packageName, String apkPath, String libPath, boolean dependSystem, boolean skipDexOpt, int appId, VPackage.XposedModule xposedModule) {
         this.packageName = packageName;
         this.apkPath = apkPath;
         this.libPath = libPath;
         this.dependSystem = dependSystem;
         this.appId = appId;
+        this.xposedModule = xposedModule;
     }
 
     public File getOdexFile() {
@@ -65,6 +69,7 @@ public final class InstalledAppInfo implements Parcelable {
         dest.writeString(this.libPath);
         dest.writeByte(this.dependSystem ? (byte) 1 : (byte) 0);
         dest.writeInt(this.appId);
+        dest.writeParcelable(xposedModule, flags);
     }
 
     protected InstalledAppInfo(Parcel in) {
@@ -73,6 +78,7 @@ public final class InstalledAppInfo implements Parcelable {
         this.libPath = in.readString();
         this.dependSystem = in.readByte() != 0;
         this.appId = in.readInt();
+        this.xposedModule = in.readParcelable(VPackage.XposedModule.class.getClassLoader());
     }
 
     public static final Creator<InstalledAppInfo> CREATOR = new Creator<InstalledAppInfo>() {
