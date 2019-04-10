@@ -192,7 +192,7 @@ public class VAppManagerService implements IAppManager {
                 && VirtualCore.get().isOutsideInstalled(pkg.packageName);
 
         //for sanvxposed disable inline
-        dependSystem = false;
+//        dependSystem = false;
 
         if (existSetting != null && existSetting.dependSystem) {
             dependSystem = false;
