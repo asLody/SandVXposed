@@ -2,6 +2,7 @@ package io.virtualapp.home;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.widget.Toast;
 
 import com.lody.virtual.GmsSupport;
 import com.lody.virtual.client.core.VirtualCore;
@@ -12,6 +13,7 @@ import com.lody.virtual.remote.InstalledAppInfo;
 
 import java.io.IOException;
 
+import io.virtualapp.R;
 import io.virtualapp.VCommends;
 import io.virtualapp.abs.ui.VUiKit;
 import io.virtualapp.home.models.AppData;
@@ -119,14 +121,22 @@ class HomePresenterImpl implements HomeContract.HomePresenter {
                 InstallResult res = mRepo.addVirtualApp(info);
                 if (!res.isSuccess) {
                     throw new IllegalStateException();
+                } else {
+                    InstalledAppInfo ins = VirtualCore.get().getInstalledAppInfo(info.packageName, 0);
+                    if (ins != null && ins.xposedModule != null) {
+                        String name = ins.getApplicationInfo(0).name;
+
+                    }
                 }
             }
         }).then((res) -> {
             addResult.appData = PackageAppDataStorage.get().acquire(info.packageName);
         }).done(res -> {
             boolean multipleVersion = addResult.justEnableHidden && addResult.userId != 0;
-            if (addResult.appData.getXposedModule() != null)
+            if (addResult.appData.getXposedModule() != null) {
+                Toast.makeText(mActivity, String.format(mActivity.getString(R.string.module_install_success), addResult.appData.name), Toast.LENGTH_SHORT).show();
                 return;
+            }
             if (!multipleVersion) {
                 PackageAppData data = addResult.appData;
                 data.isLoading = true;

@@ -23,4 +23,5 @@
     <string name="install_too_much_once_time">No more then 9 apps can be chosen at a time!</string>
 
     <string name="enable_xposed">enable xposed</string>
+    <string name="module_install_success">Xposed moudle %s install success!</string>
 </resources>

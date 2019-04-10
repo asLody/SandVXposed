@@ -23,4 +23,5 @@
     <string name="install_too_much_once_time">不能一次性安裝超過 9 個程式！</string>
 
     <string name="enable_xposed">激活 xposed 框架</string>
+    <string name="module_install_success">Xposed 模块 %s 安装成功!</string>
 </resources>
