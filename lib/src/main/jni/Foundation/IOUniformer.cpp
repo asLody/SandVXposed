@@ -507,39 +507,37 @@ char **build_new_env(char *const envp[]) {
     int orig_envp_count = getArrayItemCount(envp);
 
     for (int i = 0; i < orig_envp_count; i++) {
-        if (strstr(envp[i], "LD_PRELOAD")) {
+        if (strstr(envp[i], "compiler-filter")) {
             provided_ld_preload = envp[i];
             provided_ld_preload_index = i;
         }
     }
-    char ld_preload[200];
-    char *so_path = getenv("V_SO_PATH");
+    char ld_preload[40];
     if (provided_ld_preload) {
-        sprintf(ld_preload, "LD_PRELOAD=%s:%s", so_path, provided_ld_preload + 11);
-    } else {
-        sprintf(ld_preload, "LD_PRELOAD=%s", so_path);
+        sprintf(ld_preload, "--compiler-filter=%s", "speed");
     }
-    int new_envp_count = orig_envp_count
-                         + get_keep_item_count()
-                         + get_forbidden_item_count()
-                         + get_replace_item_count() * 2 + 1;
-    if (provided_ld_preload) {
-        new_envp_count--;
+
+    char *api_level_char = getenv("V_API_LEVEL");
+    int api_level = atoi(api_level_char);
+
+    int new_envp_count = orig_envp_count;
+    if (api_level >= 23) {
+        new_envp_count = orig_envp_count + 1;
     }
     char **new_envp = (char **) malloc(new_envp_count * sizeof(char *));
     int cur = 0;
-    new_envp[cur++] = ld_preload;
     for (int i = 0; i < orig_envp_count; ++i) {
         if (i != provided_ld_preload_index) {
             new_envp[cur++] = envp[i];
+        } else {
+            new_envp[i] = ld_preload;
         }
     }
-    for (int i = 0; environ[i]; ++i) {
-        if (environ[i][0] == 'V' && environ[i][1] == '_') {
-            new_envp[cur++] = environ[i];
-        }
+
+    if (new_envp_count != orig_envp_count) {
+        new_envp[new_envp_count - 1] = (char *) (api_level > 25 ? "--inline-max-code-units=0" : "--inline-depth-limit=0");
     }
-    new_envp[cur] = NULL;
+
     return new_envp;
 }
 
