@@ -666,9 +666,9 @@ void hook_dlopen(int api_level) {
 void IOUniformer::startUniformer(const char *so_path, int api_level, int preview_api_level) {
     char api_level_chars[5];
     setenv("V_SO_PATH", so_path, 1);
-    sprintf(api_level_chars, "%i", api_level);
+    ALOGD("API_LEVEL %d", api_level);
     setenv("V_API_LEVEL", api_level_chars, 1);
-    sprintf(api_level_chars, "%i", preview_api_level);
+    ALOGD("API_LEVEL_PRE %d", preview_api_level);
     setenv("V_PREVIEW_API_LEVEL", api_level_chars, 1);
 
     void *handle = dlopen("libc.so", RTLD_NOW);
@@ -714,5 +714,9 @@ void IOUniformer::startUniformer(const char *so_path, int api_level, int preview
         }
         dlclose(handle);
     }
-    hook_dlopen(api_level);
+    if (api_level >= 28 && preview_api_level > 0) {
+        ALOGE("Android Q, Skip hook dlopen");
+    } else {
+        hook_dlopen(api_level);
+    }
 }
