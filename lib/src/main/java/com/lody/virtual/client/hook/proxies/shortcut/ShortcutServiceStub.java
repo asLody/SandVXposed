@@ -2,8 +2,9 @@ package com.lody.virtual.client.hook.proxies.shortcut;
 
 import com.lody.virtual.client.hook.base.BinderInvocationProxy;
 import com.lody.virtual.client.hook.base.ReplaceCallingPkgMethodProxy;
+import com.lody.virtual.client.hook.base.ResultStaticMethodProxy;
 
-import mirror.android.content.pm.ILauncherApps;
+import mirror.android.content.pm.IShortcutService;
 
 /**
  * @author Lody
@@ -12,7 +13,7 @@ public class ShortcutServiceStub extends BinderInvocationProxy {
 
 
     public ShortcutServiceStub() {
-        super(ILauncherApps.Stub.asInterface, "shortcut");
+        super(IShortcutService.Stub.asInterface, "shortcut");
     }
 
     @Override
@@ -25,7 +26,8 @@ public class ShortcutServiceStub extends BinderInvocationProxy {
         super.onBindMethods();
         addMethodProxy(new ReplaceCallingPkgMethodProxy("getManifestShortcuts"));
         addMethodProxy(new ReplaceCallingPkgMethodProxy("getDynamicShortcuts"));
-        addMethodProxy(new ReplaceCallingPkgMethodProxy("setDynamicShortcuts"));
+        //ignore set shortcut
+        addMethodProxy(new ResultStaticMethodProxy("setDynamicShortcuts", false));
         addMethodProxy(new ReplaceCallingPkgMethodProxy("addDynamicShortcuts"));
         addMethodProxy(new ReplaceCallingPkgMethodProxy("createShortcutResultIntent"));
         addMethodProxy(new ReplaceCallingPkgMethodProxy("disableShortcuts"));
@@ -36,5 +38,8 @@ public class ShortcutServiceStub extends BinderInvocationProxy {
         addMethodProxy(new ReplaceCallingPkgMethodProxy("getMaxShortcutCountPerActivity"));
         addMethodProxy(new ReplaceCallingPkgMethodProxy("reportShortcutUsed"));
         addMethodProxy(new ReplaceCallingPkgMethodProxy("onApplicationActive"));
+        //ignore pin shortcut
+        addMethodProxy(new ResultStaticMethodProxy("requestPinShortcut", false));
+        addMethodProxy(new ReplaceCallingPkgMethodProxy("getPinnedShortcuts"));
     }
 }
