@@ -17,6 +17,8 @@ install target app and xposed modules in SandVXposed
 # Plugin tested
 
 Q++
+QX
+WX
 上帝模式
 MDWechat
 XPrivacyLua
@@ -24,6 +26,11 @@ XPrivacyLua
 应用变量
 。。。
 
+# ScreenShot
+
+![art1.jpg](art/art2.jpg)
+
+![art2.jpg](art/art1.jpg)
 
 # SandHook
 https://github.com/ganyao114/SandHook
