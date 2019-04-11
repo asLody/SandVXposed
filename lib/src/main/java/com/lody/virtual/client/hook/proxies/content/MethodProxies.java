@@ -5,12 +5,11 @@ import android.os.Build;
 
 import com.lody.virtual.client.VClientImpl;
 import com.lody.virtual.client.hook.base.MethodProxy;
+import com.lody.virtual.helper.utils.OSUtils;
 
 import java.lang.reflect.Method;
 
-/**
- * author: weishu on 18/3/13.
- */
+
 class MethodProxies {
 
     static class NotifyChange extends MethodProxy {
@@ -65,8 +64,51 @@ class MethodProxies {
         }
 
         @Override
+        public Object call(Object who, Method method, Object... args) throws Throwable {
+            try {
+                return super.call(who, method, args);
+            } catch (Throwable se) {
+                if (se.getCause() instanceof SecurityException && OSUtils.getInstance().isAndroidQ()) {
+                    se.printStackTrace();
+                } else {
+                    throw se;
+                }
+            }
+            return null;
+        }
+
+        @Override
         public boolean isEnable() {
             return isAppProcess();
         }
     }
+
+
+    static class RegisterContentObserver extends MethodProxy {
+
+        @Override
+        public String getMethodName() {
+            return "registerContentObserver";
+        }
+
+        @Override
+        public Object call(Object who, Method method, Object... args) throws Throwable {
+            try {
+                return super.call(who, method, args);
+            } catch (Throwable se) {
+                if (se.getCause() instanceof SecurityException) {
+                    se.printStackTrace();
+                } else {
+                    throw se;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public boolean isEnable() {
+            return isAppProcess() && OSUtils.getInstance().isAndroidQ();
+        }
+    }
+
 }

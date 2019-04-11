@@ -645,6 +645,8 @@ void hook_dlopen(int api_level) {
                               (unsigned long *) &symbol) == 0) {
             MSHookFunction(symbol, (void *) new_do_dlopen_V24,
                            (void **) &orig_do_dlopen_V24);
+        } else {
+            ALOGE("error hook dlopen");
         }
     } else if (api_level >= 19) {
         if (findSymbol("__dl__Z9do_dlopenPKciPK17android_dlextinfo", "linker",
