@@ -13,7 +13,7 @@ import io.virtualapp.home.repo.AppRepository;
 /**
  * @author Lody
  */
-class ListAppPresenterImpl implements ListAppContract.ListAppPresenter {
+public class ListAppPresenterImpl implements ListAppContract.ListAppPresenter {
 
 	private Activity mActivity;
 	private ListAppContract.ListAppView mView;
@@ -21,7 +21,7 @@ class ListAppPresenterImpl implements ListAppContract.ListAppPresenter {
 
 	private File from;
 
-	ListAppPresenterImpl(Activity activity, ListAppContract.ListAppView view, File fromWhere) {
+	public ListAppPresenterImpl(Activity activity, ListAppContract.ListAppView view, File fromWhere) {
 		mActivity = activity;
 		mView = view;
 		mRepository = new AppRepository(activity);

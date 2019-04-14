@@ -30,6 +30,7 @@ import com.lody.virtual.client.stub.ChooseTypeAndAccountActivity;
 import com.lody.virtual.os.VUserInfo;
 import com.lody.virtual.os.VUserManager;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,7 @@ import io.virtualapp.home.models.AppInfoLite;
 import io.virtualapp.home.models.EmptyAppData;
 import io.virtualapp.home.models.MultiplePackageAppData;
 import io.virtualapp.home.models.PackageAppData;
+import io.virtualapp.home.repo.XAppDataInstalled;
 import io.virtualapp.widgets.TwoGearsView;
 
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_DRAG;
@@ -95,6 +97,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         bindViews();
         initLaunchpad();
         initMenu();
+        hHomeAct=this;
         new HomePresenterImpl(this).start();
     }
 
@@ -126,6 +129,8 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                     }).show();
             return false;
         });
+        /*
+        // 去掉没用的项目防止卡顿
         menu.add("虚拟存储").setIcon(R.drawable.ic_vs).setOnMenuItemClickListener(item -> {
             Toast.makeText(this, "The coming", Toast.LENGTH_SHORT).show();
             return false;
@@ -134,6 +139,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
             Toast.makeText(this, "The coming", Toast.LENGTH_SHORT).show();
             return false;
         });
+        */
         menu.add("虚拟位置").setIcon(R.drawable.ic_notification).setOnMenuItemClickListener(item -> {
             startActivity(new Intent(this, VirtualLocationSettings.class));
             return true;
@@ -350,6 +356,39 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                         Toast.makeText(HomeActivity.this, "You can also find it in the Settings~", Toast.LENGTH_LONG).show())
                 .setCancelable(false)
                 .show();
+    }
+
+    static public HomeActivity hHomeAct = null;
+    static public String strPkgName = "";
+    public void InstallAppByPath(String szAppPath)
+    {
+        Intent xdata;
+        File tempFile;
+        try
+        {
+            ArrayList<AppInfoLite> dataList = new ArrayList<AppInfoLite>(1);
+            tempFile = new File(szAppPath.trim());
+            dataList.add(new AppInfoLite(tempFile.getName(), szAppPath.trim(), true));
+            xdata = new Intent();
+            xdata.putParcelableArrayListExtra(VCommends.EXTRA_APP_INFO_LIST, dataList);
+            strPkgName=tempFile.getName();
+        }
+        catch(Throwable e)
+        {
+            e.printStackTrace();
+            return;
+        }
+        try
+        {
+            onActivityResult(1,RESULT_OK,xdata);
+        }
+        catch(Throwable e)
+        {
+            e.printStackTrace();
+        }
+        XAppDataInstalled hInstalled = new XAppDataInstalled();
+        hInstalled.pkgName=tempFile.getName();
+        addAppToLauncher(hInstalled);
     }
 
     @Override

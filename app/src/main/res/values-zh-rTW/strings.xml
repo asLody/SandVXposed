@@ -20,7 +20,7 @@
     <string name="clone_apps">克隆App</string>
     <string name="external_storage">外部空間</string>
     <string name="install_d">安裝 (%d)</string>
-    <string name="install_too_much_once_time">不能一次性安裝超過 9 個程式！</string>
+    <string name="install_too_much_once_time">不建议一次性安裝超過 9 個程式！</string>
 
     <string name="enable_xposed">激活 xposed 框架</string>
     <string name="module_install_success">Xposed 模块 %s 安装成功!</string>
@@ -46,4 +46,6 @@
     <string name="restartfinish">重启只需要一秒，屌不屌？</string>
     <string name="SKRestartTips">更改设置以后点击主页菜单->重启所有应用来让设置生效。</string>
     <string name="ensurerestart">真的要重启吗？</string>
+    <string name="manualpath">手动通过路径选择</string>
+    <string name="appInstallTip">正在安装应用，稍后请点击菜单->重启所有应用以重启桌面，然后刷新桌面缓存。</string>
 </resources>

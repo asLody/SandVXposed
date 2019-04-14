@@ -130,11 +130,28 @@ class HomePresenterImpl implements HomeContract.HomePresenter {
                 }
             }
         }).then((res) -> {
-            addResult.appData = PackageAppDataStorage.get().acquire(info.packageName);
+            try
+            {
+                addResult.appData = PackageAppDataStorage.get().acquire(info.packageName);
+            }
+            catch(Throwable e)
+            {
+                e.printStackTrace();
+                return;
+            }
         }).done(res -> {
             boolean multipleVersion = addResult.justEnableHidden && addResult.userId != 0;
-            if (addResult.appData.getXposedModule() != null) {
-                Toast.makeText(mActivity, String.format(mActivity.getString(R.string.module_install_success), addResult.appData.name), Toast.LENGTH_SHORT).show();
+            try
+            {
+                if (addResult.appData.getXposedModule() != null)
+                {
+                    Toast.makeText(mActivity, String.format(mActivity.getString(R.string.module_install_success), addResult.appData.name), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+            catch(Throwable e)
+            {
+                e.printStackTrace();
                 return;
             }
             if (!multipleVersion) {

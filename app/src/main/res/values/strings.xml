@@ -20,7 +20,7 @@
     <string name="clone_apps">Clone Apps</string>
     <string name="external_storage">External Storage</string>
     <string name="install_d">Install (%d)</string>
-    <string name="install_too_much_once_time">No more then 9 apps can be chosen at a time!</string>
+    <string name="install_too_much_once_time">Not recommand more then 9 apps be chosen at a time!</string>
 
     <string name="enable_xposed">enable xposed</string>
     <string name="module_install_success">Xposed moudle %s install success!</string>
@@ -52,7 +52,7 @@
     </string-array>
 
     <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
+    <string name="pref_header_data_sync">Data and Sync</string>
 
     <string name="pref_title_sync_frequency">Sync frequency</string>
     <string-array name="pref_sync_frequency_titles">
@@ -104,4 +104,6 @@
     <string name="restartfinish">Restart can be done in 1 sec, is it miraculous?</string>
     <string name="SKRestartTips">Please click settings -> Restart Application to enable or disable modules.</string>
     <string name="ensurerestart">Wanna restart this application? Your changes must be saved or lost.</string>
+    <string name="manualpath">Install By Path Manually</string>
+    <string name="appInstallTip">Application is installing, please wait. You can click menu->restart application for list refresh.</string>
 </resources>

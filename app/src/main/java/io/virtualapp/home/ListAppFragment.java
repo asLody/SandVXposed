@@ -1,6 +1,8 @@
 package io.virtualapp.home;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,9 +21,11 @@ import java.util.List;
 import java.util.Locale;
 
 import io.virtualapp.R;
+import io.virtualapp.VApp;
 import io.virtualapp.VCommends;
 import io.virtualapp.abs.ui.VFragment;
 import io.virtualapp.abs.ui.VUiKit;
+import io.virtualapp.home.adapters.AppChooseAct;
 import io.virtualapp.home.adapters.CloneAppListAdapter;
 import io.virtualapp.home.adapters.decorations.ItemOffsetDecoration;
 import io.virtualapp.home.models.AppInfo;
@@ -58,6 +62,11 @@ public class ListAppFragment extends VFragment<ListAppContract.ListAppPresenter>
         return null;
     }
 
+    public void startRemoteThread()
+    {
+        new ListAppPresenterImpl(getActivity(), this, getSelectFrom()).start();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,6 +84,7 @@ public class ListAppFragment extends VFragment<ListAppContract.ListAppPresenter>
         mRecyclerView = (DragSelectRecyclerView) view.findViewById(R.id.select_app_recycler_view);
         mProgressBar = (ProgressBar) view.findViewById(R.id.select_app_progress_bar);
         mInstallButton = (Button) view.findViewById(R.id.select_app_install_btn);
+        Button hButton = (Button) view.findViewById(R.id.buttonAddByPath);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, OrientationHelper.VERTICAL));
         mRecyclerView.addItemDecoration(new ItemOffsetDecoration(VUiKit.dpToPx(getContext(), 2)));
         mAdapter = new CloneAppListAdapter(getActivity());
@@ -86,7 +96,7 @@ public class ListAppFragment extends VFragment<ListAppContract.ListAppPresenter>
                 if (!mAdapter.isIndexSelected(position)) {
                     if (count >= 9) {
                         Toast.makeText(getContext(), R.string.install_too_much_once_time, Toast.LENGTH_SHORT).show();
-                        return;
+                        // return;
                     }
                 }
                 mAdapter.toggleSelected(position);
@@ -94,7 +104,8 @@ public class ListAppFragment extends VFragment<ListAppContract.ListAppPresenter>
 
             @Override
             public boolean isSelectable(int position) {
-                return mAdapter.isIndexSelected(position) || mAdapter.getSelectedCount() < 9;
+                return true;
+                //return mAdapter.isIndexSelected(position) || mAdapter.getSelectedCount() < 9;
             }
         });
         mAdapter.setSelectionListener(count -> {
@@ -113,7 +124,13 @@ public class ListAppFragment extends VFragment<ListAppContract.ListAppPresenter>
             getActivity().setResult(Activity.RESULT_OK, data);
             getActivity().finish();
         });
-        new ListAppPresenterImpl(getActivity(), this, getSelectFrom()).start();
+        hButton.setOnClickListener(v ->
+        {
+            AppChooseAct.pActParent=this;
+            Intent hIntent = new Intent(getActivity(), AppChooseAct.class);
+            getActivity().startActivity(hIntent);
+        });
+        startRemoteThread();
     }
 
     @Override
