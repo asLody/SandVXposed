@@ -113,8 +113,8 @@ public class XposedModuleAdapter extends RecyclerView.Adapter<XposedModuleAdapte
 
         boolean deleteModule(AppData data) {
             new AlertDialog.Builder(context)
-                    .setTitle("Delete Module")
-                    .setMessage("Do you want to delete " + data.getName() + "?")
+                    .setTitle("删除模块")
+                    .setMessage("您真的要删除 " + data.getName() + "?")
                     .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                         try {
                             if (data instanceof PackageAppData) {

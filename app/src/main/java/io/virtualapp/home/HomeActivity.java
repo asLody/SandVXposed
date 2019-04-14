@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -101,11 +102,11 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         mPopupMenu = new PopupMenu(new ContextThemeWrapper(this, R.style.Theme_AppCompat_Light), mMenuView);
         Menu menu = mPopupMenu.getMenu();
         setIconEnable(menu, true);
-        menu.add("Xposed Manager").setIcon(R.drawable.ic_xposed).setOnMenuItemClickListener(item -> {
+        menu.add("Xposed模块管理").setIcon(R.drawable.ic_xposed).setOnMenuItemClickListener(item -> {
             startActivity(new Intent(this, XposedManagerActivity.class));
             return false;
         });
-        menu.add("Accounts").setIcon(R.drawable.ic_account).setOnMenuItemClickListener(item -> {
+        menu.add("账户").setIcon(R.drawable.ic_account).setOnMenuItemClickListener(item -> {
             List<VUserInfo> users = VUserManager.get().getUsers();
             List<String> names = new ArrayList<>(users.size());
             for (VUserInfo info : users) {
@@ -116,7 +117,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                 items[i] = names.get(i);
             }
             new AlertDialog.Builder(this)
-                    .setTitle("Please select an user")
+                    .setTitle("请选择一个用户")
                     .setItems(items, (dialog, which) -> {
                         VUserInfo info = users.get(which);
                         Intent intent = new Intent(this, ChooseTypeAndAccountActivity.class);
@@ -125,20 +126,40 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                     }).show();
             return false;
         });
-        menu.add("Virtual Storage").setIcon(R.drawable.ic_vs).setOnMenuItemClickListener(item -> {
+        menu.add("虚拟存储").setIcon(R.drawable.ic_vs).setOnMenuItemClickListener(item -> {
             Toast.makeText(this, "The coming", Toast.LENGTH_SHORT).show();
             return false;
         });
-        menu.add("Notification").setIcon(R.drawable.ic_notification).setOnMenuItemClickListener(item -> {
+        menu.add("通知管理").setIcon(R.drawable.ic_notification).setOnMenuItemClickListener(item -> {
             Toast.makeText(this, "The coming", Toast.LENGTH_SHORT).show();
             return false;
         });
-        menu.add("Virtual Location").setIcon(R.drawable.ic_notification).setOnMenuItemClickListener(item -> {
+        menu.add("虚拟位置").setIcon(R.drawable.ic_notification).setOnMenuItemClickListener(item -> {
             startActivity(new Intent(this, VirtualLocationSettings.class));
             return true;
         });
-        menu.add("Settings").setIcon(R.drawable.ic_settings).setOnMenuItemClickListener(item -> {
-            Toast.makeText(this, "The coming", Toast.LENGTH_SHORT).show();
+        menu.add("设置").setIcon(R.drawable.ic_settings).setOnMenuItemClickListener(item -> {
+            startActivity(new Intent(this, SettingAct.class));
+            return false;
+        });
+        menu.add(R.string.restartapp).setIcon(R.drawable.ic_settings).setOnMenuItemClickListener(item -> {
+            Toast.makeText(this,R.string.restartfinish,Toast.LENGTH_LONG).show();
+            AlertDialog.Builder hBuilder = new AlertDialog.Builder(HomeActivity.this);
+            hBuilder.setTitle(R.string.restartapp).setMessage(R.string.ensurerestart);
+            hBuilder.
+                    setNegativeButton("×", (dialog, which) ->
+                    {
+                        // 不做任何事情
+                        return;
+                    }) .
+                    setPositiveButton("√", (dialog, which) ->
+                    {
+                        final Intent intent =getPackageManager().getLaunchIntentForPackage(getPackageName());
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        android.os.Process.killProcess(android.os.Process.myPid());
+                    });
+            hBuilder.setCancelable(false).create().show();
             return false;
         });
         mMenuView.setOnClickListener(v -> mPopupMenu.show());
@@ -197,8 +218,8 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
     private void deleteApp(int position) {
         AppData data = mLaunchpadAdapter.getList().get(position);
         new AlertDialog.Builder(this)
-                .setTitle("Delete app")
-                .setMessage("Do you want to delete " + data.getName() + "?")
+                .setTitle("删除应用")
+                .setMessage("您真的要删除 " + data.getName() + "?")
                 .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                     mPresenter.deleteApp(data);
                 })

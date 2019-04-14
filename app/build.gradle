@@ -16,7 +16,7 @@ android {
     defaultConfig {
         applicationId "io.virtualapp.sandvxposed"
         minSdkVersion 19
-        targetSdkVersion 22
+        targetSdkVersion 26
         versionCode 24
         versionName "1.2.5"
         multiDexEnabled true
@@ -77,5 +77,13 @@ dependencies {
     implementation 'com.jonathanfinerty.once:once:1.0.3'
     implementation 'com.flurry.android:analytics:6.9.2'
     implementation 'com.kyleduo.switchbutton:library:1.4.6'
+    implementation 'com.android.support:support-v4:28.0.0-rc02'
+    implementation 'com.android.support:support-vector-drawable:28.0.0-rc02'
     annotationProcessor 'com.trend.lazyinject:compiler:3.4.0-beta'
+}
+
+android {
+    defaultConfig {
+        vectorDrawables.useSupportLibrary = true
+    }
 }

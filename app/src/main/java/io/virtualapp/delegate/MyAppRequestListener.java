@@ -9,6 +9,9 @@ import com.lody.virtual.remote.InstallResult;
 
 import java.io.IOException;
 
+import io.virtualapp.R;
+import io.virtualapp.VApp;
+
 /**
  * @author Lody
  */
@@ -23,7 +26,7 @@ public class MyAppRequestListener implements VirtualCore.AppRequestListener {
 
     @Override
     public void onRequestInstall(String path) {
-        Toast.makeText(context, "Installing: " + path, Toast.LENGTH_SHORT).show();
+        android.widget.Toast.makeText(VApp.getApp(), "正在安装: " + path+"，"+R.string.SKRestartTips, Toast.LENGTH_LONG).show();
         InstallResult res = VirtualCore.get().installPackage(path, InstallStrategy.UPDATE_IF_EXIST);
         if (res.isSuccess) {
             try {
@@ -32,18 +35,18 @@ public class MyAppRequestListener implements VirtualCore.AppRequestListener {
                 e.printStackTrace();
             }
             if (res.isUpdate) {
-                Toast.makeText(context, "Update: " + res.packageName + " success!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "更新: " + res.packageName + " 成功!", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(context, "Install: " + res.packageName + " success!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "安装: " + res.packageName + " 成功!", Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(context, "Install failed: " + res.error, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "安装失败: " + res.error, Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void onRequestUninstall(String pkg) {
-        Toast.makeText(context, "Uninstall: " + pkg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "卸载: " + pkg, Toast.LENGTH_SHORT).show();
 
     }
 }

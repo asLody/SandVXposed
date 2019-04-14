@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
+import android.widget.Toast;
 
 import com.lody.virtual.sandxposed.XposedConfig;
 import com.trend.lazyinject.annotation.InjectComponent;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.virtualapp.R;
+import io.virtualapp.VApp;
 import io.virtualapp.abs.ui.VActivity;
 import io.virtualapp.abs.ui.VUiKit;
 import io.virtualapp.home.adapters.XposedModuleAdapter;
@@ -44,6 +46,7 @@ public class XposedManagerActivity extends VActivity {
         }
         initXposedGlobalSettings();
         initModuleList();
+        android.widget.Toast.makeText(VApp.getApp(),R.string.SKRestartTips, Toast.LENGTH_LONG).show();
     }
 
     private void initXposedGlobalSettings() {
