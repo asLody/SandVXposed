@@ -46,7 +46,7 @@ public class XposedManagerActivity extends VActivity {
         }
         initXposedGlobalSettings();
         initModuleList();
-        android.widget.Toast.makeText(VApp.getApp(),R.string.SKRestartTips, Toast.LENGTH_LONG).show();
+        android.widget.Toast.makeText(this,R.string.SKRestartTips, Toast.LENGTH_LONG).show();
     }
 
     private void initXposedGlobalSettings() {
@@ -71,6 +71,7 @@ public class XposedManagerActivity extends VActivity {
 
         appRepository = new AppRepository(this);
         adapter = new XposedModuleAdapter(this, appRepository, modules);
+        adapter.config = config;
         appRepository.getVirtualXposedModules()
                 .done(result -> {
                     modules.clear();
