@@ -106,4 +106,5 @@
     <string name="ensurerestart">Wanna restart this application? Your changes must be saved or lost.</string>
     <string name="manualpath">Install By Path Manually</string>
     <string name="appInstallTip">Application is installing, please wait. You can click menu->restart application for list refresh.</string>
+    <string name="about_info">Special thanks for Gan!##SandVXP is a application that can let user use Xposed module on non-root and non-bootloader-unlock devices. Clone application into this app and xposed modules, then validate it in menu\'s xposed manager, and they will work.##QQ 384550791##E-Mail king@fou.ink##Website https://www.fou.ink/</string>
 </resources>

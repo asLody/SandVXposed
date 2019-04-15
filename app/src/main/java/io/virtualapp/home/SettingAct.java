@@ -199,15 +199,18 @@ public class SettingAct extends AppCompatPreferenceActivity
         public void onCreate(Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_general);
-            setHasOptionsMenu(true);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("example_text"));
-            bindPreferenceSummaryToValue(findPreference("example_list"));
+            AlertDialog.Builder hDialog = new AlertDialog.Builder(getActivity());
+            hDialog.setTitle(R.string.about);
+            hDialog.setMessage(new String(getResources().getString(R.string.about_info)).
+                    replaceAll("##","\n"));
+            hDialog.setPositiveButton(R.string.back, (dialog, which) ->
+                    getActivity().finish());
+            hDialog.setNegativeButton(R.string.desktop, (dialog, which) ->
+            {
+                HomeActivity.hHomeAct.finish();
+                HomeActivity.goHome(getActivity());
+                getActivity().finish();
+            }).setCancelable(false).create().show();
         }
 
         @Override
