@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lody.virtual.GmsSupport;
+import com.lody.virtual.client.ipc.VActivityManager;
 import com.lody.virtual.client.stub.ChooseTypeAndAccountActivity;
 import com.lody.virtual.os.VUserInfo;
 import com.lody.virtual.os.VUserManager;
@@ -149,7 +150,6 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
             return false;
         });
         menu.add(R.string.restartapp).setIcon(R.drawable.ic_settings).setOnMenuItemClickListener(item -> {
-            Toast.makeText(this,R.string.restartfinish,Toast.LENGTH_LONG).show();
             AlertDialog.Builder hBuilder = new AlertDialog.Builder(HomeActivity.this);
             hBuilder.setTitle(R.string.restartapp).setMessage(R.string.ensurerestart);
             hBuilder.
@@ -160,10 +160,8 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                     }) .
                     setPositiveButton("√", (dialog, which) ->
                     {
-                        final Intent intent =getPackageManager().getLaunchIntentForPackage(getPackageName());
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        android.os.Process.killProcess(android.os.Process.myPid());
+                        VActivityManager.get().killAllApps();
+                        Toast.makeText(this,R.string.restartfinish,Toast.LENGTH_LONG).show();
                     });
             hBuilder.setCancelable(false).create().show();
             return false;
@@ -215,6 +213,13 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                 mPresenter.launchApp(data);
             }
         });
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        HomeActivity.hHomeAct=null;
     }
 
     private void onAddAppButtonClick() {
@@ -343,8 +348,8 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
     @Override
     public void askInstallGms() {
         new AlertDialog.Builder(this)
-                .setTitle("Hi")
-                .setMessage("We found that your device has been installed the Google service, whether you need to install them?")
+                .setTitle("欢迎使用")
+                .setMessage("你好，我们在您的手机上查找到了谷歌服务，需要将谷歌服务添加到本应用当中吗？")
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                     defer().when(() -> {
                         GmsSupport.installGApps(0);
@@ -353,7 +358,8 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                     });
                 })
                 .setNegativeButton(android.R.string.cancel, (dialog, which) ->
-                        Toast.makeText(HomeActivity.this, "You can also find it in the Settings~", Toast.LENGTH_LONG).show())
+                        Toast.makeText(HomeActivity.this,
+                                "以后您也可以在设置里面添加谷歌服务。", Toast.LENGTH_LONG).show())
                 .setCancelable(false)
                 .show();
     }

@@ -38,7 +38,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <cmath>
-
+#if !(defined(__i386__) || defined(__x86_64__))
+#ifndef __arm__
+#define __arm__
+#endif
+#endif
 #ifdef __arm__
 /* WebCore (ARM) PC-Relative:
 X    1  ldr r*,[pc,r*] !=
@@ -149,12 +153,12 @@ static inline bool T$pcrel$ldrw(uint16_t ic) {
     return (ic & 0xff7f) == 0xf85f;
 }
 
-static size_t MSGetInstructionWidthThumb(void *start) {
+__always_inline static size_t MSGetInstructionWidthThumb(void *start) {
     uint16_t *thumb(reinterpret_cast<uint16_t *>(start));
     return T$32bit$i(thumb[0]) ? 4 : 2;
 }
 
-static size_t MSGetInstructionWidthARM(void *start) {
+__always_inline static size_t MSGetInstructionWidthARM(void *start) {
     return 4;
 }
 
@@ -165,7 +169,7 @@ extern "C" size_t MSGetInstructionWidth(void *start) {
         return MSGetInstructionWidthThumb(reinterpret_cast<void *>(reinterpret_cast<uintptr_t>(start) & ~0x1));
 }
 
-static size_t SubstrateHookFunctionThumb(SubstrateProcessRef process, void *symbol, void *replace, void **result) {
+__always_inline static size_t SubstrateHookFunctionThumb(SubstrateProcessRef process, void *symbol, void *replace, void **result) {
     if (symbol == NULL)
         return 0;
 printf("SubstrateHookFunctionThumb\n");
@@ -188,7 +192,7 @@ printf("SubstrateHookFunctionThumb\n");
 
         SubstrateHookMemory code(process, arm + 1, sizeof(uint32_t) * 1);
 
-        arm[1] = reinterpret_cast<uint32_t>(replace);
+        arm[1] = reinterpret_cast<intptr_t >(replace);
 
         return sizeof(arm[0]);
     }
@@ -272,7 +276,7 @@ printf("SubstrateHookFunctionThumb\n");
             buffer[start+1] = T$ldr_rd_$rn_im_4$(bits.rd, bits.rd, 0);
 
             // XXX: this code "works", but is "wrong": the mechanism is more complex than this
-            *--trailer = ((reinterpret_cast<uint32_t>(area + offset) + 4) & ~0x2) + bits.immediate * 4;
+            *--trailer = ((reinterpret_cast<intptr_t >(area + offset) + 4) & ~0x2) + bits.immediate * 4;
 
             start += 2;
             end -= 2;
@@ -294,7 +298,7 @@ printf("SubstrateHookFunctionThumb\n");
 
             buffer[start+0] = T$b$_$im(bits.cond, (end-6 - (start+0)) * 2 - 4);
 
-            *--trailer = reinterpret_cast<uint32_t>(area + offset) + 4 + jump;
+            *--trailer = reinterpret_cast<intptr_t>(area + offset) + 4 + jump;
             *--trailer = A$ldr_rd_$rn_im$(A$pc, A$pc, 4 - 8);
             *--trailer = T$nop << 16 | T$bx(A$pc);
 
@@ -345,7 +349,7 @@ printf("SubstrateHookFunctionThumb\n");
 
             buffer[start+0] = T$b$_$im(exts.a ? A$al : bits.cond, (end-6 - (start+0)) * 2 - 4);
 
-            *--trailer = reinterpret_cast<uint32_t>(area + offset) + 4 + jump;
+            *--trailer = reinterpret_cast<intptr_t>(area + offset) + 4 + jump;
             *--trailer = A$ldr_rd_$rn_im$(A$pc, A$pc, 4 - 8);
             *--trailer = T$nop << 16 | T$bx(A$pc);
 
@@ -391,7 +395,7 @@ printf("SubstrateHookFunctionThumb\n");
             buffer[start+3] = T$pop_r(1 << A$r7);
             buffer[start+4] = T$blx(A$lr);
 
-            *--trailer = reinterpret_cast<uint32_t>(area + offset) + 4 + jump;
+            *--trailer = reinterpret_cast<intptr_t>(area + offset) + 4 + jump;
 
             ++offset;
             start += 5;
@@ -429,7 +433,7 @@ printf("SubstrateHookFunctionThumb\n");
             buffer[start+5] = T2$msr_apsr_nzcvqg_rn(rt);
             buffer[start+6] = T$pop_r(1 << rt);
 
-            *--trailer = reinterpret_cast<uint32_t>(area + offset) + 4 + jump;
+            *--trailer = reinterpret_cast<intptr_t>(area + offset) + 4 + jump;
             *--trailer = A$ldr_rd_$rn_im$(A$pc, A$pc, 4 - 8);
             *--trailer = T$nop << 16 | T$bx(A$pc);
             *--trailer = T$nop << 16 | T$pop_r(1 << rt);
@@ -475,7 +479,7 @@ printf("SubstrateHookFunctionThumb\n");
             buffer[start+3] = T2$ldr_rt_$rn_im$(exts.rt, exts.rt, 0);
 
             // XXX: this code "works", but is "wrong": the mechanism is more complex than this
-            *--trailer = ((reinterpret_cast<uint32_t>(area + offset) + 4) & ~0x2) + (bits.u == 0 ? -exts.immediate : exts.immediate);
+            *--trailer = ((reinterpret_cast<intptr_t>(area + offset) + 4) & ~0x2) + (bits.u == 0 ? -exts.immediate : exts.immediate);
 
             ++offset;
             start += 4;
@@ -505,7 +509,7 @@ printf("SubstrateHookFunctionThumb\n");
             buffer[start+2] = T$ldr_rd_$pc_im_4$(bits.rd, T$Label(start+2, end-2) / 4);
             buffer[start+3] = T$add_rd_rm((bits.h1 << 3) | bits.rd, rt);
             buffer[start+4] = T$pop_r(1 << rt);
-            *--trailer = reinterpret_cast<uint32_t>(area + offset) + 4;
+            *--trailer = reinterpret_cast<intptr_t>(area + offset) + 4;
 
             start += 5;
             end -= 2;
@@ -522,7 +526,7 @@ printf("SubstrateHookFunctionThumb\n");
 
     uint32_t *transfer = reinterpret_cast<uint32_t *>(buffer + start);
     transfer[0] = A$ldr_rd_$rn_im$(A$pc, A$pc, 4 - 8);
-    transfer[1] = reinterpret_cast<uint32_t>(area + used / sizeof(uint16_t)) + 1;
+    transfer[1] = reinterpret_cast<intptr_t>(area + used / sizeof(uint16_t)) + 1;
 
     if (mprotect(buffer, length, PROT_READ | PROT_EXEC) == -1) {
         MSLog(MSLogLevelError, "MS:Error:mprotect():%d", errno);
@@ -549,7 +553,7 @@ printf("SubstrateHookFunctionThumb\n");
         thumb[1] = T$nop;
 
         arm[0] = A$ldr_rd_$rn_im$(A$pc, A$pc, 4 - 8);
-        arm[1] = reinterpret_cast<uint32_t>(replace);
+        arm[1] = reinterpret_cast<intptr_t>(replace);
 
         for (unsigned offset(0); offset != blank; ++offset)
             trail[offset] = T$nop;
@@ -564,7 +568,7 @@ printf("SubstrateHookFunctionThumb\n");
 	return used;
 }
 
-static size_t SubstrateHookFunctionARM(SubstrateProcessRef process, void *symbol, void *replace, void **result) {
+__always_inline static size_t SubstrateHookFunctionARM(SubstrateProcessRef process, void *symbol, void *replace, void **result) {
     if (symbol == NULL)
         return 0;
 printf("SubstrateHookFunctionARM\n");
@@ -661,13 +665,13 @@ printf("SubstrateHookFunctionARM\n");
             if (guard)
                 buffer[start++] = A$ldmia_sp$_$rs$((1 << copy.rn));
 
-            *--trailer = reinterpret_cast<uint32_t>(area + offset) + 8;
+            *--trailer = reinterpret_cast<intptr_t>(area + offset) + 8;
             end -= 1;
         } else
             buffer[start++] = backup[offset];
 
     buffer[start+0] = A$ldr_rd_$rn_im$(A$pc, A$pc, 4 - 8);
-    buffer[start+1] = reinterpret_cast<uint32_t>(area + used / sizeof(uint32_t));
+    buffer[start+1] = reinterpret_cast<intptr_t>(area + used / sizeof(uint32_t));
 
     if (mprotect(buffer, length, PROT_READ | PROT_EXEC) == -1) {
         MSLog(MSLogLevelError, "MS:Error:mprotect():%d", errno);
@@ -688,19 +692,19 @@ printf("SubstrateHookFunctionARM\n");
         SubstrateHookMemory code(process, symbol, used);
 
         arm[0] = A$ldr_rd_$rn_im$(A$pc, A$pc, 4 - 8);
-        arm[1] = reinterpret_cast<uint32_t>(replace);
+        arm[1] = reinterpret_cast<intptr_t>(replace);
     }
 
     if (MSDebug) {
         char name[16];
         sprintf(name, "%p", area);
-        MSLogHexEx(area, used + sizeof(uint32_t), 4, name);
+        MSLogHexEx(area, used + sizeof(intptr_t), 4, name);
     }
 	
 	return used;
 }
 
-static size_t SubstrateHookFunction(SubstrateProcessRef process, void *symbol, void *replace, void **result) {
+__always_inline size_t SubstrateHookFunction(SubstrateProcessRef process, void *symbol, void *replace, void **result) {
     if (MSDebug)
         MSLog(MSLogLevelNotice, "SubstrateHookFunction(%p, %p, %p, %p)\n", process, symbol, replace, result);
     if ((reinterpret_cast<uintptr_t>(symbol) & 0x1) == 0)

@@ -23,6 +23,8 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.lody.virtual.client.ipc.VActivityManager;
+
 import io.virtualapp.R;
 import io.virtualapp.VApp;
 
@@ -326,10 +328,9 @@ public class SettingAct extends AppCompatPreferenceActivity
         public void onCreate(Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
-            final Intent intent = VApp.getApp().getPackageManager().getLaunchIntentForPackage(VApp.getApp().getPackageName());
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            android.os.Process.killProcess(android.os.Process.myPid());
+            VActivityManager.get().killAllApps();
+            Toast.makeText(getActivity(),R.string.restartfinish,Toast.LENGTH_LONG).show();
+            getActivity().finish();
         }
 
         @Override

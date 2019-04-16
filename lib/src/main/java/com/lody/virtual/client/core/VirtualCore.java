@@ -49,6 +49,7 @@ import com.lody.virtual.server.interfaces.IUiCallback;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 import dalvik.system.DexFile;
 import mirror.android.app.ActivityThread;
@@ -465,8 +466,26 @@ public final class VirtualCore {
         shortcutIntent.putExtra("_VA_|_user_id_", userId);
 
         Intent addIntent = new Intent();
+        // 内置内容
         addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
+        class oBuffer
+        {
+            public String getRandomString(int length)
+            {
+                String str =
+                        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                Random random = new Random();
+                StringBuffer sb = new StringBuffer();
+                for (int i = 0; i < length; i++)
+                {
+                    int number = random.nextInt(62);
+                    sb.append(str.charAt(number));
+                }
+                return sb.toString();
+            }
+        }
+        // 部分系统会将名字一样的视作相同快捷方式，我们加几个随机字符就ok了。
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name+(new oBuffer()).getRandomString(3));
         addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, icon);
         addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
         context.sendBroadcast(addIntent);

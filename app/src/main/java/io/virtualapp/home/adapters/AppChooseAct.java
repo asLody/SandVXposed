@@ -185,7 +185,8 @@ public class AppChooseAct extends AppCompatActivity
             throw new ExceptionWithContext("Not support Android 4.4 or lower.",new Exception());
         if(pActParent==null)return;
         android.widget.Toast.makeText(pActParent.getActivity(),R.string.appInstallTip, Toast.LENGTH_LONG).show();
-        HomeActivity.hHomeAct.InstallAppByPath(path);
+        if(HomeActivity.hHomeAct!=null)
+            HomeActivity.hHomeAct.InstallAppByPath(path);
         pActParent.getActivity().finish();
         finish();
     }
