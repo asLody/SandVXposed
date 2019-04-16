@@ -13,6 +13,8 @@
 
 bool iu_loaded = false;
 
+int g_preview_api_level = 0;
+
 void IOUniformer::init_env_before_all() {
     if (iu_loaded)
         return;
@@ -23,6 +25,7 @@ void IOUniformer::init_env_before_all() {
         int api_level = atoi(api_level_chars);
         int preview_api_level;
         preview_api_level = atoi(preview_api_level_chars);
+        g_preview_api_level = preview_api_level;
         char keep_env_name[25];
         char forbid_env_name[25];
         char replace_src_env_name[25];
@@ -558,7 +561,8 @@ char **build_new_argv(char *const argv[]) {
     char *api_level_char = getenv("V_API_LEVEL");
     int api_level = atoi(api_level_char);
 
-    if (api_level >= ANDROID_L2 && api_level < ANDROID_Q) {
+    //(api_level == 28 && g_preview_api_level > 0) = Android Q Preview
+    if (api_level >= ANDROID_L2 && (api_level < ANDROID_Q && !(api_level == 28 && g_preview_api_level > 0))) {
         new_argv[cur++] = (char *) "--compile-pic";
     }
     if (api_level >= ANDROID_M) {
