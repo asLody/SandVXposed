@@ -561,7 +561,7 @@ char **build_new_argv(char *const argv[]) {
     if (api_level >= ANDROID_L2 && api_level < ANDROID_Q) {
         new_argv[cur++] = (char *) "--compile-pic";
     }
-    if (api_level >= 23) {
+    if (api_level >= ANDROID_M) {
         new_argv[cur++] = (char *) (api_level > ANDROID_N2 ? "--inline-max-code-units=0" : "--inline-depth-limit=0");
     }
 
