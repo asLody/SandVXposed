@@ -6,7 +6,7 @@ buildscript {
             url 'https://dl.google.com/dl/android/maven2/'
             name 'Google'
         }
-        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        //maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
         jcenter()
         google()
     }
@@ -25,7 +25,7 @@ allprojects {
             url 'https://dl.google.com/dl/android/maven2/'
             name 'Google'
         }
-        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+         // maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
         jcenter()
         maven {
             url "https://jitpack.io"

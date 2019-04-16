@@ -500,45 +500,94 @@ int inline getArrayItemCount(char *const array[]) {
     return i;
 }
 
-
 char **build_new_env(char *const envp[]) {
     char *provided_ld_preload = NULL;
     int provided_ld_preload_index = -1;
     int orig_envp_count = getArrayItemCount(envp);
 
     for (int i = 0; i < orig_envp_count; i++) {
-        if (strstr(envp[i], "compiler-filter")) {
+        if (strstr(envp[i], "LD_PRELOAD")) {
             provided_ld_preload = envp[i];
             provided_ld_preload_index = i;
         }
     }
-    char ld_preload[40];
+    char ld_preload[200];
+    char *so_path = getenv("V_SO_PATH");
     if (provided_ld_preload) {
-        sprintf(ld_preload, "--compiler-filter=%s", "speed");
+        sprintf(ld_preload, "LD_PRELOAD=%s:%s", so_path, provided_ld_preload + 11);
+    } else {
+        sprintf(ld_preload, "LD_PRELOAD=%s", so_path);
+    }
+    int new_envp_count = orig_envp_count
+                         + get_keep_item_count()
+                         + get_forbidden_item_count()
+                         + get_replace_item_count() * 2 + 1;
+    if (provided_ld_preload) {
+        new_envp_count--;
+    }
+    char **new_envp = (char **) malloc(new_envp_count * sizeof(char *));
+    int cur = 0;
+    new_envp[cur++] = ld_preload;
+    for (int i = 0; i < orig_envp_count; ++i) {
+        if (i != provided_ld_preload_index) {
+            new_envp[cur++] = envp[i];
+        }
+    }
+    for (int i = 0; environ[i]; ++i) {
+        if (environ[i][0] == 'V' && environ[i][1] == '_') {
+            new_envp[cur++] = environ[i];
+        }
+    }
+    new_envp[cur] = NULL;
+    return new_envp;
+}
+
+
+//disable inline
+char **build_new_argv(char *const argv[]) {
+
+    int orig_argv_count = getArrayItemCount(argv);
+
+    int new_argv_count = orig_argv_count + 2;
+    char **new_argv = (char **) malloc(new_argv_count * sizeof(char *));
+    int cur = 0;
+    for (int i = 0; i < orig_argv_count; ++i) {
+        new_argv[cur++] = argv[i];
     }
 
     char *api_level_char = getenv("V_API_LEVEL");
     int api_level = atoi(api_level_char);
 
-    int new_envp_count = orig_envp_count;
-    if (api_level >= 23) {
-        new_envp_count = orig_envp_count + 1;
+    if (api_level >= ANDROID_L2 && api_level < ANDROID_Q) {
+        new_argv[cur++] = (char *) "--compile-pic";
     }
-    char **new_envp = (char **) malloc(new_envp_count * sizeof(char *));
-    int cur = 0;
-    for (int i = 0; i < orig_envp_count; ++i) {
-        if (i != provided_ld_preload_index) {
-            new_envp[cur++] = envp[i];
-        } else {
-            new_envp[i] = ld_preload;
+    if (api_level >= 23) {
+        new_argv[cur++] = (char *) (api_level > ANDROID_N2 ? "--inline-max-code-units=0" : "--inline-depth-limit=0");
+    }
+
+    new_argv[cur] = NULL;
+
+    return new_argv;
+}
+
+//skip dex2oat hooker
+bool isSandHooker(char *const args[]) {
+    int orig_arg_count = getArrayItemCount(args);
+
+    for (int i = 0; i < orig_arg_count; i++) {
+        if (strstr(args[i], "SandHooker")) {
+            char *api_level_char = getenv("V_API_LEVEL");
+            int api_level = atoi(api_level_char);
+            if (api_level >= ANDROID_N) {
+                ALOGE("skip dex2oat hooker!");
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
-    if (new_envp_count != orig_envp_count) {
-        new_envp[new_envp_count - 1] = (char *) (api_level > 25 ? "--inline-max-code-units=0" : "--inline-depth-limit=0");
-    }
-
-    return new_envp;
+    return false;
 }
 
 // int (*origin_execve)(const char *pathname, char *const argv[], char *const envp[]);
@@ -560,9 +609,14 @@ HOOK_DEF(int, execve, const char *pathname, char *argv[], char *const envp[]) {
         }
     }
     if (strstr(pathname, "dex2oat")) {
+        if (isSandHooker(argv)) {
+            return -1;
+        }
+        char **new_argv = build_new_argv(argv);
         char **new_envp = build_new_env(envp);
-        int ret = syscall(__NR_execve, redirect_path, argv, new_envp);
+        int ret = syscall(__NR_execve, redirect_path, new_argv, new_envp);
         FREE(redirect_path, pathname);
+        free(new_argv);
         free(new_envp);
         return ret;
     }
