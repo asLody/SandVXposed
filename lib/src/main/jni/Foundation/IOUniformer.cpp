@@ -14,6 +14,7 @@
 bool iu_loaded = false;
 
 int g_preview_api_level = 0;
+int g_api_level = 0;
 
 void IOUniformer::init_env_before_all() {
     if (iu_loaded)
@@ -23,6 +24,7 @@ void IOUniformer::init_env_before_all() {
     if (api_level_chars) {
         ALOGE("Enter init before all.");
         int api_level = atoi(api_level_chars);
+        g_api_level = api_level;
         int preview_api_level;
         preview_api_level = atoi(preview_api_level_chars);
         g_preview_api_level = preview_api_level;
@@ -558,15 +560,12 @@ char **build_new_argv(char *const argv[]) {
         new_argv[cur++] = argv[i];
     }
 
-    char *api_level_char = getenv("V_API_LEVEL");
-    int api_level = atoi(api_level_char);
-
     //(api_level == 28 && g_preview_api_level > 0) = Android Q Preview
-    if (api_level >= ANDROID_L2 && (api_level < ANDROID_Q && !(api_level == 28 && g_preview_api_level > 0))) {
+    if (g_api_level >= ANDROID_L2 && (g_api_level < ANDROID_Q && !(g_api_level == 28 && g_preview_api_level > 0))) {
         new_argv[cur++] = (char *) "--compile-pic";
     }
-    if (api_level >= ANDROID_M) {
-        new_argv[cur++] = (char *) (api_level > ANDROID_N2 ? "--inline-max-code-units=0" : "--inline-depth-limit=0");
+    if (g_api_level >= ANDROID_M) {
+        new_argv[cur++] = (char *) (g_api_level > ANDROID_N2 ? "--inline-max-code-units=0" : "--inline-depth-limit=0");
     }
 
     new_argv[cur] = NULL;
@@ -580,9 +579,7 @@ bool isSandHooker(char *const args[]) {
 
     for (int i = 0; i < orig_arg_count; i++) {
         if (strstr(args[i], "SandHooker")) {
-            char *api_level_char = getenv("V_API_LEVEL");
-            int api_level = atoi(api_level_char);
-            if (api_level >= ANDROID_N) {
+            if (g_api_level >= ANDROID_N) {
                 ALOGE("skip dex2oat hooker!");
                 return true;
             } else {
@@ -722,11 +719,15 @@ void hook_dlopen(int api_level) {
 
 
 void IOUniformer::startUniformer(const char *so_path, int api_level, int preview_api_level) {
+
+    g_api_level = api_level;
+    g_preview_api_level = preview_api_level;
+
     char api_level_chars[5];
     setenv("V_SO_PATH", so_path, 1);
-    ALOGD("API_LEVEL %d", api_level);
+    sprintf(api_level_chars, "%i", api_level);
     setenv("V_API_LEVEL", api_level_chars, 1);
-    ALOGD("API_LEVEL_PRE %d", preview_api_level);
+    sprintf(api_level_chars, "%i", preview_api_level);
     setenv("V_PREVIEW_API_LEVEL", api_level_chars, 1);
 
     void *handle = dlopen("libc.so", RTLD_NOW);
