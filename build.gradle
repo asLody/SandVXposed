@@ -3,14 +3,16 @@
 buildscript {
     repositories {
         maven {
-            url 'https://maven.google.com/'
+            url 'https://dl.google.com/dl/android/maven2/'
             name 'Google'
         }
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
         jcenter()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
-        classpath 'com.android.tools.build:gradle-experimental:0.11.0'
+        classpath 'com.android.tools.build:gradle:3.3.2'
+        // classpath 'com.android.tools.build:gradle-experimental:3.3.2'
         classpath 'com.trend.lazyinject:aopweave:3.4.0-beta'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -20,9 +22,10 @@ buildscript {
 allprojects {
     repositories {
         maven {
-            url 'https://maven.google.com/'
+            url 'https://dl.google.com/dl/android/maven2/'
             name 'Google'
         }
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
         jcenter()
         maven {
             url "https://jitpack.io"

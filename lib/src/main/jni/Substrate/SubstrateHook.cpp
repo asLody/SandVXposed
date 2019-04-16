@@ -37,6 +37,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
+#include <cmath>
 
 #ifdef __arm__
 /* WebCore (ARM) PC-Relative:
@@ -89,8 +90,16 @@ X 4790  ldr r*,[pc,#*]    */
 
 #define T1$ldr_rt_$rn_im$(rt, rn, im) /* ldr rt, [rn, #im] */ \
     (0xf850 | ((im < 0 ? 0 : 1) << 7) | (rn))
+
+template<class T> T xabs(T _Val)
+{
+        typedef int BOOL;
+        if(_Val>T(0))return _Val;
+        return -_Val;
+}
+
 #define T2$ldr_rt_$rn_im$(rt, rn, im) /* ldr rt, [rn, #im] */ \
-    (((rt) << 12) | abs(im))
+    (((rt) << 12) | xabs(im))
 
 #define T1$mrs_rd_apsr(rd) /* mrs rd, apsr */ \
     (0xf3ef)

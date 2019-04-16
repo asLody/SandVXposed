@@ -37,3 +37,7 @@ https://github.com/ganyao114/SandHook
 
 # VirtualApp
 https://github.com/asLody/VirtualApp
+
+# Chinese
+
+[VirtualApp 源码分析](https://blog.csdn.net/ganyao939543405/article/details/76146760)
