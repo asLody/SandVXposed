@@ -50,4 +50,5 @@
     <string name="appInstallTip">正在安装应用，稍后请点击菜单->重启所有应用以重启桌面，然后刷新桌面缓存。</string>
     <string name="about_info">"特别感谢甘！##SandVXP是一个应用程序，可以让用户在非Root和非引导加载程序解锁设备上使用Xposed模块。##将应用程序和模块添加或克隆到这个应用程序中，然后在菜单的“Xposed管理器”中启用它，应用和模块就可以工作了。##QQ 384550791##邮箱: king@fou.ink##网址https://www.fou.ink/ "</string>
     <string name="launch_failed">抱歉，启动失败。</string>
+    <string name="sys_crash">应用程序发生异常，已被捕捉，请留意。</string>
 </resources>
