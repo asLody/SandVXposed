@@ -2,6 +2,8 @@
 #include "SandboxFs.h"
 #include "Path.h"
 
+#include <iostream>
+#include <string>
 PathItem *keep_items;
 PathItem *forbidden_items;
 ReplaceItem *replace_items;
@@ -10,9 +12,11 @@ int forbidden_item_count;
 int replace_item_count;
 
 int add_keep_item(const char *path) {
-    char keep_env_name[25];
-    sprintf(keep_env_name, "V_KEEP_ITEM_%d", keep_item_count);
-    setenv(keep_env_name, path, 1);
+    // char keep_env_name[25];
+    std::string keep_env_name("V_KEEP_ITEM_");
+    // sprintf(keep_env_name, "V_KEEP_ITEM_%d", keep_item_count);
+    keep_env_name+=std::to_string(keep_item_count);
+    setenv(keep_env_name.c_str(), path, 1);
     keep_items = (PathItem *) realloc(keep_items,
                                       keep_item_count * sizeof(PathItem) + sizeof(PathItem));
     PathItem &item = keep_items[keep_item_count];
@@ -22,9 +26,11 @@ int add_keep_item(const char *path) {
 }
 
 int add_forbidden_item(const char *path) {
-    char forbidden_env_name[25];
-    sprintf(forbidden_env_name, "V_FORBID_ITEM_%d", forbidden_item_count);
-    setenv(forbidden_env_name, path, 1);
+    // char forbidden_env_name[25];
+    std::string forbidden_env_name("V_FORBID_ITEM_");
+    // sprintf(forbidden_env_name, "V_FORBID_ITEM_%d", forbidden_item_count);
+    forbidden_env_name+=std::to_string(forbidden_item_count);
+    setenv(forbidden_env_name.c_str(), path, 1);
     forbidden_items = (PathItem *) realloc(forbidden_items,
                                            forbidden_item_count * sizeof(PathItem) +
                                            sizeof(PathItem));
@@ -36,12 +42,16 @@ int add_forbidden_item(const char *path) {
 }
 
 int add_replace_item(const char *orig_path, const char *new_path) {
-    char src_env_name[25];
-    char dst_env_name[25];
-    sprintf(src_env_name, "V_REPLACE_ITEM_SRC_%d", replace_item_count);
-    sprintf(dst_env_name, "V_REPLACE_ITEM_DST_%d", replace_item_count);
-    setenv(src_env_name, orig_path, 1);
-    setenv(dst_env_name, new_path, 1);
+    // char src_env_name[25];
+    std::string src_env_name("V_REPLACE_ITEM_SRC_");
+    // char dst_env_name[25];
+    std::string dst_env_name("V_REPLACE_ITEM_DST_");
+    // sprintf(src_env_name, "V_REPLACE_ITEM_SRC_%d", replace_item_count);
+    src_env_name+=std::to_string(replace_item_count);
+    // sprintf(dst_env_name, "V_REPLACE_ITEM_DST_%d", replace_item_count);
+    dst_env_name+=std::to_string(replace_item_count);
+    setenv(src_env_name.c_str(), orig_path, 1);
+    setenv(dst_env_name.c_str(), new_path, 1);
 
     replace_items = (ReplaceItem *) realloc(replace_items,
                                             replace_item_count * sizeof(ReplaceItem) +

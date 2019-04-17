@@ -1,0 +1,30 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- These settings headers are only used on tablets. -->
+
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$GeneralPreferenceFragment"
+        android:icon="@drawable/ic_info_black_24dp"
+        android:title="@string/about" />
+
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$NotificationPreferenceFragment"
+        android:icon="@drawable/ic_notifications_black_24dp"
+        android:title="@string/pref_header_notifications" />
+
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$DataSyncPreferenceFragment"
+        android:icon="@drawable/ic_sync_black_24dp"
+        android:title="@string/pref_header_data_sync" />
+
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$SKSettings"
+        android:icon="@drawable/ic_info_black_24dp"
+        android:title="@string/SK_Settings" />
+
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$SKResstart"
+        android:icon="@drawable/ic_shortcut"
+        android:title="@string/restartapp" />
+
+</preference-headers>

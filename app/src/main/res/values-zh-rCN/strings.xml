@@ -20,8 +20,35 @@
     <string name="clone_apps">克隆App</string>
     <string name="external_storage">外置存储</string>
     <string name="install_d">安装 (%d)</string>
-    <string name="install_too_much_once_time">不能一次性安装超过9个App!</string>
+    <string name="install_too_much_once_time">不建议一次性安装超过9个App!</string>
 
     <string name="enable_xposed">激活 xposed 框架</string>
     <string name="module_install_success">Xposed 模块 %s 安装成功!</string>
+    <string name="title_activity_setting">设置</string>
+    <string name="pref_header_general">通用</string>
+    <string name="pref_title_social_recommendations">使用全局默认</string>
+    <string name="pref_description_social_recommendations">基于您的消息历史记录建议联系人名</string>
+    <string name="pref_title_display_name">显示名称</string>
+    <string name="pref_default_display_name">zhan</string>
+    <string name="pref_title_add_friends_to_messages">添加朋友到消息</string>
+    <string name="pref_header_data_sync">数据和同步</string>
+    <string name="pref_title_sync_frequency">同步频率</string>
+    <string name="pref_title_system_sync_settings">系统同步设置</string>
+    <string name="pref_header_notifications">通知</string>
+    <string name="pref_title_new_message_notifications">新的消息通知</string>
+    <string name="pref_title_ringtone">铃声</string>
+    <string name="pref_ringtone_silent">静音</string>
+    <string name="pref_title_vibrate">震动</string>
+    <string name="SK_Settings">应用设置</string>
+    <string name="SK_Thecoming">咕咕咕</string>
+    <string name="back">返回</string>
+    <string name="restartapp">重启所有应用</string>
+    <string name="restartfinish">重启应用只需要一秒，是不是很牛逼呢？</string>
+    <string name="SKRestartTips">更改设置以后点击主页菜单->重启所有应用来让设置生效。</string>
+    <string name="ensurerestart">真的要重启吗？请确保已经保存好数据。</string>
+    <string name="manualpath">手动选择路径安装</string>
+    <string name="appInstallTip">正在安装应用，稍后请点击菜单->重启所有应用以重启桌面，然后刷新桌面缓存。</string>
+    <string name="about_info">"特别感谢甘！##SandVXP是一个应用程序，可以让用户在非Root和非引导加载程序解锁设备上使用Xposed模块。##将应用程序和模块添加或克隆到这个应用程序中，然后在菜单的“Xposed管理器”中启用它，应用和模块就可以工作了。##QQ 384550791##邮箱: king@fou.ink##网址https://www.fou.ink/ "</string>
+    <string name="launch_failed">抱歉，启动失败。</string>
+    <string name="sys_crash">应用程序发生异常，已被捕捉，请留意。</string>
 </resources>

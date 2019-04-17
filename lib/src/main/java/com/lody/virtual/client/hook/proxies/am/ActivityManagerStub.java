@@ -1,10 +1,12 @@
 package com.lody.virtual.client.hook.proxies.am;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IInterface;
+import android.widget.Toast;
 
 import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.hook.base.BinderInvocationStub;
@@ -16,11 +18,13 @@ import com.lody.virtual.client.hook.base.ReplaceCallingPkgMethodProxy;
 import com.lody.virtual.client.hook.base.ReplaceLastUidMethodProxy;
 import com.lody.virtual.client.hook.base.ResultStaticMethodProxy;
 import com.lody.virtual.client.hook.base.StaticMethodProxy;
+import com.lody.virtual.client.ipc.VAccountManager;
 import com.lody.virtual.client.ipc.VActivityManager;
 import com.lody.virtual.helper.compat.BuildCompat;
 import com.lody.virtual.helper.compat.ParceledListSliceCompat;
 import com.lody.virtual.remote.AppTaskInfo;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -69,8 +73,22 @@ public class ActivityManagerStub extends MethodInvocationProxy<MethodInvocationS
         if (VirtualCore.get().isVAppProcess()) {
             addMethodProxy(new StaticMethodProxy("navigateUpTo") {
                 @Override
-                public Object call(Object who, Method method, Object... args) throws Throwable {
-                    throw new RuntimeException("Call navigateUpTo!!!!");
+                public Object call(Object who, Method method, Object... args)
+                {
+                    Object _infos=null;
+                    try
+                    {
+                        _infos = method.invoke(who, args);
+                    } catch (IllegalAccessException e)
+                    {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e)
+                    {
+                        e.printStackTrace();
+                        return false;
+                    }
+                    // throw new RuntimeException("Call navigateUpTo!!!!");
+                    return _infos;
                 }
             });
             addMethodProxy(new ReplaceLastUidMethodProxy("checkPermissionWithToken"));

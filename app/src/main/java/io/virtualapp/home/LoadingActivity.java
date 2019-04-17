@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.ipc.VActivityManager;
@@ -54,9 +55,11 @@ public class LoadingActivity extends VActivity {
         ImageView iconView = (ImageView) findViewById(R.id.app_icon);
         iconView.setImageDrawable(appModel.icon);
         TextView nameView = (TextView) findViewById(R.id.app_name);
-        nameView.setText(String.format(Locale.ENGLISH, "Opening %s...", appModel.name));
+        nameView.setText(String.format(Locale.CHINESE, "正在打开 %s...", appModel.name));
         Intent intent = getIntent().getParcelableExtra(KEY_INTENT);
         if (intent == null) {
+            Toast.makeText(this,R.string.launch_failed,Toast.LENGTH_LONG).show();
+            finish();
             return;
         }
         VirtualCore.get().setUiCallback(intent, mUiCallback);

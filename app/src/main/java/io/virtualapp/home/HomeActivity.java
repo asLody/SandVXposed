@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -25,10 +26,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lody.virtual.GmsSupport;
+import com.lody.virtual.client.ipc.VActivityManager;
 import com.lody.virtual.client.stub.ChooseTypeAndAccountActivity;
 import com.lody.virtual.os.VUserInfo;
 import com.lody.virtual.os.VUserManager;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +50,7 @@ import io.virtualapp.home.models.AppInfoLite;
 import io.virtualapp.home.models.EmptyAppData;
 import io.virtualapp.home.models.MultiplePackageAppData;
 import io.virtualapp.home.models.PackageAppData;
+import io.virtualapp.home.repo.XAppDataInstalled;
 import io.virtualapp.widgets.TwoGearsView;
 
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_DRAG;
@@ -94,6 +98,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         bindViews();
         initLaunchpad();
         initMenu();
+        hHomeAct=this;
         new HomePresenterImpl(this).start();
     }
 
@@ -101,11 +106,11 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         mPopupMenu = new PopupMenu(new ContextThemeWrapper(this, R.style.Theme_AppCompat_Light), mMenuView);
         Menu menu = mPopupMenu.getMenu();
         setIconEnable(menu, true);
-        menu.add("Xposed Manager").setIcon(R.drawable.ic_xposed).setOnMenuItemClickListener(item -> {
+        menu.add("Xposed管理器").setIcon(R.drawable.ic_xposed).setOnMenuItemClickListener(item -> {
             startActivity(new Intent(this, XposedManagerActivity.class));
             return false;
         });
-        menu.add("Accounts").setIcon(R.drawable.ic_account).setOnMenuItemClickListener(item -> {
+        menu.add("账户").setIcon(R.drawable.ic_account).setOnMenuItemClickListener(item -> {
             List<VUserInfo> users = VUserManager.get().getUsers();
             List<String> names = new ArrayList<>(users.size());
             for (VUserInfo info : users) {
@@ -116,7 +121,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                 items[i] = names.get(i);
             }
             new AlertDialog.Builder(this)
-                    .setTitle("Please select an user")
+                    .setTitle("请选择一个用户")
                     .setItems(items, (dialog, which) -> {
                         VUserInfo info = users.get(which);
                         Intent intent = new Intent(this, ChooseTypeAndAccountActivity.class);
@@ -125,20 +130,40 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                     }).show();
             return false;
         });
-        menu.add("Virtual Storage").setIcon(R.drawable.ic_vs).setOnMenuItemClickListener(item -> {
+        /*
+        // 去掉没用的项目防止卡顿
+        menu.add("虚拟存储").setIcon(R.drawable.ic_vs).setOnMenuItemClickListener(item -> {
             Toast.makeText(this, "The coming", Toast.LENGTH_SHORT).show();
             return false;
         });
-        menu.add("Notification").setIcon(R.drawable.ic_notification).setOnMenuItemClickListener(item -> {
+        menu.add("通知管理").setIcon(R.drawable.ic_notification).setOnMenuItemClickListener(item -> {
             Toast.makeText(this, "The coming", Toast.LENGTH_SHORT).show();
             return false;
         });
-        menu.add("Virtual Location").setIcon(R.drawable.ic_notification).setOnMenuItemClickListener(item -> {
+        */
+        menu.add("虚拟位置").setIcon(R.drawable.ic_notification).setOnMenuItemClickListener(item -> {
             startActivity(new Intent(this, VirtualLocationSettings.class));
             return true;
         });
-        menu.add("Settings").setIcon(R.drawable.ic_settings).setOnMenuItemClickListener(item -> {
-            Toast.makeText(this, "The coming", Toast.LENGTH_SHORT).show();
+        menu.add("设置").setIcon(R.drawable.ic_settings).setOnMenuItemClickListener(item -> {
+            startActivity(new Intent(this, SettingAct.class));
+            return false;
+        });
+        menu.add(R.string.restartapp).setIcon(R.drawable.ic_settings).setOnMenuItemClickListener(item -> {
+            AlertDialog.Builder hBuilder = new AlertDialog.Builder(HomeActivity.this);
+            hBuilder.setTitle(R.string.restartapp).setMessage(R.string.ensurerestart);
+            hBuilder.
+                    setNegativeButton("×", (dialog, which) ->
+                    {
+                        // 不做任何事情
+                        return;
+                    }) .
+                    setPositiveButton("√", (dialog, which) ->
+                    {
+                        VActivityManager.get().killAllApps();
+                        Toast.makeText(this,R.string.restartfinish,Toast.LENGTH_LONG).show();
+                    });
+            hBuilder.setCancelable(false).create().show();
             return false;
         });
         mMenuView.setOnClickListener(v -> mPopupMenu.show());
@@ -190,6 +215,13 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         });
     }
 
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        HomeActivity.hHomeAct=null;
+    }
+
     private void onAddAppButtonClick() {
         ListAppActivity.gotoListApp(this);
     }
@@ -197,8 +229,8 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
     private void deleteApp(int position) {
         AppData data = mLaunchpadAdapter.getList().get(position);
         new AlertDialog.Builder(this)
-                .setTitle("Delete app")
-                .setMessage("Do you want to delete " + data.getName() + "?")
+                .setTitle("删除应用")
+                .setMessage("您真的要删除 " + data.getName() + "?")
                 .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                     mPresenter.deleteApp(data);
                 })
@@ -316,8 +348,8 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
     @Override
     public void askInstallGms() {
         new AlertDialog.Builder(this)
-                .setTitle("Hi")
-                .setMessage("We found that your device has been installed the Google service, whether you need to install them?")
+                .setTitle("欢迎使用")
+                .setMessage("你好，我们在您的手机上查找到了谷歌服务，需要将谷歌服务添加到本应用当中吗？")
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                     defer().when(() -> {
                         GmsSupport.installGApps(0);
@@ -326,9 +358,43 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                     });
                 })
                 .setNegativeButton(android.R.string.cancel, (dialog, which) ->
-                        Toast.makeText(HomeActivity.this, "You can also find it in the Settings~", Toast.LENGTH_LONG).show())
+                        Toast.makeText(HomeActivity.this,
+                                "以后您也可以在设置里面添加谷歌服务。", Toast.LENGTH_LONG).show())
                 .setCancelable(false)
                 .show();
+    }
+
+    static public HomeActivity hHomeAct = null;
+    static public String strPkgName = "";
+    public void InstallAppByPath(String szAppPath)
+    {
+        Intent xdata;
+        File tempFile;
+        try
+        {
+            ArrayList<AppInfoLite> dataList = new ArrayList<AppInfoLite>(1);
+            tempFile = new File(szAppPath.trim());
+            dataList.add(new AppInfoLite(tempFile.getName(), szAppPath.trim(), true));
+            xdata = new Intent();
+            xdata.putParcelableArrayListExtra(VCommends.EXTRA_APP_INFO_LIST, dataList);
+            strPkgName=tempFile.getName();
+        }
+        catch(Throwable e)
+        {
+            e.printStackTrace();
+            return;
+        }
+        try
+        {
+            onActivityResult(1,RESULT_OK,xdata);
+        }
+        catch(Throwable e)
+        {
+            e.printStackTrace();
+        }
+        XAppDataInstalled hInstalled = new XAppDataInstalled();
+        hInstalled.pkgName=tempFile.getName();
+        addAppToLauncher(hInstalled);
     }
 
     @Override

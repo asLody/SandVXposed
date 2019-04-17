@@ -10,6 +10,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+        <activity android:name=".home.adapters.AppChooseAct"
+            android:launchMode="singleInstance"></activity>
+        <activity
+            android:name=".home.SettingAct"
+            android:label="@string/title_activity_setting" />
 
         <meta-data
             android:name="TencentMapSDK"
@@ -48,10 +53,10 @@
             android:name=".home.location.MarkerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/UITheme" />
-
-        <activity android:name=".home.XposedManagerActivity"
+        <activity
+            android:name=".home.XposedManagerActivity"
             android:label="Xposed Manager"
-            android:theme="@style/XposedManager"/>
+            android:theme="@style/XposedManager" />
 
         <provider
             android:name=".sandxposed.SandHookConfigProvider"

@@ -1,6 +1,7 @@
 package io.virtualapp.home.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Environment;
 import android.os.storage.StorageManager;

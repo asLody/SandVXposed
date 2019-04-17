@@ -18,6 +18,11 @@
 -keep   class com.amap.api.maps.**{*;}
 -keep   class com.autonavi.**{*;}
 -keep   class com.amap.api.trace.**{*;}
+-keep   class com.tencent.**{*;}
+-keep   class com.google.android.gms.**{*;}
+-keep   class com.tencent.**{*;}
+-keep   class org.eclipse.**{*;}
+-keep   class org.slf4j.**{*;}
 
 #定位
 -keep class com.amap.api.location.**{*;}

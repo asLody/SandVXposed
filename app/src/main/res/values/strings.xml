@@ -20,8 +20,93 @@
     <string name="clone_apps">Clone Apps</string>
     <string name="external_storage">External Storage</string>
     <string name="install_d">Install (%d)</string>
-    <string name="install_too_much_once_time">No more then 9 apps can be chosen at a time!</string>
+    <string name="install_too_much_once_time">Not recommand more then 9 apps be chosen at a time!</string>
 
     <string name="enable_xposed">enable xposed</string>
     <string name="module_install_success">Xposed moudle %s install success!</string>
+    <string name="title_activity_setting">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data and Sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="list_preference_entries">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+    </string-array>
+
+    <string-array name="list_preference_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="multi_select_list_preference_default_value" />
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="SK_Settings">App Settings</string>
+    <string name="SK_Thecoming">Comming soon</string>
+    <string name="back">Back</string>
+    <string name="restartapp">Restart Application</string>
+    <string name="restartfinish">Restart can be done in 1 sec, is it miraculous?</string>
+    <string name="SKRestartTips">Please click settings -> Restart Application to enable or disable modules.</string>
+    <string name="ensurerestart">Wanna restart this application? Your changes must be saved or lost.</string>
+    <string name="manualpath">Install By Path Manually</string>
+    <string name="appInstallTip">Application is installing, please wait. You can click menu->restart application for list refresh.</string>
+    <string name="about_info">Special thanks for Gan!##SandVXP is a application that can let user use Xposed module on non-root and non-bootloader-unlock devices. Clone application into this app and xposed modules, then validate it in menu\'s xposed manager, and they will work.##QQ 384550791##E-Mail king@fou.ink##Website https://www.fou.ink/</string>
+    <string name="launch_failed">Launch app failed...</string>
+    <string name="sys_crash">Application may crash but catch by SKActivity.</string>
 </resources>
