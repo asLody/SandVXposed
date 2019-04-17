@@ -2,6 +2,7 @@ package com.lody.virtual.client.core;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -11,13 +12,18 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Icon;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.ConditionVariable;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.PersistableBundle;
 import android.os.Process;
 import android.os.RemoteException;
 
@@ -52,6 +58,7 @@ import java.util.List;
 import java.util.Random;
 
 import dalvik.system.DexFile;
+import mirror.android.app.Activity;
 import mirror.android.app.ActivityThread;
 
 /**
@@ -464,31 +471,35 @@ public final class VirtualCore {
         shortcutIntent.putExtra("_VA_|_intent_", targetIntent);
         shortcutIntent.putExtra("_VA_|_uri_", targetIntent.toUri(0));
         shortcutIntent.putExtra("_VA_|_user_id_", userId);
-
-        Intent addIntent = new Intent();
-        // 内置内容
-        addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-        class oBuffer
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O)
         {
-            public String getRandomString(int length)
-            {
-                String str =
-                        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-                Random random = new Random();
-                StringBuffer sb = new StringBuffer();
-                for (int i = 0; i < length; i++)
-                {
-                    int number = random.nextInt(62);
-                    sb.append(str.charAt(number));
-                }
-                return sb.toString();
+            ShortcutManager shortcutManager = (ShortcutManager) context.getSystemService(Context.SHORTCUT_SERVICE);
+            if(shortcutManager.isRequestPinShortcutSupported()) {
+                Intent shortcutInfoIntent = new Intent(context, android.app.Activity.class);
+                shortcutInfoIntent.setAction(Intent.ACTION_VIEW);
+                shortcutInfoIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+                ShortcutInfo info = new ShortcutInfo.Builder(context, targetIntent.toUri(0)+userId)
+                        .setIcon(Icon.createWithBitmap(icon))
+                        .setShortLabel(name)
+                        .setIntent(shortcutInfoIntent)
+                        .build();
+                //当添加快捷方式的确认弹框弹出来时，将被回调
+                PendingIntent shortcutCallbackIntent = PendingIntent.getBroadcast(context, 0, new Intent(context, android.app.Activity.class),
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+                shortcutManager.requestPinShortcut(info, shortcutCallbackIntent.getIntentSender());
             }
         }
-        // 部分系统会将名字一样的视作相同快捷方式，我们加几个随机字符就ok了。
-        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name+(new oBuffer()).getRandomString(3));
-        addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, icon);
-        addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
-        context.sendBroadcast(addIntent);
+        else
+        {
+            Intent addIntent = new Intent();
+            // 内置内容
+            addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+            addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
+            addIntent.putExtra("duplicate", true);
+            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, icon);
+            addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+            context.sendBroadcast(addIntent);
+        }
         return true;
     }
 
