@@ -15,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.android.dex.util.ExceptionWithContext;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -182,8 +181,15 @@ public class AppChooseAct extends AppCompatActivity
             // android.widget.Toast.makeText(this,path,android.widget.Toast.LENGTH_SHORT).show();
         }
         else
-            throw new ExceptionWithContext("Not support Android 4.4 or lower.",new Exception());
-        if(pActParent==null)return;
+        {
+            finish();
+            return;
+        }
+        if(pActParent==null)
+        {
+            finish();
+            return;
+        }
         android.widget.Toast.makeText(pActParent.getActivity(),R.string.appInstallTip, Toast.LENGTH_LONG).show();
         if(HomeActivity.hHomeAct!=null)
             HomeActivity.hHomeAct.InstallAppByPath(path);
