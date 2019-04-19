@@ -475,18 +475,28 @@ public final class VirtualCore {
         {
             ShortcutManager shortcutManager = (ShortcutManager) context.getSystemService(Context.SHORTCUT_SERVICE);
             if(shortcutManager.isRequestPinShortcutSupported()) {
-                Intent shortcutInfoIntent = new Intent(context, android.app.Activity.class);
-                shortcutInfoIntent.setAction(Intent.ACTION_VIEW);
-                shortcutInfoIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
-                ShortcutInfo info = new ShortcutInfo.Builder(context, targetIntent.toUri(0)+userId)
-                        .setIcon(Icon.createWithBitmap(icon))
-                        .setShortLabel(name)
-                        .setIntent(shortcutInfoIntent)
-                        .build();
-                //当添加快捷方式的确认弹框弹出来时，将被回调
-                PendingIntent shortcutCallbackIntent = PendingIntent.getBroadcast(context, 0, new Intent(context, android.app.Activity.class),
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-                shortcutManager.requestPinShortcut(info, shortcutCallbackIntent.getIntentSender());
+                ShortcutInfo info = null;
+                try
+                {
+                    Intent shortcutInfoIntent = new Intent();
+                    shortcutInfoIntent.setAction("com.sk.vxpmain");
+                    shortcutInfoIntent.putExtra("pArgsToLaunch", packageName);
+                    shortcutInfoIntent.putExtra("dwUserID", userId);
+
+                    info = new ShortcutInfo.Builder(context, targetIntent.toUri(0) + userId)
+                            .setIcon(Icon.createWithBitmap(icon))
+                            .setShortLabel(name)
+                            .setIntent(shortcutInfoIntent)
+                            .build();
+                    //当添加快捷方式的确认弹框弹出来时，将被回调
+                    PendingIntent shortcutCallbackIntent = PendingIntent.getBroadcast(context, 0, new Intent(context, android.app.Activity.class),
+                            PendingIntent.FLAG_UPDATE_CURRENT);
+                    shortcutManager.requestPinShortcut(info, shortcutCallbackIntent.getIntentSender());
+                }
+                catch (Throwable e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
         else

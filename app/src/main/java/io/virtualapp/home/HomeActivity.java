@@ -26,6 +26,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lody.virtual.GmsSupport;
+import com.lody.virtual.client.core.RomChecker;
+import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.ipc.VActivityManager;
 import com.lody.virtual.client.stub.ChooseTypeAndAccountActivity;
 import com.lody.virtual.os.VUserInfo;
@@ -87,6 +89,35 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        Bundle lpBundle = getIntent().getExtras();
+        while(lpBundle!=null)
+        {
+            try
+            {
+                // Fix android O shortcut by Saurik QQ 384550791
+                String pIntentInvoke = lpBundle.getString("pArgsToLaunch");
+                getIntent().removeExtra("pArgsToLaunch");
+                if (pIntentInvoke == null)
+                {
+                    break;
+                }
+                int dwUserID = lpBundle.getInt("dwUserID");
+                XAppDataInstalled lpAppInfo = new XAppDataInstalled();
+                lpAppInfo.pkgName = pIntentInvoke;
+                LoadingActivity.launch(getContext(),pIntentInvoke,dwUserID);
+            }
+            catch(Throwable e)
+            {
+                e.printStackTrace();
+            }
+            break;
+        }
     }
 
     @Override
@@ -239,6 +270,23 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
     }
 
     private void createShortcut(int position) {
+        try
+        {
+            boolean bIsEMUI = RomChecker.isEmui();
+            if (bIsEMUI)
+            {
+                AlertDialog.Builder hDialog = new AlertDialog.Builder(HomeActivity.hHomeAct);
+                // 消极
+                hDialog.setNegativeButton("知道了", (dialog, which) ->
+                        Toast.makeText(HomeActivity.hHomeAct, "记得允许权限哦~", Toast.LENGTH_SHORT).show());
+                hDialog.setMessage(R.string.rom_shortcut_tips);
+                hDialog.setTitle(R.string.create_shortcut);
+                hDialog.create().show();
+            }
+        }catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
         AppData model = mLaunchpadAdapter.getList().get(position);
         if (model instanceof PackageAppData || model instanceof MultiplePackageAppData) {
             mPresenter.createShortcut(model);

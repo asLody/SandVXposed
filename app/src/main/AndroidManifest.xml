@@ -33,7 +33,14 @@
         <activity
             android:name=".home.HomeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/UITheme" />
+            android:theme="@style/UITheme"
+            android:launchMode="singleInstance"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.sk.vxpmain" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".home.ListAppActivity"
             android:screenOrientation="portrait"
