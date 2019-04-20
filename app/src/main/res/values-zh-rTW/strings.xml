@@ -52,4 +52,6 @@
     <string name="launch_failed">Sorry，App无法启动。</string>
     <string name="sys_crash">应用程序异常，已经捕捉。</string>
     <string name="rom_shortcut_tips">检测到您的机型必须手动允许快捷方式的创建，请到系统设置->应用->权限管理，找到本应用，开启快捷方式权限。</string>
+    <string name="app_powered_by">由SandHook框架强力驱动</string>
+    <string name="app_contributor">Yao Gan, Lixin Liang, Saurik</string>
 </resources>

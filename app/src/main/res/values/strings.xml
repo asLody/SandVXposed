@@ -110,4 +110,6 @@
     <string name="launch_failed">Launch app failed...</string>
     <string name="sys_crash">Application may crash but catch by SKActivity.</string>
     <string name="rom_shortcut_tips">We detected your device must accept permission manual. Please allow shortcut ceration permission in system settings. Allow this in Settings -> App Management -> Permission Management -> this application -> allow shortcut permission.</string>
+    <string name="app_powered_by">Powered by SandHook</string>
+    <string name="app_contributor">Yao Gan, Lixin Liang, Saurik</string>
 </resources>
