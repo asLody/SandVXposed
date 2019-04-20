@@ -3,6 +3,7 @@ package com.lody.virtual.client.core;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -432,6 +433,14 @@ public final class VirtualCore {
         return createShortcut(userId, packageName, null, listener);
     }
 
+    public class VReceiver extends BroadcastReceiver
+    {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Do nothing
+        }
+    }
+
     public boolean createShortcut(int userId, String packageName, Intent splash, OnEmitShortcutListener listener) {
         InstalledAppInfo setting = getInstalledAppInfo(packageName, 0);
         if (setting == null) {
@@ -489,7 +498,7 @@ public final class VirtualCore {
                             .setIntent(shortcutInfoIntent)
                             .build();
                     //当添加快捷方式的确认弹框弹出来时，将被回调
-                    PendingIntent shortcutCallbackIntent = PendingIntent.getBroadcast(context, 0, new Intent(context, android.app.Activity.class),
+                    PendingIntent shortcutCallbackIntent = PendingIntent.getBroadcast(context, 0, new Intent(context, VReceiver.class),
                             PendingIntent.FLAG_UPDATE_CURRENT);
                     shortcutManager.requestPinShortcut(info, shortcutCallbackIntent.getIntentSender());
                 }
