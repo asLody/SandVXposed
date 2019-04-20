@@ -426,6 +426,8 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && data != null) {
+            Toast.makeText(this,R.string.wait,Toast.LENGTH_LONG)
+                    .show();
             List<AppInfoLite> appList = data.getParcelableArrayListExtra(VCommends.EXTRA_APP_INFO_LIST);
             if (appList != null) {
                 for (AppInfoLite info : appList) {
