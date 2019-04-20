@@ -160,6 +160,7 @@ class HomePresenterImpl implements HomeContract.HomePresenter {
                 if (addResult.appData.getXposedModule() != null)
                 {
                     Toast.makeText(mActivity, String.format(mActivity.getString(R.string.module_install_success), addResult.appData.name), Toast.LENGTH_SHORT).show();
+                    mView.removeAppToLauncher(lpXappData);
                     return;
                 }
             }

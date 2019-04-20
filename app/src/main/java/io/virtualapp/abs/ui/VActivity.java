@@ -2,22 +2,14 @@ package io.virtualapp.abs.ui;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.flurry.android.FlurryAgent;
-
 import org.jdeferred.android.AndroidDeferredManager;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.virtualapp.abs.BaseView;
-import io.virtualapp.home.HomeActivity;
 
 /**
  * @author Lody
@@ -53,13 +45,11 @@ public class VActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        FlurryAgent.onStartSession(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        FlurryAgent.onEndSession(this);
     }
 
     @Override
