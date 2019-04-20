@@ -22,6 +22,7 @@ import io.virtualapp.home.models.MultiplePackageAppData;
 import io.virtualapp.home.models.PackageAppData;
 import io.virtualapp.home.repo.AppRepository;
 import io.virtualapp.home.repo.PackageAppDataStorage;
+import io.virtualapp.home.repo.XAppDataInstalled;
 import jonathanfinerty.once.Once;
 
 /**
@@ -86,6 +87,17 @@ class HomePresenterImpl implements HomeContract.HomePresenter {
             private int userId;
             private boolean justEnableHidden;
         }
+        XAppDataInstalled lpXappData = new XAppDataInstalled();
+        try
+        {
+            lpXappData.pkgName = info.packageName;
+            mView.addAppToLauncher(lpXappData);
+        }
+        catch(Throwable e)
+        {
+            e.printStackTrace();
+            return;
+        }
         AddResult addResult = new AddResult();
         VUiKit.defer().when(() -> {
             InstalledAppInfo installedAppInfo = VirtualCore.get().getInstalledAppInfo(info.packageName, 0);
@@ -122,11 +134,12 @@ class HomePresenterImpl implements HomeContract.HomePresenter {
                 if (!res.isSuccess) {
                     throw new IllegalStateException();
                 } else {
+                    /*
                     InstalledAppInfo ins = VirtualCore.get().getInstalledAppInfo(info.packageName, 0);
                     if (ins != null && ins.xposedModule != null) {
                         String name = ins.getApplicationInfo(0).name;
-
                     }
+                    */
                 }
             }
         }).then((res) -> {
@@ -137,6 +150,7 @@ class HomePresenterImpl implements HomeContract.HomePresenter {
             catch(Throwable e)
             {
                 e.printStackTrace();
+                mView.removeAppToLauncher(lpXappData);
                 return;
             }
         }).done(res -> {
@@ -152,8 +166,10 @@ class HomePresenterImpl implements HomeContract.HomePresenter {
             catch(Throwable e)
             {
                 e.printStackTrace();
+                mView.removeAppToLauncher(lpXappData);
                 return;
             }
+            mView.removeAppToLauncher(lpXappData);
             if (!multipleVersion) {
                 PackageAppData data = addResult.appData;
                 data.isLoading = true;
