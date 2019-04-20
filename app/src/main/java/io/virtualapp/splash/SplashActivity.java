@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.WindowManager;
 
 import com.lody.virtual.client.core.VirtualCore;
+import com.tencent.stat.StatConfig;
+import com.tencent.stat.StatService;
 
 import io.virtualapp.R;
 import io.virtualapp.VCommends;
@@ -38,6 +40,11 @@ public class SplashActivity extends VActivity {
             }
         }).done((res) -> {
             HomeActivity.goHome(this);
+            // 腾讯用户统计
+            // [可选]设置是否打开debug输出，上线时请关闭，Logcat标签为"MtaSDK"
+            StatConfig.setDebugEnable(false);
+            // 基础统计API
+            StatService.registerActivityLifecycleCallbacks(this.getApplication());
             finish();
         });
     }
