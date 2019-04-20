@@ -95,29 +95,6 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
     protected void onResume()
     {
         super.onResume();
-        Bundle lpBundle = getIntent().getExtras();
-        while(lpBundle!=null)
-        {
-            try
-            {
-                // Fix android O shortcut by Saurik QQ 384550791
-                String pIntentInvoke = lpBundle.getString("pArgsToLaunch");
-                getIntent().removeExtra("pArgsToLaunch");
-                if (pIntentInvoke == null)
-                {
-                    break;
-                }
-                int dwUserID = lpBundle.getInt("dwUserID");
-                XAppDataInstalled lpAppInfo = new XAppDataInstalled();
-                lpAppInfo.pkgName = pIntentInvoke;
-                LoadingActivity.launch(getContext(),pIntentInvoke,dwUserID);
-            }
-            catch(Throwable e)
-            {
-                e.printStackTrace();
-            }
-            break;
-        }
     }
 
     @Override

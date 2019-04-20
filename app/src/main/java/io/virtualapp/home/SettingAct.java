@@ -306,6 +306,18 @@ public class SettingAct extends AppCompatPreferenceActivity
             android.widget.Toast.makeText(VApp.getApp(), R.string.SK_Thecoming, android.widget.Toast.LENGTH_LONG).show();
             addPreferencesFromResource(R.xml.pref_appset);
             setHasOptionsMenu(true);
+            /* TODO: implement function. */
+            AlertDialog.Builder hDialog = new AlertDialog.Builder(getActivity());
+            hDialog.setMessage(R.string.SK_Thecoming);
+            hDialog.setTitle("The coming...").setNegativeButton(R.string.back,
+                    (dialog, which) -> getActivity().finish());
+            hDialog.setPositiveButton(R.string.desktop, (dialog, which) ->
+            {
+                HomeActivity.goHome(getActivity());
+                getActivity().finish();
+            });
+            hDialog.create().show();
+            /* TODO: implement function. */
         }
 
         @Override
@@ -314,7 +326,7 @@ public class SettingAct extends AppCompatPreferenceActivity
             int id = item.getItemId();
             if (id == android.R.id.home)
             {
-                startActivity(new Intent(getActivity(), SettingAct.class));
+                // getActivity().finish();
                 return true;
             }
             return super.onOptionsItemSelected(item);

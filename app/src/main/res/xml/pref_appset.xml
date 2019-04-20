@@ -3,7 +3,6 @@
     <!-- This preference simply launches an intent when selected. Use this UI sparingly, per
          design guidelines. -->
     <Preference android:title="@string/back">
-        <intent android:action="io.virtualapp.home.SettingAct" />
     </Preference>
 
 </PreferenceScreen>

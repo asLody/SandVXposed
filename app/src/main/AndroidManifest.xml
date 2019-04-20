@@ -10,8 +10,19 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name=".home.adapters.AppChooseAct"
-            android:launchMode="singleInstance"></activity>
+        <activity
+            android:name=".home.ShortcutAppActivity"
+            android:launchMode="singleInstance"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.sk.vxpmain" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".home.adapters.AppChooseAct"
+            android:launchMode="singleInstance" />
         <activity
             android:name=".home.SettingAct"
             android:label="@string/title_activity_setting" />
@@ -32,14 +43,9 @@
         </activity>
         <activity
             android:name=".home.HomeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/UITheme"
             android:launchMode="singleInstance"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.sk.vxpmain" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+            android:screenOrientation="portrait"
+            android:theme="@style/UITheme">
         </activity>
         <activity
             android:name=".home.ListAppActivity"
