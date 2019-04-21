@@ -54,6 +54,7 @@ import io.virtualapp.home.models.MultiplePackageAppData;
 import io.virtualapp.home.models.PackageAppData;
 import io.virtualapp.home.repo.XAppDataInstalled;
 import io.virtualapp.widgets.TwoGearsView;
+import jonathanfinerty.once.Once;
 
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_DRAG;
 import static android.support.v7.widget.helper.ItemTouchHelper.DOWN;
@@ -108,6 +109,17 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         initMenu();
         hHomeAct=this;
         new HomePresenterImpl(this).start();
+
+        if (!Once.beenDone("user_license")) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.about)
+                    .setMessage(R.string.software_license)
+                    .setCancelable(false)
+                    .setNegativeButton(R.string.back, (dialog, which) -> finish())
+                    .setPositiveButton(R.string.accept, (dialog, which) ->
+                            Once.markDone("user_license"))
+                    .create().show();
+        }
     }
 
     private void initMenu() {
@@ -119,10 +131,21 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
             return false;
         });
         menu.add("账户").setIcon(R.drawable.ic_account).setOnMenuItemClickListener(item -> {
-            List<VUserInfo> users = VUserManager.get().getUsers();
-            List<String> names = new ArrayList<>(users.size());
-            for (VUserInfo info : users) {
-                names.add(info.name);
+            List<String> names;
+            List<VUserInfo> users;
+            try
+            {
+                users = VUserManager.get().getUsers();
+                names = new ArrayList<>(users.size());
+                for (VUserInfo info : users)
+                {
+                    names.add(info.name);
+                }
+            }
+            catch(Throwable e)
+            {
+                e.printStackTrace();
+                return false;
             }
             CharSequence[] items = new CharSequence[names.size()];
             for (int i = 0; i < names.size(); i++) {
