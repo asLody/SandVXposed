@@ -110,7 +110,13 @@ public class ListAppFragment extends VFragment<ListAppContract.ListAppPresenter>
         });
         mAdapter.setSelectionListener(count -> {
             mInstallButton.setEnabled(count > 0);
-            mInstallButton.setText(String.format(Locale.ENGLISH, getResources().getString(R.string.install_d), count));
+            try
+            {
+                mInstallButton.setText(String.format(Locale.ENGLISH, getResources().getString(R.string.install_d), count));
+            }catch (Throwable e)
+            {
+                e.printStackTrace();
+            }
         });
         mInstallButton.setOnClickListener(v -> {
             Integer[] selectedIndices = mAdapter.getSelectedIndices();
