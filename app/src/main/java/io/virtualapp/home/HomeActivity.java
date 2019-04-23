@@ -525,7 +525,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                         android.app.AlertDialog.Builder hBuilder
                                 = new android.app.AlertDialog.Builder(HomeActivity.this);
                         hBuilder.setTitle(R.string.sk_failed)
-                                .setMessage(R.string.safe_mode_enforcing)
+                                .setMessage(R.string.unknown_package)
                                 .setCancelable(false);
                         hBuilder.setPositiveButton(R.string.back, (dialog, which) ->
                                 Toast.makeText(HomeActivity.this,R.string.launch_failed,Toast.LENGTH_SHORT)
