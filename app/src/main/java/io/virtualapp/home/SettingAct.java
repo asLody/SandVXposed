@@ -27,6 +27,7 @@ import com.lody.virtual.client.ipc.VActivityManager;
 
 import io.virtualapp.R;
 import io.virtualapp.VApp;
+import jonathanfinerty.once.Once;
 
 import java.util.List;
 
@@ -239,14 +240,29 @@ public class SettingAct extends AppCompatPreferenceActivity
         public void onCreate(Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_notification);
+            addPreferencesFromResource(R.xml.pref_appset);
             setHasOptionsMenu(true);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+            AlertDialog.Builder hDialog = new AlertDialog.Builder(getActivity());
+            hDialog.setMessage(R.string.enable_search_app);
+            hDialog.setTitle(R.string.SK_Settings).setNegativeButton(R.string.disable,
+                    (dialog, which) ->
+                    {
+                        if (Once.beenDone("enable_search_app"))
+                        {
+                            Once.clearDone("enable_search_app");
+                        }
+                        getActivity().finish();
+                    });
+            hDialog.setPositiveButton(R.string.enable, (dialog, which) ->
+            {
+                if (!Once.beenDone("enable_search_app"))
+                {
+                    Once.markDone("enable_search_app");
+                }
+                getActivity().finish();
+            })
+                    .setCancelable(false);
+            hDialog.create().show();
         }
 
         @Override
@@ -275,6 +291,28 @@ public class SettingAct extends AppCompatPreferenceActivity
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_data_sync);
             setHasOptionsMenu(true);
+
+            AlertDialog.Builder hDialog = new AlertDialog.Builder(getActivity());
+            hDialog.setMessage(R.string.safe_mode_tips);
+            hDialog.setTitle(R.string.SK_Settings).setNegativeButton(R.string.still_safe,
+                    (dialog, which) ->
+                    {
+                        if (Once.beenDone("disable_safe_mode"))
+                        {
+                            Once.clearDone("disable_safe_mode");
+                        }
+                        getActivity().finish();
+                    });
+            hDialog.setPositiveButton(R.string.disable, (dialog, which) ->
+            {
+                if (!Once.beenDone("disable_safe_mode"))
+                {
+                    Once.markDone("disable_safe_mode");
+                }
+                getActivity().finish();
+            })
+                    .setCancelable(false);
+            hDialog.create().show();
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are

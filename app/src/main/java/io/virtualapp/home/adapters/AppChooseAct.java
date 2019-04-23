@@ -1,8 +1,10 @@
 package io.virtualapp.home.adapters;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -26,6 +28,7 @@ import io.virtualapp.home.ListAppFragment;
 import io.virtualapp.home.ListAppPresenterImpl;
 import io.virtualapp.home.models.AppInfo;
 import io.virtualapp.home.models.AppInfoLite;
+import jonathanfinerty.once.Once;
 
 public class AppChooseAct extends AppCompatActivity
 {
@@ -37,10 +40,39 @@ public class AppChooseAct extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_choose);
 
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        startActivityForResult(intent, 404);
+        if (!Once.beenDone("disable_safe_mode"))
+        {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.about)
+                    .setMessage(R.string.safe_mode_enforcing)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.back, (dialog, which) ->
+                            finish())
+                    .create().show();
+        }
+        else if (!Once.beenDone("appchoose_act_tips"))
+        {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.about)
+                    .setMessage(R.string.appchoose_tips)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.accept, (dialog, which) ->
+                    {
+                        Once.markDone("appchoose_act_tips");
+                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                        intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+                        intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        startActivityForResult(intent, 404);
+                    })
+                    .create().show();
+        }
+        else
+        {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            startActivityForResult(intent, 404);
+        }
     }
 
     @Override
@@ -181,7 +213,15 @@ public class AppChooseAct extends AppCompatActivity
             return;
         }
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {//4.4以后
-            path = getPath(this, uri);
+            try
+            {
+                path = getPath(this, uri);
+            }catch(Throwable e)
+            {
+                e.printStackTrace();
+                finish();
+                return;
+            }
             // android.widget.Toast.makeText(this,path,android.widget.Toast.LENGTH_SHORT).show();
         }
         else

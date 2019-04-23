@@ -40,4 +40,22 @@
         android:paddingLeft="20px"
         android:paddingRight="20px"
         android:text="@string/manualpath" />
+
+    <Button
+        android:id="@+id/search_app_m"
+        style="@android:style/Widget.Material.Light.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#33B5E5"
+        android:paddingLeft="20px"
+        android:paddingRight="20px"
+        android:visibility="invisible"
+        android:text="@string/search" />
+
+    <SearchView
+        android:id="@+id/search_box_vi"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dip"/>
 </FrameLayout>

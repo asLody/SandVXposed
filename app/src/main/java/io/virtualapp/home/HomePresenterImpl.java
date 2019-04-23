@@ -1,6 +1,7 @@
 package io.virtualapp.home;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.widget.Toast;
 
@@ -12,6 +13,8 @@ import com.lody.virtual.remote.InstallResult;
 import com.lody.virtual.remote.InstalledAppInfo;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import io.virtualapp.R;
 import io.virtualapp.VCommends;
@@ -20,6 +23,7 @@ import io.virtualapp.home.models.AppData;
 import io.virtualapp.home.models.AppInfoLite;
 import io.virtualapp.home.models.MultiplePackageAppData;
 import io.virtualapp.home.models.PackageAppData;
+import io.virtualapp.home.models.safePackage;
 import io.virtualapp.home.repo.AppRepository;
 import io.virtualapp.home.repo.PackageAppDataStorage;
 import io.virtualapp.home.repo.XAppDataInstalled;
@@ -125,21 +129,40 @@ class HomePresenterImpl implements HomeContract.HomePresenter {
                         throw new IllegalStateException();
                     }
                 }
-                boolean success = VirtualCore.get().installPackageAsUser(nextUserId, info.packageName);
-                if (!success) {
-                    throw new IllegalStateException();
+                List<String> pkg_Det = Arrays.asList(safePackage.safe_Package);
+                if (!Once.beenDone("disable_safe_mode")&&!pkg_Det.contains(info.packageName))
+                {
+                    return;
+                }
+                else
+                {
+                    boolean success = VirtualCore.get().installPackageAsUser(nextUserId, info.packageName);
+                    if (!success)
+                    {
+                        throw new IllegalStateException();
+                    }
                 }
             } else {
-                InstallResult res = mRepo.addVirtualApp(info);
-                if (!res.isSuccess) {
-                    throw new IllegalStateException();
-                } else {
+                List<String> pkg_Det = Arrays.asList(safePackage.safe_Package);
+                if (!Once.beenDone("disable_safe_mode")&&!pkg_Det.contains(info.packageName))
+                {
+                    return;
+                }
+                else
+                {
+                    InstallResult res = mRepo.addVirtualApp(info);
+                    if (!res.isSuccess)
+                    {
+                        throw new IllegalStateException();
+                    } else
+                    {
                     /*
                     InstalledAppInfo ins = VirtualCore.get().getInstalledAppInfo(info.packageName, 0);
                     if (ins != null && ins.xposedModule != null) {
                         String name = ins.getApplicationInfo(0).name;
                     }
                     */
+                    }
                 }
             }
         }).then((res) -> {
