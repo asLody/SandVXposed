@@ -13,10 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,6 +33,7 @@ import io.virtualapp.home.adapters.decorations.ItemOffsetDecoration;
 import io.virtualapp.home.models.AppInfo;
 import io.virtualapp.home.models.AppInfoLite;
 import io.virtualapp.widgets.DragSelectRecyclerView;
+import jonathanfinerty.once.Once;
 
 /**
  * @author Lody
@@ -41,6 +44,7 @@ public class ListAppFragment extends VFragment<ListAppContract.ListAppPresenter>
     private ProgressBar mProgressBar;
     private Button mInstallButton;
     private CloneAppListAdapter mAdapter;
+    List<AppInfo> privList;
 
     public static ListAppFragment newInstance(File selectFrom) {
         Bundle args = new Bundle();
@@ -79,12 +83,33 @@ public class ListAppFragment extends VFragment<ListAppContract.ListAppPresenter>
         mAdapter.saveInstanceState(outState);
     }
 
+    public void onSearchAppByName(String szToSearch)
+    {
+        if(privList.size()==0)return;
+        List<AppInfo> theListChg = privList.subList(0,privList.size());
+        Iterator<AppInfo> theItor = theListChg.iterator();
+        while(theItor.hasNext())
+        {
+            AppInfo theInfo = theItor.next();
+            if(theInfo.name.toString().indexOf(szToSearch)==-1)
+                theItor.remove();
+        }
+        mAdapter.setList(theListChg);
+    }
+
+    private SearchView hSearch;
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mRecyclerView = (DragSelectRecyclerView) view.findViewById(R.id.select_app_recycler_view);
         mProgressBar = (ProgressBar) view.findViewById(R.id.select_app_progress_bar);
         mInstallButton = (Button) view.findViewById(R.id.select_app_install_btn);
         Button hButton = (Button) view.findViewById(R.id.buttonAddByPath);
+        Button hSearchButton = (Button) view.findViewById(R.id.search_app_m);
+        if (Once.beenDone("enable_search_app"))
+        {
+            hSearchButton.setVisibility(View.VISIBLE);
+        }
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, OrientationHelper.VERTICAL));
         mRecyclerView.addItemDecoration(new ItemOffsetDecoration(VUiKit.dpToPx(getContext(), 2)));
         mAdapter = new CloneAppListAdapter(getActivity());
@@ -135,6 +160,29 @@ public class ListAppFragment extends VFragment<ListAppContract.ListAppPresenter>
             AppChooseAct.pActParent=this;
             Intent hIntent = new Intent(getActivity(), AppChooseAct.class);
             getActivity().startActivity(hIntent);
+        });
+        hSearch = view.findViewById(R.id.search_box_vi);
+        hSearchButton.setOnClickListener(v ->
+        {
+            hSearch.setVisibility(View.VISIBLE);
+            Toast.makeText(getActivity(),R.string.click_search_tips,Toast.LENGTH_LONG).show();
+        });
+        hSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+        {
+            @Override
+            public boolean onQueryTextSubmit(String query)
+            {
+                hSearch.setVisibility(View.INVISIBLE);
+                privList = mAdapter.getList();
+                onSearchAppByName(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText)
+            {
+                return false;
+            }
         });
         startRemoteThread();
     }
