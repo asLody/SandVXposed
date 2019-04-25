@@ -3,15 +3,18 @@ package io.virtualapp.home;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -188,7 +191,8 @@ public class SettingAct extends AppCompatPreferenceActivity
                 || DataSyncPreferenceFragment.class.getName().equals(fragmentName)
                 || NotificationPreferenceFragment.class.getName().equals(fragmentName)
                 || SKResstart.class.getName().equals(fragmentName)
-                || SKSettings.class.getName().equals(fragmentName);
+                || SKSettings.class.getName().equals(fragmentName)
+                || SKsetAppLiving.class.getName().equals(fragmentName);
     }
 
     /**
@@ -381,6 +385,62 @@ public class SettingAct extends AppCompatPreferenceActivity
             VActivityManager.get().killAllApps();
             Toast.makeText(getActivity(),R.string.restartfinish,Toast.LENGTH_LONG).show();
             getActivity().finish();
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item)
+        {
+            int id = item.getItemId();
+            if (id == android.R.id.home)
+            {
+                startActivity(new Intent(getActivity(), SettingAct.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class SKsetAppLiving extends PreferenceFragment
+    {
+        @Override
+        public void onCreate(Bundle savedInstanceState)
+        {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_data_sync);
+            setHasOptionsMenu(true);
+
+            AlertDialog.Builder hDialog = new AlertDialog.Builder(getActivity());
+            hDialog.setMessage(R.string.non_stop);
+            hDialog.setTitle(R.string.SK_Settings).setNegativeButton(R.string.disable,
+                    (dialog, which) ->
+                    {
+                        if (Once.beenDone("app_force_live"))
+                        {
+                            Once.clearDone("app_force_live");
+                        }
+                        Intent intent = new Intent(getActivity(), MakeMeLive.class);
+                        getActivity().stopService(intent);
+                        getActivity().finish();
+                    });
+            hDialog.setPositiveButton(R.string.enable, (dialog, which) ->
+            {
+                if (!Once.beenDone("app_force_live"))
+                {
+                    Once.markDone("app_force_live");
+                }
+                Intent intent = new Intent(getActivity(), MakeMeLive.class);
+                getActivity().startService(intent);
+                getActivity().finish();
+            })
+                    .setCancelable(false);
+            hDialog.create().show();
+
+            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
+            // to their values. When their values change, their summaries are
+            // updated to reflect the new value, per the Android Design
+            // guidelines.
+            bindPreferenceSummaryToValue(findPreference("sync_frequency"));
         }
 
         @Override

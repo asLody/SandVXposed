@@ -668,7 +668,7 @@ __always_inline char **build_new_argv(char *const argv[]) {
         new_argv[cur++] = (char *) "--compile-pic";
     }
     if (g_api_level >= ANDROID_M) {
-        // 禁用虚拟机优化方法，达到优化的目的。
+        // 禁用虚拟机优化方法，达到Hook的目的。
         new_argv[cur++] = (char *) (g_api_level > ANDROID_N2 ? "--inline-max-code-units=0" : "--inline-depth-limit=0");
     }
 

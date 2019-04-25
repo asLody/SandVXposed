@@ -30,7 +30,8 @@ public class NativeMethods {
             }
         }
         if (gOpenDexFileNative == null) {
-            throw new RuntimeException("Unable to find method : " + methodName);
+            // throw new RuntimeException("Unable to find method : " + methodName);
+            return;
         }
         gOpenDexFileNative.setAccessible(true);
 

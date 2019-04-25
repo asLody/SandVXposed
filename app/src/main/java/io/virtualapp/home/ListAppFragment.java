@@ -85,13 +85,23 @@ public class ListAppFragment extends VFragment<ListAppContract.ListAppPresenter>
 
     public void onSearchAppByName(String szToSearch)
     {
+        if(privList==null)return;
         if(privList.size()==0)return;
-        List<AppInfo> theListChg = privList.subList(0,privList.size());
+        List<AppInfo> theListChg;
+        try
+        {
+            theListChg = privList.subList(0, privList.size());
+        }
+        catch(Throwable e)
+        {
+            e.printStackTrace();
+            return;
+        }
         Iterator<AppInfo> theItor = theListChg.iterator();
-        while(theItor.hasNext())
+        while (theItor.hasNext())
         {
             AppInfo theInfo = theItor.next();
-            if(theInfo.name.toString().indexOf(szToSearch)==-1)
+            if (theInfo.name.toString().indexOf(szToSearch) == -1)
                 theItor.remove();
         }
         mAdapter.setList(theListChg);
