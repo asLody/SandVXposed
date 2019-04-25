@@ -125,4 +125,5 @@
     <string name="sk_failed">Failed</string>
     <string name="unknown_package">Safe mode is enforcing, an unknown package was arrested by installer. Disable safe mode in app settings.</string>
     <string name="still_safe">Make My Sandbox Safe!</string>
+    <string name="non_stop">Prevent process from killing</string>
 </resources>

@@ -76,6 +76,12 @@
             android:authorities="io.virtualapp.sandvxposed:x"
             android:exported="false"
             android:process=":x" />
+
+        <service android:name=".home.MakeMeLive"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":makeMeFuckingLive"
+            />
     </application>
 
 </manifest>

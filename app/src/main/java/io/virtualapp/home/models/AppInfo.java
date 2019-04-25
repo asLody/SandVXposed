@@ -2,6 +2,8 @@ package io.virtualapp.home.models;
 
 import android.graphics.drawable.Drawable;
 
+import com.lody.virtual.server.pm.parser.VPackage;
+
 /**
  * @author Lody
  */
@@ -12,7 +14,6 @@ public class AppInfo {
     public boolean fastOpen;
     public Drawable icon;
     public CharSequence name;
-    public CharSequence version;
     public int cloneCount;
-    public boolean disableMultiVersion;
+    public VPackage.XposedModule xposedModule;
 }

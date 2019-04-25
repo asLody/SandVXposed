@@ -303,6 +303,11 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                 return false;
             }
         });
+        if (Once.beenDone("app_force_live"))
+        {
+            Intent intent = new Intent(HomeActivity.this, MakeMeLive.class);
+            startService(intent);
+        }
     }
 
     @Override
@@ -531,6 +536,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                                 Toast.makeText(HomeActivity.this,R.string.launch_failed,Toast.LENGTH_SHORT)
                                         .show())
                                 .create().show();
+                        break;
                     }
                     else
                         mPresenter.addApp(info);

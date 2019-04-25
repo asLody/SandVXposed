@@ -40,7 +40,16 @@ public class SandXposed {
             if (TextUtils.equals(packageName, module.packageName)) {
                 Log.d("injectXposedModule", "injectSelf : " + processName);
             }
-            XposedCompat.loadModule(module.apkPath, module.getOdexFile().getParent(), module.libPath, XposedBridge.class.getClassLoader());
+            try
+            {
+                XposedCompat.loadModule(module.apkPath, module.getOdexFile().getParent(), module.libPath, XposedBridge.class.getClassLoader());
+            }
+            catch (Throwable e)
+            {
+                e.printStackTrace();
+                Log.e("injectXposedModule","Inject failed...");
+                break;
+            }
         }
 
         XposedCompat.context = context;
