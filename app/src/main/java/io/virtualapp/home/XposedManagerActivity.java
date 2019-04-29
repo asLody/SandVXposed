@@ -1,10 +1,12 @@
 package io.virtualapp.home;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
+import android.view.View;
 import android.widget.Toast;
 
 import com.lody.virtual.sandxposed.XposedConfig;
@@ -38,14 +40,31 @@ public class XposedManagerActivity extends VActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_xposed_manager);
-        setSupportActionBar(findViewById(R.id.toolbar));
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        try
+        {
+            setContentView(R.layout.activity_xposed_manager);
+            setSupportActionBar(findViewById(R.id.toolbar));
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null)
+            {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            }
+            initXposedGlobalSettings();
+            initModuleList();
         }
-        initXposedGlobalSettings();
-        initModuleList();
+        catch (Throwable e)
+        {
+            if(HomeActivity.hHomeAct!=null)
+            {
+                Snackbar.make(HomeActivity.hHomeAct.getWindow().getDecorView(),R.string.launch_failed
+                ,Snackbar.LENGTH_LONG)
+                        .setAction(R.string.refresh, v ->
+                                HomeActivity.hHomeAct.RefreshDesktop())
+                        .show();
+            }
+            e.printStackTrace();
+            finish();
+        }
         android.widget.Toast.makeText(this,R.string.SKRestartTips, Toast.LENGTH_LONG).show();
     }
 

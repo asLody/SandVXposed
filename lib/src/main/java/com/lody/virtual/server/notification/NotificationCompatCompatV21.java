@@ -12,6 +12,8 @@ import android.widget.RemoteViews;
 
 import com.lody.virtual.helper.utils.Reflect;
 
+import sk.vpkg.manager.silentapps;
+
 import static com.lody.virtual.os.VEnvironment.getPackageResourcePath;
 
 /**

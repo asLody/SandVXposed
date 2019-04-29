@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.lody.virtual.client.ipc.VActivityManager;
+import com.sk.listapp.XAppManager;
 
 import io.virtualapp.R;
 import io.virtualapp.VApp;
@@ -213,11 +214,7 @@ public class SettingAct extends AppCompatPreferenceActivity
             hDialog.setPositiveButton(R.string.back, (dialog, which) ->
                     getActivity().finish());
             hDialog.setNegativeButton(R.string.desktop, (dialog, which) ->
-            {
-                HomeActivity.hHomeAct.finish();
-                HomeActivity.goHome(getActivity());
-                getActivity().finish();
-            }).setCancelable(false).create().show();
+                    getActivity().finish()).setCancelable(false).create().show();
         }
 
         @Override
@@ -345,21 +342,9 @@ public class SettingAct extends AppCompatPreferenceActivity
         public void onCreate(Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
-            android.widget.Toast.makeText(VApp.getApp(), R.string.SK_Thecoming, android.widget.Toast.LENGTH_LONG).show();
-            addPreferencesFromResource(R.xml.pref_appset);
-            setHasOptionsMenu(true);
-            /* TODO: implement function. */
-            AlertDialog.Builder hDialog = new AlertDialog.Builder(getActivity());
-            hDialog.setMessage(R.string.SK_Thecoming);
-            hDialog.setTitle("The coming...").setNegativeButton(R.string.back,
-                    (dialog, which) -> getActivity().finish());
-            hDialog.setPositiveButton(R.string.desktop, (dialog, which) ->
-            {
-                HomeActivity.goHome(getActivity());
-                getActivity().finish();
-            });
-            hDialog.create().show();
-            /* TODO: implement function. */
+            Intent hAppInfoSettings=new Intent(getActivity(), XAppManager.class);
+            getActivity().startActivity(hAppInfoSettings);
+            getActivity().finish();
         }
 
         @Override

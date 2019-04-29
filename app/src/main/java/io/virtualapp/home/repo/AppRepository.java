@@ -81,19 +81,31 @@ public class AppRepository implements AppDataSource {
     @Override
     public Promise<List<AppData>, Throwable, Void> getVirtualXposedModules() {
         return VUiKit.defer().when(() -> {
-            List<InstalledAppInfo> infos = VirtualCore.get().getInstalledApps(InstalledAppInfo.FLAG_XPOSED_MODULE);
             List<AppData> models = new ArrayList<>();
-            for (InstalledAppInfo info : infos) {
-                PackageAppData data = new PackageAppData(mContext, info);
-                if (VirtualCore.get().isAppInstalledAsUser(0, info.packageName)) {
-                    models.add(data);
-                }
-                int[] userIds = info.getInstalledUsers();
-                for (int userId : userIds) {
-                    if (userId != 0) {
-                        models.add(new MultiplePackageAppData(data, userId));
+            try
+            {
+                List<InstalledAppInfo> infos = VirtualCore.get().getInstalledApps(InstalledAppInfo.FLAG_XPOSED_MODULE);
+                for (InstalledAppInfo info : infos)
+                {
+                    PackageAppData data = new PackageAppData(mContext, info);
+                    if (VirtualCore.get().isAppInstalledAsUser(0, info.packageName))
+                    {
+                        models.add(data);
+                    }
+                    int[] userIds = info.getInstalledUsers();
+                    for (int userId : userIds)
+                    {
+                        if (userId != 0)
+                        {
+                            models.add(new MultiplePackageAppData(data, userId));
+                        }
                     }
                 }
+            }
+            catch (Throwable e)
+            {
+                e.printStackTrace();
+                models = new ArrayList<>();
             }
             return models;
         });
