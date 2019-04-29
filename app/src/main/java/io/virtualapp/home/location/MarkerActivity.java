@@ -50,33 +50,43 @@ public class MarkerActivity extends VActivity implements TencentMap.OnMapClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_marker);
-        setResult(Activity.RESULT_CANCELED);
-        Toolbar toolbar = bind(R.id.task_top_toolbar);
-        setSupportActionBar(toolbar);
-        //地址显示，暂时不用
-        pathText = bind(R.id.address);
-        pathText.setVisibility(View.VISIBLE);
-        enableBackHome();
-        mapView = (MapView) findViewById(R.id.map);
-        mapView.onCreate(savedInstanceState); // 此方法必须重写
-        mMap = mapView.getMap();
-        mMap.setOnMapClickListener(this);
-        geocoderSearch = new TencentSearch(this);
-        //
-        Intent data = getIntent();
-        if (data != null) {
-            mVLocation = data.getParcelableExtra(EXTRA_LOCATION);
-            if (mVLocation != null && mVLocation.latitude != 0 && mVLocation.longitude != 0) {
-                mLatLng = new LatLng(mVLocation.latitude, mVLocation.longitude);
-                isNoPoint = false;
+        try
+        {
+            setContentView(R.layout.activity_marker);
+            setResult(Activity.RESULT_CANCELED);
+            Toolbar toolbar = bind(R.id.task_top_toolbar);
+            setSupportActionBar(toolbar);
+            //地址显示，暂时不用
+            pathText = bind(R.id.address);
+            pathText.setVisibility(View.VISIBLE);
+            enableBackHome();
+            mapView = (MapView) findViewById(R.id.map);
+            mapView.onCreate(savedInstanceState); // 此方法必须重写
+            mMap = mapView.getMap();
+            mMap.setOnMapClickListener(this);
+            geocoderSearch = new TencentSearch(this);
+            //
+            Intent data = getIntent();
+            if (data != null)
+            {
+                mVLocation = data.getParcelableExtra(EXTRA_LOCATION);
+                if (mVLocation != null && mVLocation.latitude != 0 && mVLocation.longitude != 0)
+                {
+                    mLatLng = new LatLng(mVLocation.latitude, mVLocation.longitude);
+                    isNoPoint = false;
+                }
             }
-        }
 
-        if (isNoPoint) {
-            startLocation();
-        } else {
-            onMapClick(mLatLng);
+            if (isNoPoint)
+            {
+                startLocation();
+            } else
+            {
+                onMapClick(mLatLng);
+            }
+        }catch(Throwable e)
+        {
+            e.printStackTrace();
         }
     }
 
@@ -122,7 +132,13 @@ public class MarkerActivity extends VActivity implements TencentMap.OnMapClickLi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.marktet_map, menu);
+        try
+        {
+            getMenuInflater().inflate(R.menu.marktet_map, menu);
+        }catch(Throwable e)
+        {
+            e.printStackTrace();
+        }
         return true;
     }
 
@@ -203,7 +219,14 @@ public class MarkerActivity extends VActivity implements TencentMap.OnMapClickLi
 
             @Override
             public void onFailure(int i, String s, Throwable throwable) {
-                dialog.dismiss();
+                try
+                {
+                    dialog.dismiss();
+                }
+                catch (Throwable e)
+                {
+                    e.printStackTrace();
+                }
                 pathText.setText("error:" + s);
             }
         });

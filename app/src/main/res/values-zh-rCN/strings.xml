@@ -47,7 +47,7 @@
     <string name="SKRestartTips">更改设置以后点击主页菜单->重启所有应用来让设置生效。</string>
     <string name="ensurerestart">真的要重启吗？请确保已经保存好数据。</string>
     <string name="manualpath">手动选择路径安装</string>
-    <string name="appInstallTip">正在安装应用，稍后请点击菜单->重启所有应用以重启桌面，然后刷新桌面缓存。</string>
+    <string name="appInstallTip">正在安装应用，稍后请下拉桌面以刷新应用列表。</string>
     <string name="about_info">"特别感谢甘！##SandVXP是一个应用程序，可以让用户在非Root和非引导加载程序解锁设备上使用Xposed模块。##将应用程序和模块添加或克隆到这个应用程序中，然后在菜单的“Xposed管理器”中启用它，应用和模块就可以工作了。##QQ 384550791##邮箱: king@fou.ink##网址https://www.fou.ink/ "</string>
     <string name="launch_failed">抱歉，启动失败。</string>
     <string name="sys_crash">应用程序发生异常，已被捕捉，请留意。</string>
@@ -60,7 +60,7 @@
     <string name="search">搜索</string>
     <string name="enable_search_app">在克隆App列表里面启用搜索功能</string>
     <string name="disable">禁用</string>
-    <string name="click_search_tips">搜索按钮图标会出现在本按钮的下方，请点击这个按钮以完成搜索。</string>
+    <string name="click_search_tips">搜索按钮图标会出现在本按钮的下方，请点击这个按钮以完成搜索。如需还原列表，请下拉刷新。</string>
     <string name="safe_mode">安全模式设置</string>
     <string name="safe_mode_tips">警告，禁用安全模式，可能会让您的数据或者隐私受到威胁，并且可能导致手机沦陷为肉鸡！如果您不是专业的开发人员，请务必不要选择禁用。选择禁用代表您知晓已知风险，并关闭这个应用的安全检测功能。</string>
     <string name="safe_mode_enforcing">检测到安全模式正在运行，请在主页-右上菜单-设置，关闭安全模式以继续（不推荐）。</string>
@@ -68,4 +68,13 @@
     <string name="unknown_package">正在安全模式当中，该应用未被识别，安装器已经阻止这一危险应用。如果您非常信任此应用，请在应用设置（右上菜单-设置）里禁用安全模式，安装以后请重新开启安全模式！</string>
     <string name="still_safe">保持开启（推荐）</string>
     <string name="non_stop">防止进程结束</string>
+    <string name="title_activity_xapp_manager">SK应用管理器</string>
+    <string name="title_dashboard">仪表盘</string>
+    <string name="title_home">应用详情</string>
+    <string name="title_notifications">应用通知</string>
+    <string name="delete_ok">删除应用成功。请下拉列表以刷新。</string>
+    <string name="refresh">更新视图</string>
+    <string name="disable_notification">开启或禁止通知</string>
+    <string name="perm_need_notify">需要通知权限 (可禁止)</string>
+    <string name="notify_disabled">应用通知已经禁止。</string>
 </resources>

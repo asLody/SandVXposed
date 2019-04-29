@@ -7,6 +7,8 @@ import android.os.Build;
 
 import com.lody.virtual.client.core.VirtualCore;
 
+import sk.vpkg.manager.silentapps;
+
 /**
  * @author 247321543
  */

@@ -61,6 +61,7 @@ import java.util.Random;
 import dalvik.system.DexFile;
 import mirror.android.app.Activity;
 import mirror.android.app.ActivityThread;
+import sk.vpkg.notification.SKVPackageNotificationHook;
 
 /**
  * @author Lody
@@ -605,6 +606,15 @@ public final class VirtualCore {
     }
 
     public boolean uninstallPackage(String pkgName) {
+        try
+        {
+            SKVPackageNotificationHook hHook = new SKVPackageNotificationHook();
+            hHook.CleanPackage(pkgName);
+        }
+        catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
         try {
             return getService().uninstallPackage(pkgName);
         } catch (RemoteException e) {

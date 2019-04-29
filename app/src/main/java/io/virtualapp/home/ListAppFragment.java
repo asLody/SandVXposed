@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -101,20 +102,23 @@ public class ListAppFragment extends VFragment<ListAppContract.ListAppPresenter>
         while (theItor.hasNext())
         {
             AppInfo theInfo = theItor.next();
-            if (theInfo.name.toString().indexOf(szToSearch) == -1)
+            if (!theInfo.name.toString().contains(szToSearch))
                 theItor.remove();
         }
         mAdapter.setList(theListChg);
     }
 
     private SearchView hSearch;
+    private SwipeRefreshLayout hLayoutSwipe;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        if(getContext()==null)return;
+        if(getActivity()==null)return;
         mRecyclerView = (DragSelectRecyclerView) view.findViewById(R.id.select_app_recycler_view);
         mProgressBar = (ProgressBar) view.findViewById(R.id.select_app_progress_bar);
         mInstallButton = (Button) view.findViewById(R.id.select_app_install_btn);
-        Button hButton = (Button) view.findViewById(R.id.buttonAddByPath);
+        android.support.design.widget.FloatingActionButton hButton = view.findViewById(R.id.buttonAddByPath);
         Button hSearchButton = (Button) view.findViewById(R.id.search_app_m);
         if (Once.beenDone("enable_search_app"))
         {
@@ -193,6 +197,13 @@ public class ListAppFragment extends VFragment<ListAppContract.ListAppPresenter>
             {
                 return false;
             }
+        });
+        hLayoutSwipe = view.findViewById(R.id.swipeRefreshInstalled);
+        hLayoutSwipe.setOnRefreshListener(() ->
+        {
+            new ListAppPresenterImpl(getActivity(),
+                ListAppFragment.this, getSelectFrom()).start();
+            hLayoutSwipe.setRefreshing(false);
         });
         startRemoteThread();
     }

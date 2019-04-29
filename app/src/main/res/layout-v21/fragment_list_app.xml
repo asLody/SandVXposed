@@ -6,12 +6,17 @@
     android:layout_height="match_parent">
 
 
-    <io.virtualapp.widgets.DragSelectRecyclerView
-        android:id="@+id/select_app_recycler_view"
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        app:dsrv_autoScrollEnabled="false" />
+        android:id="@+id/swipeRefreshInstalled">
+        <io.virtualapp.widgets.DragSelectRecyclerView
+            android:id="@+id/select_app_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            app:dsrv_autoScrollEnabled="false" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <ProgressBar
         android:id="@+id/select_app_progress_bar"
@@ -30,16 +35,15 @@
         android:textSize="17sp"
         tools:ignore="HardcodedText" />
 
-    <Button
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/buttonAddByPath"
-        style="@android:style/Widget.Material.Light.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:background="#33B5E5"
-        android:paddingLeft="20px"
-        android:paddingRight="20px"
-        android:text="@string/manualpath" />
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_add"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="128dp"
+        />
 
     <Button
         android:id="@+id/search_app_m"

@@ -47,7 +47,7 @@
     <string name="SKRestartTips">更改设置以后点击主页菜单->重启所有应用来让设置生效。</string>
     <string name="ensurerestart">真的要重启吗？</string>
     <string name="manualpath">手动通过路径选择</string>
-    <string name="appInstallTip">正在安装应用，稍后请点击菜单->重启所有应用以重启桌面，然后刷新桌面缓存。</string>
+    <string name="appInstallTip">正在安装应用，稍后请下拉桌面以刷新应用列表。</string>
     <string name="about_info">"特别感谢甘！##SandVXP是一个应用程序，可以让用户在非Root和非引导加载程序解锁设备上使用Xposed模块。##将应用程序和模块添加或克隆到这个应用程序中，然后在菜单的“Xposed管理器”中启用它，应用和模块就可以工作了。##QQ 384550791##邮箱: king@fou.ink##网址https://www.fou.ink/ "</string>
     <string name="launch_failed">Sorry，App无法启动。</string>
     <string name="sys_crash">应用程序异常，已经捕捉。</string>
@@ -68,4 +68,13 @@
     <string name="unknown_package">正在安全模式当中，该应用未被识别，安装器已经阻止这一危险应用。如果您非常信任此应用，请在应用设置（右上菜单-设置）里禁用安全模式，安装以后请重新开启安全模式！</string>
     <string name="still_safe">保持开启（推荐）</string>
     <string name="non_stop">防止进程被K</string>
+    <string name="title_activity_xapp_manager">SK应用管理</string>
+    <string name="title_dashboard">仪表盘</string>
+    <string name="title_home">应用详情</string>
+    <string name="title_notifications">应用通知</string>
+    <string name="delete_ok">删除应用成功。请下拉列表以刷新。</string>
+    <string name="refresh">刷新一下</string>
+    <string name="disable_notification">开启或禁止通知</string>
+    <string name="perm_need_notify">需要通知权限 (可禁止)</string>
+    <string name="notify_disabled">应用通知已经被禁止。</string>
 </resources>

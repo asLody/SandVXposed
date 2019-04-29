@@ -15,7 +15,7 @@ public class XAppDataInstalled implements AppData
     @Override
     public boolean isLoading()
     {
-        return false;
+        return true;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class XAppDataInstalled implements AppData
     @Override
     public boolean canLaunch()
     {
-        return true;
+        return false;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class XAppDataInstalled implements AppData
     @Override
     public boolean canCreateShortcut()
     {
-        return true;
+        return false;
     }
 
     @Override

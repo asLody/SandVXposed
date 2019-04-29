@@ -105,7 +105,7 @@
     <string name="SKRestartTips">Please click settings -> Restart Application to enable or disable modules.</string>
     <string name="ensurerestart">Wanna restart this application? Your changes must be saved or lost.</string>
     <string name="manualpath">Install By Path Manually</string>
-    <string name="appInstallTip">Application is installing, please wait. You can click menu->restart application for list refresh.</string>
+    <string name="appInstallTip">Application is installing, take a while and swipe desktop for refresh.</string>
     <string name="about_info">Special thanks for Gan!##SandVXP is a application that can let user use Xposed module on non-root and non-bootloader-unlock devices. Clone application into this app and xposed modules, then validate it in menu\'s xposed manager, and they will work.##QQ 384550791##E-Mail king@fou.ink##Website https://www.fou.ink/</string>
     <string name="launch_failed">Launch app failed...</string>
     <string name="sys_crash">Application may crash but catch by SKActivity.</string>
@@ -118,7 +118,7 @@
     <string name="search">Search</string>
     <string name="enable_search_app">Enable search app in app clone list.</string>
     <string name="disable">Disable</string>
-    <string name="click_search_tips">Click search button left below this button for search.</string>
+    <string name="click_search_tips">Click search button left below this button for search. Swipe down for refreshing.</string>
     <string name="safe_mode">Safe Mode Control</string>
     <string name="safe_mode_tips">Disable this mode will bring risk such as trojan, malware etc. Make sure you can accept those risk and press disable button. You must know what risk you will undertake for.</string>
     <string name="safe_mode_enforcing">Safe mode is enforcing. Please turn off safe mode in application settings.</string>
@@ -126,4 +126,13 @@
     <string name="unknown_package">Safe mode is enforcing, an unknown package was arrested by installer. Disable safe mode in app settings.</string>
     <string name="still_safe">Make My Sandbox Safe!</string>
     <string name="non_stop">Prevent process from killing</string>
+    <string name="title_activity_xapp_manager">SK AppManager</string>
+    <string name="title_home">App Detail</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">App Notifications</string>
+    <string name="delete_ok">Delete app finish. Swipe for refresh.</string>
+    <string name="refresh">Refresh View</string>
+    <string name="disable_notification">Disable/Enable Notification</string>
+    <string name="perm_need_notify">Need Notification Permission</string>
+    <string name="notify_disabled">Notification is already disabled.</string>
 </resources>

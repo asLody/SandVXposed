@@ -17,8 +17,8 @@ android {
         applicationId "io.virtualapp.sandvxposed"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 28
-        versionName "1.2.5.1.3.1"
+        versionCode 30
+        versionName "1.2.5.1.3.1.1.1"
         multiDexEnabled true
         android {
             defaultConfig {
@@ -93,9 +93,15 @@ android {
 
         manifestPlaceholders = [
                 //AWV24BW39WRE 属于应用"VirtualApp"独有的 Android AppKey, 用于配置SDK
-                MTA_APPKEY:"AWV24BW39WRE",
+                MTA_APPKEY : "AWV24BW39WRE",
                 //标注应用推广渠道用以区分新用户来源，可填写如应用宝，豌豆荚等
-                MTA_CHANNEL:"VApp"
+                MTA_CHANNEL: "VApp"
         ]
+    }
+}
+
+android {
+    defaultConfig {
+        vectorDrawables.useSupportLibrary = true
     }
 }

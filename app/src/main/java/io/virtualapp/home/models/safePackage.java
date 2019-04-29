@@ -6,6 +6,13 @@ public class safePackage
 {
     static public String safe_Package[] =
             {
+                    "com.qiyi.video",//爱奇艺
+                    "com.changba",//唱吧
+                    "com.dianping.v1",//大众点评
+                    "com.jingdong.app.mall",//京东
+                    "com.sankuai.meituan.takeoutnew",//美团
+                    "com.smile.gifmaker",//快手
+
                     "com.dahuo.sunflower.xp.none",
                     "com.ext.star.wars",
                     "bin.xposed.Unblock163MusicClient",//网易云音乐破解

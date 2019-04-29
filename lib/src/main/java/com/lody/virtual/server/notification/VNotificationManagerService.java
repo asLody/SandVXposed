@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import sk.vpkg.manager.silentapps;
+
 public class VNotificationManagerService implements INotificationManager {
     private static final AtomicReference<VNotificationManagerService> gService = new AtomicReference<>();
     private NotificationManager mNotificationManager;
@@ -70,6 +72,14 @@ public class VNotificationManagerService implements INotificationManager {
 
     @Override
     public boolean areNotificationsEnabledForPackage(String packageName, int userId) {
+        try
+        {
+            if (silentapps.notifyBlackList.contains(packageName))
+                return false;
+        }catch (Throwable ignored)
+        {
+            // ignored
+        }
         return !mDisables.contains(packageName + ":" + userId);
     }
 

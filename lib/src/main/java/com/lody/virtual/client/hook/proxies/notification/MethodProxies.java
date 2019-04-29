@@ -1,7 +1,9 @@
 package com.lody.virtual.client.hook.proxies.notification;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.os.Build;
+import android.widget.Toast;
 
 import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.hook.base.MethodProxy;
@@ -11,6 +13,8 @@ import com.lody.virtual.helper.utils.ArrayUtils;
 import com.lody.virtual.helper.utils.VLog;
 
 import java.lang.reflect.Method;
+
+import sk.vpkg.notification.SKVPackageNotificationHook;
 
 /**
  * @author Lody
@@ -32,24 +36,35 @@ class MethodProxies {
             if (getHostPkg().equals(pkg)) {
                 return method.invoke(who, args);
             }
-            if(true){
-                return 0;
+            SKVPackageNotificationHook hHook = new SKVPackageNotificationHook();
+            int idIndex = ArrayUtils.indexOfFirst(args, Integer.class);
+            int id = (int) args[idIndex];
+            int notificationIndex = ArrayUtils.indexOfFirst(args, Notification.class);
+            Notification notification = (Notification) args[notificationIndex];
+            try
+            {
+                if (!hHook.ProcessNotificationWithoutTag(pkg, idIndex, notification))
+                    VLog.e(TAG,"enqueueNotification Error");
             }
+            catch (Throwable e)
+            {
+                e.printStackTrace();
+            }
+
+            return 0;
+            /*
             if(Build.MODEL.contains("vivo") || Build.MODEL.contains("ZTE")){
                 return 0;
             }
-            int notificationIndex = ArrayUtils.indexOfFirst(args, Notification.class);
-            int idIndex = ArrayUtils.indexOfFirst(args, Integer.class);
-            int id = (int) args[idIndex];
             id = VNotificationManager.get().dealNotificationId(id, pkg, null, getAppUserId());
             args[idIndex] = id;
-            Notification notification = (Notification) args[notificationIndex];
             if (!VNotificationManager.get().dealNotification(id, notification, pkg)) {
                 return 0;
             }
             VNotificationManager.get().addNotification(id, null, pkg, getAppUserId());
             args[0] = getHostPkg();
             return method.invoke(who, args);
+            */
         }
     }
 
@@ -66,17 +81,32 @@ class MethodProxies {
             if (getHostPkg().equals(pkg)) {
                 return method.invoke(who, args);
             }
-            if(true){
-                return 0;
+            SKVPackageNotificationHook hHook = new SKVPackageNotificationHook();
+            int idIndex = ArrayUtils.indexOfFirst(args, Integer.class);
+            int id = (int) args[idIndex];
+            @SuppressLint("ObsoleteSdkInt")
+            int tagIndex = (Build.VERSION.SDK_INT >= 18 ? 2 : 1);
+            String tag = (String) args[tagIndex];
+            int notificationIndex = ArrayUtils.indexOfFirst(args, Notification.class);
+            Notification notification = (Notification) args[notificationIndex];
+            try
+            {
+                if (!hHook.ProcessNotificationWithTag(pkg, tag, idIndex, notification))
+                    VLog.e(TAG,"enqueueNotificationWithTag Error");
             }
+            catch (Throwable e)
+            {
+                e.printStackTrace();
+            }
+
+            return 0;
+            /*
             if(Build.MODEL.contains("vivo") || Build.MODEL.contains("ZTE")){
                 return 0;
             }
             int notificationIndex = ArrayUtils.indexOfFirst(args, Notification.class);
             int idIndex = ArrayUtils.indexOfFirst(args, Integer.class);
-            int tagIndex = (Build.VERSION.SDK_INT >= 18 ? 2 : 1);
             int id = (int) args[idIndex];
-            String tag = (String) args[tagIndex];
 
             id = VNotificationManager.get().dealNotificationId(id, pkg, tag, getAppUserId());
             tag = VNotificationManager.get().dealNotificationTag(id, pkg, tag, getAppUserId());
@@ -93,6 +123,7 @@ class MethodProxies {
                 args[1] = getHostPkg();
             }
             return method.invoke(who, args);
+            */
         }
     }
 
@@ -114,23 +145,35 @@ class MethodProxies {
         @Override
         public Object call(Object who, Method method, Object... args) throws Throwable {
             String pkg = MethodParameterUtils.replaceFirstAppPkg(args);
+
             if (getHostPkg().equals(pkg)) {
                 return method.invoke(who, args);
             }
-            if(true){
-                return 0;
+            String tag = (String) args[1];
+            int id = (int) args[2];
+            SKVPackageNotificationHook hHook = new SKVPackageNotificationHook();
+            try
+            {
+                if (!hHook.ProcessCancelNotificationWithTag(pkg, tag, id))
+                    VLog.e(TAG,"cancelNotificationWithTag Error");
             }
+            catch (Throwable e)
+            {
+                e.printStackTrace();
+            }
+
+            return 0;
+            /*
             if(Build.MODEL.contains("vivo") || Build.MODEL.contains("ZTE")){
                 return 0;
             }
-            String tag = (String) args[1];
-            int id = (int) args[2];
             id = VNotificationManager.get().dealNotificationId(id, pkg, tag, getAppUserId());
             tag = VNotificationManager.get().dealNotificationTag(id, pkg, tag, getAppUserId());
 
             args[1] = tag;
             args[2] = id;
             return method.invoke(who, args);
+            */
         }
     }
 
@@ -147,11 +190,24 @@ class MethodProxies {
         @Override
         public Object call(Object who, Method method, Object... args) throws Throwable {
             String pkg = MethodParameterUtils.replaceFirstAppPkg(args);
+            if (getHostPkg().equals(pkg)) {
+                return method.invoke(who, args);
+            }
+            SKVPackageNotificationHook hHook = new SKVPackageNotificationHook();
+            try
+            {
+                if (!hHook.ProcessRemoveAll(pkg))
+                    VLog.e(TAG,"cancelNotificationWithTag Error");
+            }
+            catch (Throwable e)
+            {
+                e.printStackTrace();
+            }
             if (VirtualCore.get().isAppInstalled(pkg)) {
                 VNotificationManager.get().cancelAllNotification(pkg, getAppUserId());
                 return 0;
             }
-            return method.invoke(who, args);
+            return 0;
         }
     }
 
@@ -164,6 +220,7 @@ class MethodProxies {
         @Override
         public Object call(Object who, Method method, Object... args) throws Throwable {
             String pkg = (String) args[0];
+            Toast.makeText(VirtualCore.get().getContext(),pkg+5,Toast.LENGTH_SHORT).show();
             if (getHostPkg().equals(pkg)) {
                 return method.invoke(who, args);
             }
@@ -180,6 +237,7 @@ class MethodProxies {
         @Override
         public Object call(Object who, Method method, Object... args) throws Throwable {
             String pkg = (String) args[0];
+            Toast.makeText(VirtualCore.get().getContext(),pkg+6,Toast.LENGTH_SHORT).show();
             if (getHostPkg().equals(pkg)) {
                 return method.invoke(who, args);
             }

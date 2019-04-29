@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.PopupMenu;
@@ -308,6 +309,19 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
             Intent intent = new Intent(HomeActivity.this, MakeMeLive.class);
             startService(intent);
         }
+        SwipeRefreshLayout hRefreshControl = findViewById(R.id.swipeRefreshDesktop_HomeAct);
+        hRefreshControl.setOnRefreshListener(() ->
+        {
+            RefreshDesktop();
+            ((SwipeRefreshLayout)findViewById(R.id.swipeRefreshDesktop_HomeAct))
+                    .setRefreshing(false);
+        });
+    }
+
+    public void RefreshDesktop()
+    {
+        new HomePresenterImpl(HomeActivity.this).start();
+        listAppData = null;
     }
 
     @Override
@@ -513,6 +527,8 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         XAppDataInstalled hInstalled = new XAppDataInstalled();
         hInstalled.pkgName=tempFile.getName();
         addAppToLauncher(hInstalled);
+        Toast.makeText(HomeActivity.this,R.string.appInstallTip,Toast.LENGTH_LONG)
+                .show();
     }
 
     @Override
@@ -520,8 +536,6 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && data != null) {
             List<String> pkg_Det = Arrays.asList(safePackage.safe_Package);
-            Toast.makeText(this,R.string.wait,Toast.LENGTH_LONG)
-                    .show();
             List<AppInfoLite> appList = data.getParcelableArrayListExtra(VCommends.EXTRA_APP_INFO_LIST);
             if (appList != null) {
                 for (AppInfoLite info : appList) {
