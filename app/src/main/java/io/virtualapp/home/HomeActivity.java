@@ -35,6 +35,7 @@ import com.lody.virtual.client.ipc.VActivityManager;
 import com.lody.virtual.client.stub.ChooseTypeAndAccountActivity;
 import com.lody.virtual.os.VUserInfo;
 import com.lody.virtual.os.VUserManager;
+import com.sk.fwindow.skFloattingWin;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -181,6 +182,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         });
         */
         menu.add("虚拟位置").setIcon(R.drawable.ic_notification).setOnMenuItemClickListener(item -> {
+            Toast.makeText(this, "这是一个假功能，不信可以试试有没有用的哟~", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, VirtualLocationSettings.class));
             return true;
         });
@@ -316,6 +318,11 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
             ((SwipeRefreshLayout)findViewById(R.id.swipeRefreshDesktop_HomeAct))
                     .setRefreshing(false);
         });
+        if (Once.beenDone("enable_floating_win"))
+        {
+            startService(new Intent
+                    (this, skFloattingWin.class));
+        }
     }
 
     public void RefreshDesktop()
