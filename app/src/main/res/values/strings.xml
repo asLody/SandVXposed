@@ -135,4 +135,14 @@
     <string name="disable_notification">Disable/Enable Notification</string>
     <string name="perm_need_notify">Need Notification Permission</string>
     <string name="notify_disabled">Notification is already disabled.</string>
+    <string name="title_activity_install_pkg">SK Package Installer</string>
+    <string name="package_installer">Installing Package</string>
+    <string name="ensure_install">Do you wanna install this application? Click Without dependence to avoid crash after sysapp uninstall.</string>
+    <string name="install_success">Install %s Success!!!</string>
+    <string name="upgrade_success">Update %s Success!!!</string>
+    <string name="install_no_depend">Install Without Dependence</string>
+    <string name="enable_odex">Enable DEX2OAT</string>
+    <string name="ensure_odex">Are you sure to enable DEX2OAT? Enable this can speed up application, but modules cannot work anymore.</string>
+    <string name="enable_floating_win">Enable Floating Window</string>
+    <string name="ensure_enable_floating_win">Disable or enable floating window for this application. Enable this for prevent application from system killing.</string>
 </resources>

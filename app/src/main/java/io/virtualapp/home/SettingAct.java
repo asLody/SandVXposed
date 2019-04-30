@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.lody.virtual.client.ipc.VActivityManager;
+import com.sk.fwindow.skFloattingWin;
 import com.sk.listapp.XAppManager;
 
 import io.virtualapp.R;
@@ -193,7 +194,8 @@ public class SettingAct extends AppCompatPreferenceActivity
                 || NotificationPreferenceFragment.class.getName().equals(fragmentName)
                 || SKResstart.class.getName().equals(fragmentName)
                 || SKSettings.class.getName().equals(fragmentName)
-                || SKsetAppLiving.class.getName().equals(fragmentName);
+                || SKsetAppLiving.class.getName().equals(fragmentName)
+                || SKAppFloatingWindowSetting.class.getName().equals(fragmentName);
     }
 
     /**
@@ -209,12 +211,11 @@ public class SettingAct extends AppCompatPreferenceActivity
             super.onCreate(savedInstanceState);
             AlertDialog.Builder hDialog = new AlertDialog.Builder(getActivity());
             hDialog.setTitle(R.string.about);
-            hDialog.setMessage(new String(getResources().getString(R.string.about_info)).
+            hDialog.setMessage(getResources().getString(R.string.about_info).
                     replaceAll("##","\n"));
             hDialog.setPositiveButton(R.string.back, (dialog, which) ->
-                    getActivity().finish());
-            hDialog.setNegativeButton(R.string.desktop, (dialog, which) ->
-                    getActivity().finish()).setCancelable(false).create().show();
+                    getActivity().finish())
+                    .setCancelable(false).create().show();
         }
 
         @Override
@@ -426,6 +427,55 @@ public class SettingAct extends AppCompatPreferenceActivity
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item)
+        {
+            int id = item.getItemId();
+            if (id == android.R.id.home)
+            {
+                startActivity(new Intent(getActivity(), SettingAct.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class SKAppFloatingWindowSetting extends PreferenceFragment
+    {
+        @Override
+        public void onCreate(Bundle savedInstanceState)
+        {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_appset);
+            setHasOptionsMenu(true);
+            AlertDialog.Builder hDialog = new AlertDialog.Builder(getActivity());
+            hDialog.setMessage(R.string.ensure_enable_floating_win);
+            hDialog.setTitle(R.string.SK_Settings).setNegativeButton(R.string.disable,
+                    (dialog, which) ->
+                    {
+                        if (Once.beenDone("enable_floating_win"))
+                        {
+                            Once.clearDone("enable_floating_win");
+                        }
+                        getActivity().stopService(new Intent
+                                (getActivity(), skFloattingWin.class));
+                        getActivity().finish();
+                    });
+            hDialog.setPositiveButton(R.string.enable, (dialog, which) ->
+            {
+                if (!Once.beenDone("enable_floating_win"))
+                {
+                    Once.markDone("enable_floating_win");
+                }
+                getActivity().startService(new Intent
+                        (getActivity(), skFloattingWin.class));
+                getActivity().finish();
+            })
+                    .setCancelable(false);
+            hDialog.create().show();
         }
 
         @Override

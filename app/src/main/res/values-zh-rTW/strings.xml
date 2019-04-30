@@ -77,4 +77,14 @@
     <string name="disable_notification">开启或禁止通知</string>
     <string name="perm_need_notify">需要通知权限 (可禁止)</string>
     <string name="notify_disabled">应用通知已经被禁止。</string>
+    <string name="title_activity_install_pkg">SK程式安装工具</string>
+    <string name="package_installer">正在安装</string>
+    <string name="ensure_install">您真的要安装这个应用吗？这个未知来源的应用可能带来未知风险！请谨慎选择是否继续！如未来需要卸载本机已安装的App，请选择无依赖安装。</string>
+    <string name="install_success">安装%s成功！</string>
+    <string name="upgrade_success">更新程式%schen</string>
+    <string name="install_no_depend">无依赖安装</string>
+    <string name="enable_odex">开启优化</string>
+    <string name="ensure_odex">是否开启DEX2OAT？这个选项可以加速应用运行。如果您不使用任何模块，可以开启这个选项。注意本选项开启以后，应用将有几率无法使用模块！注意，使用这个选项，应用首次打开会慢一些。</string>
+    <string name="enable_floating_win">启用悬浮窗功能（防止被k）</string>
+    <string name="ensure_enable_floating_win">启动或者禁用悬浮窗。启用悬浮窗可以防止应用后台被系统回收，如没特殊需要请不要开启这个选项。开启这个选项需要授权，授权完毕再回到设置页面启用悬浮窗。</string>
 </resources>

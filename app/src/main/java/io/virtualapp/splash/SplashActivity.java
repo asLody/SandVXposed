@@ -17,14 +17,21 @@ import jonathanfinerty.once.Once;
 
 public class SplashActivity extends VActivity {
 
+    static private boolean is_initialized = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(is_initialized)
+        {
+            HomeActivity.goHome(this);
+            finish();
+            return;
+        }
         @SuppressWarnings("unused")
         boolean enterGuide = !Once.beenDone(Once.THIS_APP_INSTALL, VCommends.TAG_NEW_VERSION);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         VUiKit.defer().when(() -> {
             long time = System.currentTimeMillis();
@@ -45,6 +52,7 @@ public class SplashActivity extends VActivity {
             StatConfig.setDebugEnable(false);
             // 基础统计API
             StatService.registerActivityLifecycleCallbacks(this.getApplication());
+            is_initialized = true;
             finish();
         });
     }
