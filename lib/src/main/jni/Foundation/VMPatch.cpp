@@ -396,7 +396,16 @@ void hookAndroidVM(JArrayClass<jobject> javaMethods,
         patchEnv.art_work_around_app_jni_bugs = dlsym(soInfo, "art_work_around_app_jni_bugs");
     } else {
         // workaround for dlsym returns null when system has libhoudini
-        void *h = dlopen("/system/lib/libandroid_runtime.so", RTLD_LAZY);
+        constexpr unsigned long dwPtrSize = sizeof(void*);
+
+        void *h = NULL;
+        // #ifndef _WIN64
+        if(dwPtrSize==4UL) h = dlopen("/system/lib/libandroid_runtime.so", RTLD_LAZY);
+        // #else
+        else if(dwPtrSize==8UL)h = dlopen("/system/lib64/libandroid_runtime.so", RTLD_LAZY);
+        // #endif
+        else h = dlopen("/system/lib/libandroid_runtime.so", RTLD_LAZY);
+
         {
             patchEnv.IPCThreadState_self = (int (*)(void)) dlsym(RTLD_DEFAULT,
                                                                  "_ZN7android14IPCThreadState4selfEv");

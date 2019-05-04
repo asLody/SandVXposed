@@ -1,12 +1,17 @@
 package com.lody.virtual.client.hook.providers;
 
+import android.app.DownloadManager;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 
 import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.hook.base.MethodBox;
 
 import java.lang.reflect.InvocationTargetException;
+
+import sk.vpkg.provider.MProvider;
 
 /**
  * @author Lody
@@ -58,5 +63,11 @@ class DownloadProviderHook extends ExternalProviderHook {
             }
         }
         return super.insert(methodBox, url, initialValues);
+    }
+
+    @Override
+    public Cursor query(MethodBox methodBox, Uri url, String[] projection, String selection, String[] selectionArgs, String sortOrder, Bundle originQueryArgs) throws InvocationTargetException {
+        Cursor cursor = super.query(methodBox, url, projection, selection, selectionArgs, sortOrder, originQueryArgs);
+        return new MProvider.QueryRedirectCursor(cursor, DownloadManager.COLUMN_LOCAL_FILENAME);
     }
 }

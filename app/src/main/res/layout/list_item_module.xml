@@ -59,11 +59,11 @@
                     android:layout_marginStart="4dip"
                     android:ellipsize="middle"
                     android:gravity="end"
-                    android:maxLines="1"
                     android:maxWidth="150dp"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@android:color/tertiary_text_dark"
-                    android:textIsSelectable="false"/>
+                    android:textIsSelectable="false"
+                    android:singleLine="true" />
             </LinearLayout>
 
             <TextView

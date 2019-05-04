@@ -87,4 +87,9 @@
     <string name="ensure_odex">是否开启DEX2OAT？这个选项可以加速应用运行。如果您不使用任何模块，可以开启这个选项。注意本选项开启以后，应用将有几率无法使用模块！注意，使用这个选项，应用首次打开会慢一些。</string>
     <string name="enable_floating_win">启用悬浮窗功能（防止被k）</string>
     <string name="ensure_enable_floating_win">启动或者禁用悬浮窗。启用悬浮窗可以防止应用后台被系统回收，如没特殊需要请不要开启这个选项。开启这个选项需要授权，授权完毕再回到设置页面启用悬浮窗。</string>
+    <string name="kill_app">杀掉进程</string>
+    <string name="odex_failed">警告，出现了某些问题，如果出现应用无法启动的问题，请重新安装这个应用。</string>
+    <string name="override_app">覆盖安装</string>
+    <string name="ensure_override_app">克隆、覆盖安装还是中止呢？克隆会使用应用已安装进沙盒的版本，覆盖会使用您选定的版本，如果需要升级或者降级这个应用，请选择覆盖。</string>
+    <string name="save_success_need_restart">保存成功，请打开桌面 - 右上菜单，点击重启所有应用以后使得设置生效。</string>
 </resources>

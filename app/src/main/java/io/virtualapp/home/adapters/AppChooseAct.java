@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import io.virtualapp.R;
 import io.virtualapp.VCommends;
@@ -207,15 +208,21 @@ public class AppChooseAct extends AppCompatActivity
             finish();
             return;
         }
-        if ("file".equalsIgnoreCase(uri.getScheme())){//使用第三方应用打开
-            path = uri.getPath();
-            // android.widget.Toast.makeText(this,path,android.widget.Toast.LENGTH_SHORT).show();
-            return;
-        }
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {//4.4以后
             try
             {
-                path = getPath(this, uri);
+                String szExStorage = Environment.getExternalStorageDirectory().getAbsolutePath();
+                try
+                {
+                    if (Objects.requireNonNull(uri.getPath()).startsWith(szExStorage))
+                    {
+                        path = uri.getPath();
+                    } else path = getPath(this, uri);
+                }
+                catch (Throwable e)
+                {
+                    path = getPath(this, uri);
+                }
             }catch(Throwable e)
             {
                 e.printStackTrace();

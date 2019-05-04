@@ -182,7 +182,6 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         });
         */
         menu.add("虚拟位置").setIcon(R.drawable.ic_notification).setOnMenuItemClickListener(item -> {
-            Toast.makeText(this, "这是一个假功能，不信可以试试有没有用的哟~", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, VirtualLocationSettings.class));
             return true;
         });
