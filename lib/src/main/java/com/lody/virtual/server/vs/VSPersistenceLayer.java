@@ -16,7 +16,7 @@ import java.util.Map;
 
 class VSPersistenceLayer extends PersistenceLayer {
 
-    private static final char[] MAGIC = {'v', 's', 'a'};
+    private static final char[] MAGIC = {'V', 'S', 'K'};
     private static final int CURRENT_VERSION = 1;
     private final VirtualStorageService mService;
 

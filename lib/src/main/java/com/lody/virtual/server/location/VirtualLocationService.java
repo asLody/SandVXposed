@@ -2,18 +2,18 @@ package com.lody.virtual.server.location;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.RemoteException;
 
 import com.lody.virtual.helper.PersistenceLayer;
 import com.lody.virtual.helper.collection.SparseArray;
 import com.lody.virtual.os.VEnvironment;
 import com.lody.virtual.remote.vloc.VCell;
-import com.lody.virtual.remote.vloc.VLocation;
 import com.lody.virtual.server.interfaces.IVirtualLocationManager;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import sk.vpkg.location.SKLocation;
 
 /**
  * @author Lody
@@ -34,7 +34,7 @@ public class VirtualLocationService implements IVirtualLocationManager {
         VCell cell;
         List<VCell> allCell;
         List<VCell> neighboringCell;
-        VLocation location;
+        SKLocation location;
 
         public void set(VLocConfig other) {
             this.mode = other.mode;
@@ -66,7 +66,7 @@ public class VirtualLocationService implements IVirtualLocationManager {
             this.cell = in.readParcelable(VCell.class.getClassLoader());
             this.allCell = in.createTypedArrayList(VCell.CREATOR);
             this.neighboringCell = in.createTypedArrayList(VCell.CREATOR);
-            this.location = in.readParcelable(VLocation.class.getClassLoader());
+            this.location = in.readParcelable(SKLocation.class.getClassLoader());
         }
 
         public static final Creator<VLocConfig> CREATOR = new Creator<VLocConfig>() {
@@ -236,13 +236,13 @@ public class VirtualLocationService implements IVirtualLocationManager {
     }
 
     @Override
-    public void setLocation(int userId, String pkg, VLocation loc) {
+    public void setLocation(int userId, String pkg, SKLocation loc) {
         getOrCreateConfig(userId, pkg).location = loc;
         mPersistenceLayer.save();
     }
 
     @Override
-    public VLocation getLocation(int userId, String pkg) {
+    public SKLocation getLocation(int userId, String pkg) {
         VLocConfig config = getOrCreateConfig(userId, pkg);
         mPersistenceLayer.save();
         switch (config.mode) {
@@ -257,12 +257,12 @@ public class VirtualLocationService implements IVirtualLocationManager {
     }
 
     @Override
-    public void setGlobalLocation(VLocation loc) {
+    public void setGlobalLocation(SKLocation loc) {
         mGlobalConfig.location = loc;
     }
 
     @Override
-    public VLocation getGlobalLocation() {
+    public SKLocation getGlobalLocation() {
         return mGlobalConfig.location;
     }
 

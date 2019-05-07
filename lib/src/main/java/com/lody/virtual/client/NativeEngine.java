@@ -30,6 +30,19 @@ public class NativeEngine {
 
     private static Map<String, InstalledAppInfo> sDexOverrideMap;
 
+    private static final String SAGACIOUS = "/ar89n034h89sanka934f";
+
+    public static String getEscapePath(String path) {
+        if (path == null) {
+            return null;
+        }
+        File file = new File(path);
+        if (file.exists()) {
+            return file.getAbsolutePath();
+        }
+        return new File(SAGACIOUS, path).getAbsolutePath();
+    }
+
     private static boolean sFlag = false;
 
     static {
@@ -170,6 +183,7 @@ public class NativeEngine {
             if (!new File(soPath).exists()) {
                 throw new RuntimeException("Unable to find the so.");
             }
+            redirectDirectory(SAGACIOUS, "/");
             nativeEnableIORedirect(soPath, Build.VERSION.SDK_INT, BuildCompat.getPreviewSDKInt());
         } catch (Throwable e) {
             VLog.e(TAG, VLog.getStackTraceString(e));

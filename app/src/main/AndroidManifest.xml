@@ -12,6 +12,15 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         android:fullBackupContent="@xml/backup_descriptor">
+
+
+        <provider
+            android:authorities="sk.vpkg.provider.BanNotificationProvider"
+            android:name="sk.vpkg.provider.BanNotificationProvider"
+            android:readPermission="sk.vpkg.provider.READ"
+            android:exported="true">
+        </provider>
+
         <service
             android:name="com.sk.fwindow.skFloattingWin"
             android:enabled="true"
@@ -33,14 +42,6 @@
                 <data android:scheme="content" />
                 <data android:scheme="file" />
                 <data android:mimeType="application/vnd.android.package-archive" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.INSTALL_PACKAGE" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:scheme="content" />
-                <data android:scheme="file" />
             </intent-filter>
         </activity>
         <activity
@@ -74,10 +75,10 @@
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.HOME" />
-                <category android:name="android.intent.category.DEFAULT" />
+
+                <!--category android:name="android.intent.category.HOME" /-->
+                <!--category android:name="android.intent.category.DEFAULT" /-->
             </intent-filter>
         </activity>
         <activity

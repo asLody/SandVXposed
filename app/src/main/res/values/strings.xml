@@ -145,4 +145,9 @@
     <string name="ensure_odex">Are you sure to enable DEX2OAT? Enable this can speed up application, but modules cannot work anymore.</string>
     <string name="enable_floating_win">Enable Floating Window</string>
     <string name="ensure_enable_floating_win">Disable or enable floating window for this application. Enable this for prevent application from system killing.</string>
+    <string name="kill_app">Kill Process</string>
+    <string name="odex_failed">Some error occured, maybe application will crash on next launching. Uninstall it and reinstall it can fix.</string>
+    <string name="override_app">Override App</string>
+    <string name="ensure_override_app">Overlay this application with the versionly app you selected, clone this app with version same as sandbox installed  or abort?</string>
+    <string name="save_success_need_restart">Save success. You can validate it after restart all apps(Desktop - Menu[Button right top] - Resatrt all apps).</string>
 </resources>

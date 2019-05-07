@@ -47,33 +47,39 @@ public class LoadingActivity extends VActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_loading);
-        loadingView = (EatBeansView) findViewById(R.id.loading_anim);
-        int userId = getIntent().getIntExtra(KEY_USER, -1);
-        String pkg = getIntent().getStringExtra(PKG_NAME_ARGUMENT);
-        appModel = PackageAppDataStorage.get().acquire(pkg);
-        ImageView iconView = (ImageView) findViewById(R.id.app_icon);
-        iconView.setImageDrawable(appModel.icon);
-        TextView nameView = (TextView) findViewById(R.id.app_name);
-        nameView.setText(String.format(Locale.CHINESE, "正在打开 %s...", appModel.name));
-        Intent intent = getIntent().getParcelableExtra(KEY_INTENT);
-        if (intent == null) {
-            Toast.makeText(this,R.string.launch_failed,Toast.LENGTH_LONG).show();
-            finish();
-            return;
-        }
-        VirtualCore.get().setUiCallback(intent, mUiCallback);
-        VUiKit.defer().when(() -> {
-            if (!appModel.fastOpen) {
-                try {
-                    VirtualCore.get().preOpt(appModel.packageName);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        try {
+            setContentView(R.layout.activity_loading);
+            loadingView = (EatBeansView) findViewById(R.id.loading_anim);
+            int userId = getIntent().getIntExtra(KEY_USER, -1);
+            String pkg = getIntent().getStringExtra(PKG_NAME_ARGUMENT);
+            appModel = PackageAppDataStorage.get().acquire(pkg);
+            ImageView iconView = (ImageView) findViewById(R.id.app_icon);
+            iconView.setImageDrawable(appModel.icon);
+            TextView nameView = (TextView) findViewById(R.id.app_name);
+            nameView.setText(String.format(Locale.CHINESE, "正在打开 %s...", appModel.name));
+            Intent intent = getIntent().getParcelableExtra(KEY_INTENT);
+            if (intent == null) {
+                Toast.makeText(this, R.string.launch_failed, Toast.LENGTH_LONG).show();
+                finish();
+                return;
             }
-            VActivityManager.get().startActivity(intent, userId);
-        });
-
+            VirtualCore.get().setUiCallback(intent, mUiCallback);
+            VUiKit.defer().when(() -> {
+                if (!appModel.fastOpen) {
+                    try {
+                        VirtualCore.get().preOpt(appModel.packageName);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                VActivityManager.get().startActivity(intent, userId);
+            });
+        }catch (Throwable e)
+        {
+            e.printStackTrace();
+            Toast.makeText(this, R.string.launch_failed, Toast.LENGTH_LONG).show();
+            finish();
+        }
     }
 
     private final VirtualCore.UiCallback mUiCallback = new VirtualCore.UiCallback() {

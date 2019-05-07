@@ -823,12 +823,14 @@ void IOUniformer::startUniformer(const char *so_path, int api_level, int preview
     g_api_level = api_level;
     g_preview_api_level = preview_api_level;
 
-    char api_level_chars[5];
+    // char api_level_chars[5];
     setenv("V_SO_PATH", so_path, 1);
-    sprintf(api_level_chars, "%i", api_level);
-    setenv("V_API_LEVEL", api_level_chars, 1);
-    sprintf(api_level_chars, "%i", preview_api_level);
-    setenv("V_PREVIEW_API_LEVEL", api_level_chars, 1);
+    std::string api_level_chars = std::to_string(api_level);
+    // sprintf(api_level_chars, "%i", api_level);
+    setenv("V_API_LEVEL", api_level_chars.c_str(), 1);
+    api_level_chars = std::to_string(preview_api_level);
+    // sprintf(api_level_chars, "%i", preview_api_level);
+    setenv("V_PREVIEW_API_LEVEL", api_level_chars.c_str(), 1);
 
     void *handle = dlopen("libc.so", RTLD_NOW);
     if (handle) {

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lody.virtual.helper.utils.VLog;
-import com.lody.virtual.remote.vloc.VLocation;
 import com.tencent.lbssearch.TencentSearch;
 import com.tencent.lbssearch.httpresponse.BaseObject;
 import com.tencent.lbssearch.httpresponse.HttpResponseListener;
@@ -34,8 +32,9 @@ import com.tencent.tencentmap.mapsdk.map.CameraUpdateFactory;
 import com.tencent.tencentmap.mapsdk.map.MapView;
 import com.tencent.tencentmap.mapsdk.map.TencentMap;
 
-import io.virtualapp.abs.ui.VActivity;
 import io.virtualapp.R;
+import io.virtualapp.abs.ui.VActivity;
+import sk.vpkg.location.SKLocation;
 
 public class MarkerActivity extends VActivity implements TencentMap.OnMapClickListener, TencentLocationListener {
     private TencentMap mMap;
@@ -45,7 +44,7 @@ public class MarkerActivity extends VActivity implements TencentMap.OnMapClickLi
     private TencentSearch geocoderSearch;
     private String mAddress;
     private boolean isNoPoint = true;
-    private VLocation mVLocation;
+    private SKLocation mVLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,13 +168,13 @@ public class MarkerActivity extends VActivity implements TencentMap.OnMapClickLi
                 if (mLatLng != null) {
                     /**
                      * TODO edit info
-                     * @see com.lody.virtual.remote.vloc.VLocation#altitude
-                     * @see com.lody.virtual.remote.vloc.VLocation#accuracy
-                     * @see com.lody.virtual.remote.vloc.VLocation#speed
-                     * @see com.lody.virtual.remote.vloc.VLocation#bearing
+                     * @see com.lody.virtual.remote.vloc.SKLocation#altitude
+                     * @see com.lody.virtual.remote.vloc.SKLocation#accuracy
+                     * @see com.lody.virtual.remote.vloc.SKLocation#speed
+                     * @see com.lody.virtual.remote.vloc.SKLocation#bearing
                      */
                     if (mVLocation == null) {
-                        mVLocation = new VLocation();
+                        mVLocation = new SKLocation();
                         mVLocation.accuracy = 50;
                     }
                     mVLocation.latitude = mLatLng.getLatitude();
@@ -269,7 +268,7 @@ public class MarkerActivity extends VActivity implements TencentMap.OnMapClickLi
     }
 
 
-    private void setResultOk(VLocation location) {
+    private void setResultOk(SKLocation location) {
         Intent intent = new Intent();
         intent.putExtra(EXTRA_LOCATION, location);
         setResult(Activity.RESULT_OK, intent);

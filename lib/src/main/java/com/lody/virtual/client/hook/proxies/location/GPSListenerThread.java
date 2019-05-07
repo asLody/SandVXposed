@@ -5,7 +5,6 @@ import android.os.Build.VERSION;
 import android.os.Handler;
 
 import com.lody.virtual.client.ipc.VirtualLocationManager;
-import com.lody.virtual.remote.vloc.VLocation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +13,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import mirror.android.location.LocationManager;
+import sk.vpkg.location.SKLocation;
 
 
 public class GPSListenerThread extends TimerTask {
@@ -48,9 +48,9 @@ public class GPSListenerThread extends TimerTask {
         if (listeners != null) {
             try {
                 if (!listeners.isEmpty()) {
-                    VLocation vLocation = VirtualLocationManager.get().getLocation();
+                    SKLocation vLocation = VirtualLocationManager.get().getLocation();
                     if (vLocation != null) {
-                        Location location = vLocation.toSysLocation();
+                        Location location = vLocation.getLocation();
                         //noinspection unchecked
                         Set<Map.Entry> entries = listeners.entrySet();
                         for (Map.Entry entry : entries) {

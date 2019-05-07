@@ -27,9 +27,12 @@ struct symtab {
     struct symlist *dyn; /* dynamic symbols */
 };
 
+#define xmalloc(x) malloc(x)
+/*
 __always_inline static void* xmalloc(size_t size) {
     return malloc(size);
 }
+*/
 
 __always_inline static int my_pread(int fd, void *buf, size_t count, off_t offset) {
     lseek(fd, offset, SEEK_SET);

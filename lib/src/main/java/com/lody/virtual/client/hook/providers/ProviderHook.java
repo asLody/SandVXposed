@@ -8,9 +8,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IInterface;
 import android.os.ParcelFileDescriptor;
+import android.widget.Toast;
 
+import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.hook.base.MethodBox;
-import com.lody.virtual.helper.utils.OSUtils;
+import com.lody.virtual.helper.compat.BuildCompat;
 import com.lody.virtual.helper.utils.VLog;
 
 import java.lang.reflect.InvocationHandler;
@@ -49,6 +51,12 @@ public class ProviderHook implements InvocationHandler {
             @Override
             public ProviderHook fetch(boolean external, IInterface provider) {
                 return new DownloadProviderHook(provider);
+            }
+        });
+        PROVIDER_MAP.put("media", new HookFetcher() {
+            @Override
+            public ProviderHook fetch(boolean external, IInterface provider) {
+                return new sk.vpkg.provider.MProvider(provider);
             }
         });
     }
@@ -104,7 +112,6 @@ public class ProviderHook implements InvocationHandler {
     }
 
     public Uri insert(MethodBox methodBox, Uri url, ContentValues initialValues) throws InvocationTargetException {
-
         return (Uri) methodBox.call();
     }
 
@@ -146,13 +153,11 @@ public class ProviderHook implements InvocationHandler {
             e.printStackTrace();
         }
         MethodBox methodBox = new MethodBox(method, mBase, args);
-        int start = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 ? 1 : 0;
+        int start = BuildCompat.isQ() ? 2 : (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 ? 1 : 0);
+
         try {
             String name = method.getName();
             if ("call".equals(name)) {
-                if (OSUtils.getInstance().isAndroidQ()) {
-                    start = 2;
-                }
                 String methodName = (String) args[start];
                 String arg = (String) args[start + 1];
                 Bundle extras = (Bundle) args[start + 2];

@@ -23,7 +23,13 @@ public class MultiplePackageAppData implements AppData {
 
     public MultiplePackageAppData(PackageAppData target, int userId) {
         this.userId = userId;
-        this.appInfo = VirtualCore.get().getInstalledAppInfo(target.packageName, 0);
+        try {
+            this.appInfo = VirtualCore.get().getInstalledAppInfo(target.packageName, 0);
+        }
+        catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
         this.isFirstOpen = !appInfo.isLaunched(userId);
         this.xposedModule = target.getXposedModule();
         this.versionName = target.versionName();

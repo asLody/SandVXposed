@@ -176,7 +176,13 @@ public class AppRepository implements AppDataSource {
             info.path = path;
             info.icon = ai.loadIcon(pm);
             info.name = ai.loadLabel(pm);
-            InstalledAppInfo installedAppInfo = VirtualCore.get().getInstalledAppInfo(pkg.packageName, 0);
+            InstalledAppInfo installedAppInfo = null;
+            try {
+                installedAppInfo = VirtualCore.get().getInstalledAppInfo(pkg.packageName, 0);
+            }catch (Throwable exp)
+            {
+                exp.printStackTrace();
+            }
             if (installedAppInfo != null) {
                 info.cloneCount = installedAppInfo.getInstalledUsers().length;
             }
