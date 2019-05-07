@@ -196,7 +196,15 @@ public class AppChooseAct extends AppCompatActivity
         Uri uri = null;
         if (data != null)
         {
-            uri = data.getData();
+            try
+            {
+                uri = data.getData();
+            }catch (Throwable e)
+            {
+                e.printStackTrace();
+                finish();
+                return;
+            }
         }
         else
         {

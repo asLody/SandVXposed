@@ -405,8 +405,15 @@ public class SettingAct extends AppCompatPreferenceActivity
                         {
                             Once.clearDone("app_force_live");
                         }
-                        Intent intent = new Intent(getActivity(), MakeMeLive.class);
-                        getActivity().stopService(intent);
+                        try
+                        {
+                            Intent intent = new Intent(getActivity(), MakeMeLive.class);
+                            getActivity().stopService(intent);
+                        }
+                        catch (Throwable e)
+                        {
+                            e.printStackTrace();
+                        }
                         getActivity().finish();
                     });
             hDialog.setPositiveButton(R.string.enable, (dialog, which) ->
@@ -415,8 +422,14 @@ public class SettingAct extends AppCompatPreferenceActivity
                 {
                     Once.markDone("app_force_live");
                 }
-                Intent intent = new Intent(getActivity(), MakeMeLive.class);
-                getActivity().startService(intent);
+                try
+                {
+                    Intent intent = new Intent(getActivity(), MakeMeLive.class);
+                    getActivity().startService(intent);
+                }catch (Throwable e)
+                {
+                    e.printStackTrace();
+                }
                 getActivity().finish();
             })
                     .setCancelable(false);

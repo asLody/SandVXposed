@@ -32,7 +32,7 @@ public class AppLocationAdapter extends BaseAdapterPlus<LocationData> {
         if (item.location != null && item.mode != 0) {
             viewHolder.location.setText(item.location.latitude + "," + item.location.longitude);
         } else {
-            viewHolder.location.setText("real location");
+            viewHolder.location.setText("真实位置");
         }
     }
 
