@@ -92,4 +92,6 @@
     <string name="override_app">覆盖安装</string>
     <string name="ensure_override_app">克隆、覆盖安装还是中止呢？克隆会使用应用已安装进沙盒的版本，覆盖会使用您选定的版本，如果需要升级或者降级这个应用，请选择覆盖。</string>
     <string name="save_success_need_restart">保存成功，请打开桌面 - 右上菜单，点击重启所有应用以后使得设置生效。</string>
+    <string name="enable_storage_redirect">启用存储重定向</string>
+    <string name="ensure_enable_storage_redirect">警告，有的应用在开启这个选项以后会产生错误，请谨慎开启。该选项用于重定向App在TF卡根目录创建的文件夹，全部文件或文件夹会被重定向到存储根目录下的\"skdir\"文件夹。</string>
 </resources>

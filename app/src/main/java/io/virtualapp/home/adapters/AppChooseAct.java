@@ -222,6 +222,13 @@ public class AppChooseAct extends AppCompatActivity
                 String szExStorage = Environment.getExternalStorageDirectory().getAbsolutePath();
                 try
                 {
+                    if(uri.getPath()!=null)
+                        if(uri.getPath().startsWith("content://com.android.providers.downloads"))
+                        {
+                            Toast.makeText(this,R.string.launch_failed,Toast.LENGTH_SHORT)
+                                    .show();
+                            finish();
+                        }
                     if (Objects.requireNonNull(uri.getPath()).startsWith(szExStorage))
                     {
                         path = uri.getPath();
@@ -252,7 +259,8 @@ public class AppChooseAct extends AppCompatActivity
         android.widget.Toast.makeText(pActParent.getActivity(),R.string.appInstallTip, Toast.LENGTH_LONG).show();
         if(HomeActivity.hHomeAct!=null)
             HomeActivity.hHomeAct.InstallAppByPath(path);
-        pActParent.getActivity().finish();
+        if(pActParent.getActivity()!=null)
+            pActParent.getActivity().finish();
         finish();
     }
 
