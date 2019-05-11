@@ -2,26 +2,21 @@ package io.virtualapp.home;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
+import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -30,11 +25,11 @@ import com.lody.virtual.client.ipc.VActivityManager;
 import com.sk.fwindow.skFloattingWin;
 import com.sk.listapp.XAppManager;
 
-import io.virtualapp.R;
-import io.virtualapp.VApp;
-import jonathanfinerty.once.Once;
-
 import java.util.List;
+
+import io.virtualapp.R;
+import jonathanfinerty.once.Once;
+import sk.vpkg.provider.BanNotificationProvider;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -195,7 +190,8 @@ public class SettingAct extends AppCompatPreferenceActivity
                 || SKResstart.class.getName().equals(fragmentName)
                 || SKSettings.class.getName().equals(fragmentName)
                 || SKsetAppLiving.class.getName().equals(fragmentName)
-                || SKAppFloatingWindowSetting.class.getName().equals(fragmentName);
+                || SKAppFloatingWindowSetting.class.getName().equals(fragmentName)
+                || SKAppStorageRedirect.class.getName().equals(fragmentName);
     }
 
     /**
@@ -213,8 +209,11 @@ public class SettingAct extends AppCompatPreferenceActivity
             hDialog.setTitle(R.string.about);
             hDialog.setMessage(getResources().getString(R.string.about_info).
                     replaceAll("##","\n"));
-            hDialog.setPositiveButton(R.string.back, (dialog, which) ->
+            hDialog.setPositiveButton(R.string.desktop, (dialog, which) ->
                     getActivity().finish())
+                    .setCancelable(false).create().show();
+            hDialog.setNegativeButton(R.string.back, (dialog, which) ->
+                    dialog.dismiss())
                     .setCancelable(false).create().show();
         }
 
@@ -485,6 +484,53 @@ public class SettingAct extends AppCompatPreferenceActivity
                 }
                 getActivity().startService(new Intent
                         (getActivity(), skFloattingWin.class));
+                getActivity().finish();
+            })
+                    .setCancelable(false);
+            hDialog.create().show();
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item)
+        {
+            int id = item.getItemId();
+            if (id == android.R.id.home)
+            {
+                startActivity(new Intent(getActivity(), SettingAct.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class SKAppStorageRedirect extends PreferenceFragment
+    {
+        @Override
+        public void onCreate(Bundle savedInstanceState)
+        {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_appset);
+            setHasOptionsMenu(true);
+            AlertDialog.Builder hDialog = new AlertDialog.Builder(getActivity());
+            hDialog.setMessage(R.string.ensure_enable_storage_redirect);
+            hDialog.setTitle(R.string.SK_Settings).setNegativeButton(R.string.disable,
+                    (dialog, which) ->
+                    {
+                        String szEnableRedirectStorage = BanNotificationProvider.getString(getActivity(),"StorageRedirect");
+                        if(szEnableRedirectStorage!=null)
+                        {
+                            BanNotificationProvider.remove(getActivity(),"StorageRedirect");
+                        }
+                        getActivity().finish();
+                    });
+            hDialog.setPositiveButton(R.string.enable, (dialog, which) ->
+            {
+                String szEnableRedirectStorage = BanNotificationProvider.getString(getActivity(),"StorageRedirect");
+                if(szEnableRedirectStorage==null)
+                {
+                    BanNotificationProvider.save(getActivity(),"StorageRedirect","Enabled");
+                }
                 getActivity().finish();
             })
                     .setCancelable(false);

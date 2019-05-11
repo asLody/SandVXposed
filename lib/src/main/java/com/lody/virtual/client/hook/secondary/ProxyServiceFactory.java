@@ -37,7 +37,8 @@ public class ProxyServiceFactory {
 									if (e.getCause() != null) {
 										throw e.getCause();
 									}
-									throw e;
+									// throw e;
+									return null;
 								}
 							}
 						};
@@ -61,7 +62,8 @@ public class ProxyServiceFactory {
 									if (e.getCause() != null) {
 										throw e.getCause();
 									}
-									throw e;
+									// throw e;
+									return null;
 								}
 							}
 						};
@@ -86,7 +88,8 @@ public class ProxyServiceFactory {
 									if (e.getCause() != null) {
 										throw e.getCause();
 									}
-									throw e;
+									// throw e;
+									return null;
 								}
 							}
 						};

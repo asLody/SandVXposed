@@ -150,4 +150,6 @@
     <string name="override_app">Override App</string>
     <string name="ensure_override_app">Overlay this application with the versionly app you selected, clone this app with version same as sandbox installed  or abort?</string>
     <string name="save_success_need_restart">Save success. You can validate it after restart all apps(Desktop - Menu[Button right top] - Resatrt all apps).</string>
+    <string name="enable_storage_redirect">Enable storage path redirect</string>
+    <string name="ensure_enable_storage_redirect">Some app may not work while you enable this options. This will redirect diretories that create by app in your TF card to \"skdir\" directory in root path of storage.</string>
 </resources>

@@ -30,4 +30,8 @@
         android:fragment="io.virtualapp.home.SettingAct$SKAppFloatingWindowSetting"
         android:title="@string/enable_floating_win" />
 
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$SKAppStorageRedirect"
+        android:title="@string/enable_storage_redirect" />
+
 </preference-headers>

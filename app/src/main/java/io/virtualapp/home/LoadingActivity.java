@@ -33,14 +33,23 @@ public class LoadingActivity extends VActivity {
     private EatBeansView loadingView;
 
     public static void launch(Context context, String packageName, int userId) {
-        Intent intent = VirtualCore.get().getLaunchIntent(packageName, userId);
-        if (intent != null) {
-            Intent loadingPageIntent = new Intent(context, LoadingActivity.class);
-            loadingPageIntent.putExtra(PKG_NAME_ARGUMENT, packageName);
-            loadingPageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            loadingPageIntent.putExtra(KEY_INTENT, intent);
-            loadingPageIntent.putExtra(KEY_USER, userId);
-            context.startActivity(loadingPageIntent);
+        try
+        {
+            Intent intent = VirtualCore.get().getLaunchIntent(packageName, userId);
+            if (intent != null)
+            {
+                Intent loadingPageIntent = new Intent(context, LoadingActivity.class);
+                loadingPageIntent.putExtra(PKG_NAME_ARGUMENT, packageName);
+                loadingPageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                loadingPageIntent.putExtra(KEY_INTENT, intent);
+                loadingPageIntent.putExtra(KEY_USER, userId);
+                context.startActivity(loadingPageIntent);
+            }
+        }
+        catch(Throwable e)
+        {
+            // ignored.
+            e.printStackTrace();
         }
     }
 
