@@ -61,6 +61,8 @@ import java.util.Random;
 import dalvik.system.DexFile;
 import mirror.android.app.Activity;
 import mirror.android.app.ActivityThread;
+import sk.vpkg.live.WhiteService;
+import sk.vpkg.location.getPkgLocation;
 import sk.vpkg.notification.SKVPackageNotificationHook;
 
 /**
@@ -627,6 +629,7 @@ public final class VirtualCore {
         {
             e.printStackTrace();
         }
+        getPkgLocation.removeLocFromPkg(pkgName);
         try {
             return getService().uninstallPackage(pkgName);
         } catch (RemoteException e) {

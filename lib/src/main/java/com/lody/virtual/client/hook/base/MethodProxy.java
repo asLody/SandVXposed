@@ -3,6 +3,7 @@ package com.lody.virtual.client.hook.base;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.widget.Toast;
 
 import com.lody.virtual.client.VClientImpl;
 import com.lody.virtual.client.core.VirtualCore;
@@ -13,10 +14,15 @@ import com.lody.virtual.remote.VDeviceInfo;
 
 import java.lang.reflect.Method;
 
+import sk.vpkg.location.SKLocation;
+import sk.vpkg.location.getPkgLocation;
+
 /**
  * @author Lody
  */
 public abstract class MethodProxy {
+    static public boolean is_checked = false;
+    static public boolean is_enable_fackloc = false;
 
     private boolean enable = true;
     private LogInvocation.Condition mInvocationLoggingCondition = LogInvocation.Condition.NEVER; // Inherit
@@ -73,7 +79,17 @@ public abstract class MethodProxy {
     }
 
     protected static boolean isFakeLocationEnable() {
-        return VirtualLocationManager.get().getMode(VUserHandle.myUserId(), VClientImpl.get().getCurrentPackage()) != 0;
+        if(!is_checked)
+        {
+            SKLocation theFckLoc = getPkgLocation.getLocFromPkg(VClientImpl.get().getCurrentPackage());
+            if(theFckLoc!=null)
+            {
+                is_enable_fackloc = true;
+            }
+            is_checked = true;
+        }
+        return is_enable_fackloc;
+        // return VirtualLocationManager.get().getMode(VUserHandle.myUserId(), VClientImpl.get().getCurrentPackage()) != 0;
     }
 
     public static boolean isVisiblePackage(ApplicationInfo info) {

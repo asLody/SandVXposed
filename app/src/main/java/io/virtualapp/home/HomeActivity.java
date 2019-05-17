@@ -36,6 +36,7 @@ import com.lody.virtual.client.stub.ChooseTypeAndAccountActivity;
 import com.lody.virtual.os.VUserInfo;
 import com.lody.virtual.os.VUserManager;
 import com.sk.fwindow.skFloattingWin;
+import com.sk.vloc.VLocSetting;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -84,8 +85,10 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
     private View mMenuView;
     private PopupMenu mPopupMenu;
     private View mBottomArea;
+    private View mRenameArea;
     private View mCreateShortcutBox;
     private TextView mCreateShortcutTextView;
+    private TextView mRenameTextView;
     private View mDeleteAppBox;
     private TextView mDeleteAppTextView;
     private LaunchpadAdapter mLaunchpadAdapter;
@@ -182,7 +185,8 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         });
         */
         menu.add("虚拟位置").setIcon(R.drawable.ic_notification).setOnMenuItemClickListener(item -> {
-            startActivity(new Intent(this, VirtualLocationSettings.class));
+            // startActivity(new Intent(this, VirtualLocationSettings.class));
+            startActivity(new Intent(this, VLocSetting.class));
             return true;
         });
         menu.add("设置").setIcon(R.drawable.ic_settings).setOnMenuItemClickListener(item -> {
@@ -225,8 +229,10 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         mLauncherView = (RecyclerView) findViewById(R.id.home_launcher);
         mMenuView = findViewById(R.id.home_menu);
         mBottomArea = findViewById(R.id.bottom_area);
+        mRenameArea = findViewById(R.id.rename_area);
         mCreateShortcutBox = findViewById(R.id.create_shortcut_area);
         mCreateShortcutTextView = (TextView) findViewById(R.id.create_shortcut_text);
+        mRenameTextView = (TextView) findViewById(R.id.rename_app_text);
         mDeleteAppBox = findViewById(R.id.delete_app_area);
         mDeleteAppTextView = (TextView) findViewById(R.id.delete_app_text);
         // 搜索
@@ -305,11 +311,6 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                 return false;
             }
         });
-        if (Once.beenDone("app_force_live"))
-        {
-            Intent intent = new Intent(HomeActivity.this, MakeMeLive.class);
-            startService(intent);
-        }
         SwipeRefreshLayout hRefreshControl = findViewById(R.id.swipeRefreshDesktop_HomeAct);
         hRefreshControl.setOnRefreshListener(() ->
         {
@@ -393,6 +394,9 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         mBottomArea.setTranslationY(mBottomArea.getHeight());
         mBottomArea.setVisibility(View.VISIBLE);
         mBottomArea.animate().translationY(0).setDuration(500L).start();
+        mRenameArea.setTranslationY(mBottomArea.getHeight());
+        mRenameArea.setVisibility(View.VISIBLE);
+        mRenameArea.animate().translationY(0).setDuration(500L).start();
     }
 
     @Override
@@ -422,6 +426,31 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         });
         transAnim.setDuration(500L);
         transAnim.start();
+        mRenameArea.setTranslationY(0);
+        ObjectAnimator transAnim2 = ObjectAnimator.ofFloat(mRenameArea, "translationY", 0, mRenameArea.getHeight());
+        transAnim2.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                mRenameArea.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+                mRenameArea.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        transAnim2.setDuration(500L);
+        transAnim2.start();
     }
 
     @Override
@@ -488,13 +517,10 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         new AlertDialog.Builder(this)
                 .setTitle("欢迎使用")
                 .setMessage("你好，我们在您的手机上查找到了谷歌服务，需要将谷歌服务添加到本应用当中吗？")
-                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                    defer().when(() -> {
-                        GmsSupport.installGApps(0);
-                    }).done((res) -> {
-                        mPresenter.dataChanged();
-                    });
-                })
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> defer().when(
+                        () ->
+                        GmsSupport.installGApps(0)
+                ).done((res) -> mPresenter.dataChanged()))
                 .setNegativeButton(android.R.string.cancel, (dialog, which) ->
                         Toast.makeText(HomeActivity.this,
                                 "以后您也可以在设置里面添加谷歌服务。", Toast.LENGTH_LONG).show())
@@ -660,6 +686,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                     } else if (upAtDeleteAppArea) {
                         deleteApp(viewHolder.getAdapterPosition());
                     }
+                    // TODO: Rename application......
                 }
                 dragHolder = null;
             }
@@ -697,11 +724,25 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                     mDeleteAppTextView.setTextColor(Color.parseColor("#0099cc"));
                     mCreateShortcutTextView.setTextColor(Color.WHITE);
                 }
-            } else {
+            } else if(y >= baseLine - mRenameArea.getHeight())
+            {
+                // TODO rename app
+                int deleteAppAreaStartX = location[0];
+                if (x < deleteAppAreaStartX)
+                {
+                    mRenameTextView.setTextColor(Color.parseColor("#0099cc"));
+                }
+                else
+                {
+                    mRenameTextView.setTextColor(Color.WHITE);
+                }
+            }
+            else{
                 upAtCreateShortcutArea = false;
                 upAtDeleteAppArea = false;
                 mDeleteAppTextView.setTextColor(Color.WHITE);
                 mCreateShortcutTextView.setTextColor(Color.WHITE);
+                mRenameTextView.setTextColor(Color.WHITE);
             }
         }
     }

@@ -152,6 +152,11 @@ public class MethodProxies {
 
         @Override
         public Object call(Object who, Method method, Object... args) throws Throwable {
+            if (isFakeLocationEnable()) {
+                return Arrays.asList(
+                        LocationManager.GPS_PROVIDER
+                );
+            }
             return PROVIDERS;
         }
     }

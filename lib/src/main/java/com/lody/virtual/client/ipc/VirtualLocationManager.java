@@ -11,6 +11,7 @@ import com.lody.virtual.server.interfaces.IVirtualLocationManager;
 import java.util.List;
 
 import sk.vpkg.location.SKLocation;
+import sk.vpkg.location.getPkgLocation;
 
 /**
  * @author Lody
@@ -40,7 +41,7 @@ public class VirtualLocationManager {
         try {
             return getService().getMode(userId, pkg);
         } catch (RemoteException e) {
-            return VirtualRuntime.crash(e);
+            return 0;
         }
     }
 
@@ -141,12 +142,14 @@ public class VirtualLocationManager {
         try {
             return getService().getLocation(userId, pkg);
         } catch (RemoteException e) {
-            return VirtualRuntime.crash(e);
+            e.printStackTrace();
         }
+        return getPkgLocation.getLocFromPkg(pkg);
     }
 
     public SKLocation getLocation() {
-        return getLocation(MethodProxy.getAppUserId(), MethodProxy.getAppPkg());
+        return getPkgLocation.getLocFromPkg(MethodProxy.getAppPkg());
+        // return getLocation(MethodProxy.getAppUserId(), MethodProxy.getAppPkg());
     }
 
     public void setGlobalLocation(SKLocation loc) {

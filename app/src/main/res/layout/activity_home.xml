@@ -87,6 +87,44 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/rename_area"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="bottom|center"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:layout_marginBottom="@dimen/dp80"
+        android:weightSum="1">
+        <LinearLayout
+            android:id="@+id/rename_app_area"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_about" />
+
+            <TextView
+                android:id="@+id/rename_app_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center|start"
+                android:padding="5dp"
+                android:text="@string/rename"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/bottom_area"
         android:layout_width="match_parent"
         android:layout_height="60dp"

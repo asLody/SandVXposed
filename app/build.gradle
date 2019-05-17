@@ -17,8 +17,8 @@ android {
         applicationId "io.virtualapp.sandvxposed"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 35
-        versionName "1.2.5.1.3.1.1.6"
+        versionCode 36
+        versionName "1.2.5.1.3.1.1.7"
         multiDexEnabled true
         android {
             defaultConfig {
@@ -80,6 +80,8 @@ dependencies {
     implementation 'com.kyleduo.switchbutton:library:1.4.6'
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.android.support:support-vector-drawable:28.0.0'
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
     annotationProcessor 'com.trend.lazyinject:compiler:3.4.0-beta'
 
     // TX移动统计，非必要，大家可在构建的时候删掉

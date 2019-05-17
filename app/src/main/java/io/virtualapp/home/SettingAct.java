@@ -21,7 +21,9 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.ipc.VActivityManager;
+import com.sk.app.SettingUtils;
 import com.sk.fwindow.skFloattingWin;
 import com.sk.listapp.XAppManager;
 
@@ -29,6 +31,7 @@ import java.util.List;
 
 import io.virtualapp.R;
 import jonathanfinerty.once.Once;
+import sk.vpkg.live.WhiteService;
 import sk.vpkg.provider.BanNotificationProvider;
 
 /**
@@ -406,8 +409,16 @@ public class SettingAct extends AppCompatPreferenceActivity
                         }
                         try
                         {
-                            Intent intent = new Intent(getActivity(), MakeMeLive.class);
-                            getActivity().stopService(intent);
+                            String ismakeMeLiveEnable = BanNotificationProvider.getString(
+                                    VirtualCore.get().getContext(),
+                                    "makeMeLive"
+                            );
+                            if(ismakeMeLiveEnable!=null)
+                            {
+                                BanNotificationProvider.remove(VirtualCore.get().getContext(),
+                                        "makeMeLive"
+                                        );
+                            }
                         }
                         catch (Throwable e)
                         {
@@ -423,8 +434,18 @@ public class SettingAct extends AppCompatPreferenceActivity
                 }
                 try
                 {
-                    Intent intent = new Intent(getActivity(), MakeMeLive.class);
-                    getActivity().startService(intent);
+                    String ismakeMeLiveEnable = BanNotificationProvider.getString(
+                            VirtualCore.get().getContext(),
+                            "makeMeLive"
+                    );
+                    if(ismakeMeLiveEnable==null)
+                    {
+                        BanNotificationProvider.save(VirtualCore.get().getContext(),
+                                "makeMeLive",
+                                "Enabled"
+                        );
+                    }
+                    SettingUtils.enterWhiteListSetting(VirtualCore.get().getContext());
                 }catch (Throwable e)
                 {
                     e.printStackTrace();

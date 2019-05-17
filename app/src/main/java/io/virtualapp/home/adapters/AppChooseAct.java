@@ -18,6 +18,10 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 
+import com.lody.virtual.client.core.RomChecker;
+import com.lody.virtual.client.core.VirtualCore;
+import com.sk.installapp.InstallPkgAct;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -40,39 +44,42 @@ public class AppChooseAct extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_choose);
-
-        if (!Once.beenDone("disable_safe_mode"))
+        try
         {
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.about)
-                    .setMessage(R.string.safe_mode_enforcing)
-                    .setCancelable(false)
-                    .setPositiveButton(R.string.back, (dialog, which) ->
-                            finish())
-                    .create().show();
-        }
-        else if (!Once.beenDone("appchoose_act_tips"))
+            if (!Once.beenDone("disable_safe_mode"))
+            {
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.about)
+                        .setMessage(R.string.safe_mode_enforcing)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.back, (dialog, which) ->
+                                finish())
+                        .create().show();
+            } else if (!Once.beenDone("appchoose_act_tips"))
+            {
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.about)
+                        .setMessage(R.string.appchoose_tips)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.accept, (dialog, which) ->
+                        {
+                            Once.markDone("appchoose_act_tips");
+                            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                            intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+                            intent.addCategory(Intent.CATEGORY_OPENABLE);
+                            startActivityForResult(intent, 404);
+                        })
+                        .create().show();
+            } else
+            {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(intent, 404);
+            }
+        }catch (Throwable e)
         {
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.about)
-                    .setMessage(R.string.appchoose_tips)
-                    .setCancelable(false)
-                    .setPositiveButton(R.string.accept, (dialog, which) ->
-                    {
-                        Once.markDone("appchoose_act_tips");
-                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                        intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
-                        intent.addCategory(Intent.CATEGORY_OPENABLE);
-                        startActivityForResult(intent, 404);
-                    })
-                    .create().show();
-        }
-        else
-        {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            startActivityForResult(intent, 404);
+            e.printStackTrace();
         }
     }
 
@@ -150,6 +157,9 @@ public class AppChooseAct extends AppCompatActivity
             }
             // DownloadsProvider
             else if (isDownloadsDocument(uri)) {
+                // May lead crash for ADUI.
+                if(RomChecker.isMiui())return null;
+
                 final String id = DocumentsContract.getDocumentId(uri);
                 Uri contentUri = uri;// = ContentUris.withAppendedId(
                 //        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
@@ -222,13 +232,6 @@ public class AppChooseAct extends AppCompatActivity
                 String szExStorage = Environment.getExternalStorageDirectory().getAbsolutePath();
                 try
                 {
-                    if(uri.getPath()!=null)
-                        if(uri.getPath().startsWith("content://com.android.providers.downloads"))
-                        {
-                            Toast.makeText(this,R.string.launch_failed,Toast.LENGTH_SHORT)
-                                    .show();
-                            finish();
-                        }
                     if (Objects.requireNonNull(uri.getPath()).startsWith(szExStorage))
                     {
                         path = uri.getPath();
@@ -244,21 +247,30 @@ public class AppChooseAct extends AppCompatActivity
                 finish();
                 return;
             }
-            // android.widget.Toast.makeText(this,path,android.widget.Toast.LENGTH_SHORT).show();
         }
         else
         {
             finish();
             return;
         }
-        if(pActParent==null)
+        if(pActParent==null||path==null)
         {
             finish();
             return;
         }
-        android.widget.Toast.makeText(pActParent.getActivity(),R.string.appInstallTip, Toast.LENGTH_LONG).show();
+        /*
         if(HomeActivity.hHomeAct!=null)
             HomeActivity.hHomeAct.InstallAppByPath(path);
+            */
+        try
+        {
+            Intent lpInstaller = new Intent(VirtualCore.get().getContext(), InstallPkgAct.class);
+            lpInstaller.setData(Uri.parse(path));
+            startActivity(lpInstaller);
+        }catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
         if(pActParent.getActivity()!=null)
             pActParent.getActivity().finish();
         finish();

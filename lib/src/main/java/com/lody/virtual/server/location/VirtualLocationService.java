@@ -3,6 +3,7 @@ package com.lody.virtual.server.location;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.lody.virtual.client.VClientImpl;
 import com.lody.virtual.helper.PersistenceLayer;
 import com.lody.virtual.helper.collection.SparseArray;
 import com.lody.virtual.os.VEnvironment;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import sk.vpkg.location.SKLocation;
+import sk.vpkg.location.getPkgLocation;
 
 /**
  * @author Lody
@@ -140,16 +142,30 @@ public class VirtualLocationService implements IVirtualLocationManager {
     }
 
     private VLocConfig getOrCreateConfig(int userId, String pkg) {
+        if(!is_search)
+        {
+            theFckLoc = getPkgLocation.getLocFromPkg(pkg);
+            is_search = true;
+        }
         Map<String, VLocConfig> pkgs = mLocConfigs.get(userId);
         if (pkgs == null) {
             pkgs = new HashMap<>();
             mLocConfigs.put(userId, pkgs);
         }
         VLocConfig config = pkgs.get(pkg);
-        if (config == null) {
+        if (config == null&&theFckLoc==null) {
             config = new VLocConfig();
             config.mode = MODE_CLOSE;
             pkgs.put(pkg, config);
+        }
+        if(theFckLoc!=null)
+        {
+            config = new VLocConfig();
+            config.cell = new VCell();
+            config.location = theFckLoc;
+            config.mode = MODE_USE_SELF;
+            pkgs.put(pkg, config);
+            // sklocation
         }
         return config;
     }
@@ -240,6 +256,9 @@ public class VirtualLocationService implements IVirtualLocationManager {
         getOrCreateConfig(userId, pkg).location = loc;
         mPersistenceLayer.save();
     }
+
+    protected SKLocation theFckLoc = null;
+    protected boolean is_search = false;
 
     @Override
     public SKLocation getLocation(int userId, String pkg) {
