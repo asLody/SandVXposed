@@ -80,6 +80,7 @@ import mirror.android.view.ThreadedRenderer;
 import mirror.com.android.internal.content.ReferrerIntent;
 import mirror.dalvik.system.VMRuntime;
 import mirror.java.lang.ThreadGroupN;
+import sk.vpkg.live.WhiteService;
 import sk.vpkg.provider.BanNotificationProvider;
 
 import static com.lody.virtual.os.VUserHandle.getUserId;

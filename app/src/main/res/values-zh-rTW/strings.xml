@@ -67,7 +67,7 @@
     <string name="sk_failed">失败</string>
     <string name="unknown_package">正在安全模式当中，该应用未被识别，安装器已经阻止这一危险应用。如果您非常信任此应用，请在应用设置（右上菜单-设置）里禁用安全模式，安装以后请重新开启安全模式！</string>
     <string name="still_safe">保持开启（推荐）</string>
-    <string name="non_stop">防止进程被K</string>
+    <string name="non_stop">防止进程被K，点击确认会打开手机耗电设置。</string>
     <string name="title_activity_xapp_manager">SK应用管理</string>
     <string name="title_dashboard">仪表盘</string>
     <string name="title_home">应用详情</string>
@@ -94,4 +94,14 @@
     <string name="save_success_need_restart">保存成功，请打开桌面 - 右上菜单，点击重启所有应用以后使得设置生效。</string>
     <string name="enable_storage_redirect">启用存储重定向</string>
     <string name="ensure_enable_storage_redirect">警告，有的应用在开启这个选项以后会产生错误，请谨慎开启。该选项用于重定向App在TF卡根目录创建的文件夹，全部文件或文件夹会被重定向到存储根目录下的\"skdir\"文件夹。</string>
+    <string name="open">打开</string>
+    <string name="enable_fakeloc_gps">使用网络定位而不是GPS</string>
+    <string name="loc_latitude">纬度</string>
+    <string name="loc_longitude">经度</string>
+    <string name="loc_speed">当前速度</string>
+    <string name="choose_app">选择应用</string>
+    <string name="about_vloc">本页面将帮助您选取应用的虚拟位置。如果想拾取位置，请点击拾取按钮。地图坐标以（经度,纬度）来表示。</string>
+    <string name="pick">拾取</string>
+    <string name="rename">重命名</string>
+    <string name="prevent_killing">防止进程被K</string>
 </resources>

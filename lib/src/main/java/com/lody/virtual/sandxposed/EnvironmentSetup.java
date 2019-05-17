@@ -30,7 +30,7 @@ public class EnvironmentSetup {
     }
 
     private static void initForWeChat(Context context, String processName) {
-        if (!TextUtils.equals("com.tencent.mm", processName))
+        if (!processName.equals("com.tencent.mm"))
             return;
         //delete tinker patches
         File dataDir = new File(context.getApplicationInfo().dataDir);
@@ -46,29 +46,32 @@ public class EnvironmentSetup {
 
         //avoid mm kill self
         final int mainProcessId = Process.myPid();
-        XposedHelpers.findAndHookMethod(Process.class, "killProcess", int.class, new XC_MethodHook() {
+        XC_MethodHook g_Hook = new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 super.beforeHookedMethod(param);
+                /*
                 int pid = (int) param.args[0];
                 if (pid != mainProcessId) {
                     return;
                 }
+                */
                 // try kill main process, find stack
+                param.setResult(null);
                 StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
                 if (stackTrace == null) {
                     return;
                 }
-
                 for (StackTraceElement stackTraceElement : stackTrace) {
                     if (stackTraceElement.getClassName().contains("com.tencent.mm.app")) {
                         XposedBridge.log("do not suicide..." + Arrays.toString(stackTrace));
-                        param.setResult(null);
                         break;
                     }
                 }
             }
-        });
+        };
+        XposedHelpers.findAndHookMethod(Process.class, "killProcess", int.class, g_Hook);
+        XposedHelpers.findAndHookMethod(System.class, "exit", int.class, g_Hook);
     }
 
 }

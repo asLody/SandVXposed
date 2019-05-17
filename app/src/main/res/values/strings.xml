@@ -125,7 +125,7 @@
     <string name="sk_failed">Failed</string>
     <string name="unknown_package">Safe mode is enforcing, an unknown package was arrested by installer. Disable safe mode in app settings.</string>
     <string name="still_safe">Make My Sandbox Safe!</string>
-    <string name="non_stop">Prevent process from killing</string>
+    <string name="non_stop">Prevent process from killing. Press enable for lead you to system settings.</string>
     <string name="title_activity_xapp_manager">SK AppManager</string>
     <string name="title_home">App Detail</string>
     <string name="title_dashboard">Dashboard</string>
@@ -152,4 +152,14 @@
     <string name="save_success_need_restart">Save success. You can validate it after restart all apps(Desktop - Menu[Button right top] - Resatrt all apps).</string>
     <string name="enable_storage_redirect">Enable storage path redirect</string>
     <string name="ensure_enable_storage_redirect">Some app may not work while you enable this options. This will redirect diretories that create by app in your TF card to \"skdir\" directory in root path of storage.</string>
+    <string name="open">Open</string>
+    <string name="enable_fakeloc_gps">Ues network method instead of GPS method.</string>
+    <string name="loc_latitude">Latitude</string>
+    <string name="loc_longitude">Longitude</string>
+    <string name="loc_speed">Current Speed</string>
+    <string name="choose_app">Choose Application</string>
+    <string name="about_vloc">This page lead you to set application\'s virtual location. For pickup latitude and longitude, press pick button. The longitude and latitude is same as (x,y).</string>
+    <string name="pick">Pickup</string>
+    <string name="rename">Rename</string>
+    <string name="prevent_killing">Prevent process from killing.</string>
 </resources>

@@ -112,7 +112,21 @@ public class CloneAppListAdapter extends DragSelectRecyclerViewAdapter<CloneAppL
     }
 
     public AppInfo getItem(int index) {
-        return mAppList.get(index);
+        try
+        {
+            return mAppList.get(index);
+        }
+        catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
+        AppInfo theRet = new AppInfo();
+        theRet.name= "Unknown";
+        theRet.cloneCount = 0;
+        theRet.fastOpen = false;
+        theRet.packageName = "Unknown";
+        theRet.path = "Unknown";
+        return theRet;
     }
 
     public interface ItemEventListener {

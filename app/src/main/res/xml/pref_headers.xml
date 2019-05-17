@@ -20,7 +20,7 @@
 
     <header
         android:fragment="io.virtualapp.home.SettingAct$SKsetAppLiving"
-        android:title="@string/non_stop" />
+        android:title="@string/prevent_killing" />
 
     <header
         android:fragment="io.virtualapp.home.SettingAct$SKResstart"

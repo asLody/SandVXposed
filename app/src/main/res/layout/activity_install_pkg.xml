@@ -47,12 +47,21 @@
         android:layout_marginTop="300dp"/>
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatInstallerRetBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:src="@android:drawable/ic_delete"
-        android:id="@+id/floatInstallerRetBtn"
-        android:layout_margin="@dimen/dp80"/>
+        android:layout_margin="@dimen/dp80"
+        android:src="@android:drawable/ic_delete" />
+
+    <Button
+        android:id="@+id/openUpBtn"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/dp8"
+        android:text="@string/open" />
 
 
 </android.support.design.widget.CoordinatorLayout>

@@ -213,7 +213,13 @@ public class MarkerActivity extends VActivity implements TencentMap.OnMapClickLi
                     pathText.setText(oj.result.address);
                     mAddress = oj.result.address;
                 }
-                dialog.dismiss();
+                try
+                {
+                    dialog.dismiss();
+                }catch (Throwable e)
+                {
+                    e.printStackTrace();
+                }
             }
 
             @Override
