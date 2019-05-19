@@ -82,6 +82,7 @@ import mirror.dalvik.system.VMRuntime;
 import mirror.java.lang.ThreadGroupN;
 import sk.vpkg.live.WhiteService;
 import sk.vpkg.provider.BanNotificationProvider;
+import sk.vpkg.xposed.XposedUtils;
 
 import static com.lody.virtual.os.VUserHandle.getUserId;
 
@@ -317,7 +318,8 @@ public final class VClientImpl extends IVClient.Stub {
             InvocationStubManager.getInstance().checkEnv(AppInstrumentation.class);
         }
 
-        SandXposed.injectXposedModule(context, packageName, processName);
+        if(XposedUtils.isEnabledXposed(packageName))
+            SandXposed.injectXposedModule(context, packageName, processName);
 
         mInitialApplication = LoadedApk.makeApplication.call(data.info, false, null);
 
