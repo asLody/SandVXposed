@@ -35,6 +35,7 @@ import com.lody.virtual.client.ipc.VActivityManager;
 import com.lody.virtual.client.stub.ChooseTypeAndAccountActivity;
 import com.lody.virtual.os.VUserInfo;
 import com.lody.virtual.os.VUserManager;
+import com.sk.app.RenameApp;
 import com.sk.fwindow.skFloattingWin;
 import com.sk.vloc.VLocSetting;
 
@@ -596,6 +597,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         int[] location = new int[2];
         boolean upAtDeleteAppArea;
         boolean upAtCreateShortcutArea;
+        boolean upAtRenameArea = false;
         RecyclerView.ViewHolder dragHolder;
 
         LauncherTouchCallback() {
@@ -657,7 +659,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
 
         @Override
         public boolean canDropOver(RecyclerView recyclerView, RecyclerView.ViewHolder current, RecyclerView.ViewHolder target) {
-            if (upAtCreateShortcutArea || upAtDeleteAppArea) {
+            if (upAtCreateShortcutArea || upAtDeleteAppArea || upAtRenameArea) {
                 return false;
             }
             try {
@@ -686,7 +688,24 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                     } else if (upAtDeleteAppArea) {
                         deleteApp(viewHolder.getAdapterPosition());
                     }
-                    // TODO: Rename application......
+                    else if(upAtRenameArea)
+                    {
+                        try
+                        {
+                            Intent hIntent = new Intent(
+                                    HomeActivity.this, RenameApp.class);
+                            AppData appData = mLaunchpadAdapter.getList().get(viewHolder.getAdapterPosition());
+                            int userId = 0;
+                            if (appData instanceof MultiplePackageAppData)
+                                userId=((MultiplePackageAppData) appData).userId;
+                            String lpStr[] = {appData.getPackageName(),String.valueOf(userId)};
+                            hIntent.putExtra("appInfo", lpStr);
+                            startActivity(hIntent);
+                        }catch (Throwable e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
                 }
                 dragHolder = null;
             }
@@ -716,30 +735,32 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                 if (x < deleteAppAreaStartX) {
                     upAtCreateShortcutArea = true;
                     upAtDeleteAppArea = false;
+                    upAtRenameArea = false;
                     mCreateShortcutTextView.setTextColor(Color.parseColor("#0099cc"));
                     mDeleteAppTextView.setTextColor(Color.WHITE);
+                    mRenameTextView.setTextColor(Color.WHITE);
                 } else {
                     upAtDeleteAppArea = true;
                     upAtCreateShortcutArea = false;
+                    upAtRenameArea = false;
                     mDeleteAppTextView.setTextColor(Color.parseColor("#0099cc"));
                     mCreateShortcutTextView.setTextColor(Color.WHITE);
+                    mRenameTextView.setTextColor(Color.WHITE);
                 }
             } else if(y >= baseLine - mRenameArea.getHeight())
             {
-                // TODO rename app
-                int deleteAppAreaStartX = location[0];
-                if (x < deleteAppAreaStartX)
-                {
-                    mRenameTextView.setTextColor(Color.parseColor("#0099cc"));
-                }
-                else
-                {
-                    mRenameTextView.setTextColor(Color.WHITE);
-                }
+                // TODO: 优化一下位置，要不然那个位置太难被触及了。
+                mRenameTextView.setTextColor(Color.parseColor("#0099cc"));
+                mDeleteAppTextView.setTextColor(Color.WHITE);
+                mCreateShortcutTextView.setTextColor(Color.WHITE);
+                upAtRenameArea = true;
+                upAtCreateShortcutArea = false;
+                upAtDeleteAppArea = false;
             }
             else{
                 upAtCreateShortcutArea = false;
                 upAtDeleteAppArea = false;
+                upAtRenameArea = false;
                 mDeleteAppTextView.setTextColor(Color.WHITE);
                 mCreateShortcutTextView.setTextColor(Color.WHITE);
                 mRenameTextView.setTextColor(Color.WHITE);

@@ -1,13 +1,12 @@
 package com.lody.virtual.sandxposed;
 
 import android.content.Context;
-import android.text.TextUtils;
+import android.os.Process;
 
 import com.swift.sandhook.xposedcompat.utils.FileUtils;
 
 import java.io.File;
 import java.util.Arrays;
-import android.os.Process;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
@@ -30,7 +29,7 @@ public class EnvironmentSetup {
     }
 
     private static void initForWeChat(Context context, String processName) {
-        if (!processName.equals("com.tencent.mm"))
+        if (!processName.startsWith("com.tencent.mm"))
             return;
         //delete tinker patches
         File dataDir = new File(context.getApplicationInfo().dataDir);

@@ -162,4 +162,6 @@
     <string name="pick">Pickup</string>
     <string name="rename">Rename</string>
     <string name="prevent_killing">Prevent process from killing.</string>
+    <string name="title_activity_rename_app">RenameApp</string>
+    <string name="disable_xposed">Disable Xposed</string>
 </resources>

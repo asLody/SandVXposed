@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 import com.lody.virtual.GmsSupport;
 import com.lody.virtual.client.core.InstallStrategy;
@@ -26,6 +27,8 @@ import io.virtualapp.home.models.AppInfo;
 import io.virtualapp.home.models.AppInfoLite;
 import io.virtualapp.home.models.MultiplePackageAppData;
 import io.virtualapp.home.models.PackageAppData;
+import sk.vpkg.manager.RenameAppUtils;
+import sk.vpkg.provider.BanNotificationProvider;
 
 /**
  * @author Lody
@@ -65,12 +68,27 @@ public class AppRepository implements AppDataSource {
                 }
                 PackageAppData data = new PackageAppData(mContext, info);
                 if (VirtualCore.get().isAppInstalledAsUser(0, info.packageName)) {
-                    models.add(data);
+                    String lpIsSet = RenameAppUtils.getRenamedApp(data.packageName,0);
+                    if(lpIsSet!=null)
+                    {
+                        data.name = lpIsSet;
+                        models.add(data);
+                    }
+                    else
+                        models.add(data);
                 }
                 int[] userIds = info.getInstalledUsers();
                 for (int userId : userIds) {
+                    data = new PackageAppData(mContext, info);
                     if (userId != 0) {
-                        models.add(new MultiplePackageAppData(data, userId));
+                        String lpIsSet = RenameAppUtils.getRenamedApp(data.packageName,userId);
+                        if(lpIsSet!=null)
+                        {
+                            data.name = lpIsSet;
+                            models.add(new MultiplePackageAppData(data, userId));
+                        }
+                        else
+                            models.add(new MultiplePackageAppData(data, userId));
                     }
                 }
             }
