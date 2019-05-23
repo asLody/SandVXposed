@@ -29,6 +29,7 @@ import io.virtualapp.home.repo.AppRepository;
 import io.virtualapp.home.repo.PackageAppDataStorage;
 import io.virtualapp.home.repo.XAppDataInstalled;
 import jonathanfinerty.once.Once;
+import sk.vpkg.manager.RenameAppUtils;
 
 /**
  * @author Lody
@@ -437,6 +438,13 @@ class HomePresenterImpl implements HomeContract.HomePresenter {
             @Override
             public String getName(String originName) {
                 return originName + "(SVX)";
+            }
+
+            @Override
+            public String getNameEx(String packageName, String origName, int uid)
+            {
+                if(origName==null||packageName==null)return null;
+                return (RenameAppUtils.getRenamedApp(packageName,uid,origName) + "(SVX)");
             }
         };
         if (data instanceof PackageAppData) {

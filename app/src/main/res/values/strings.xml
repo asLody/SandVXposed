@@ -164,4 +164,7 @@
     <string name="prevent_killing">Prevent process from killing.</string>
     <string name="title_activity_rename_app">RenameApp</string>
     <string name="disable_xposed">Disable Xposed</string>
+    <string name="title_activity_update_exist_app">UpdateExistApp</string>
+    <string name="onekey_update_app">Update all cloned apps.</string>
+    <string name="sk_upgrade_localapp">All applications were added to list when page was loaded. You can click item in list for cancel item form syncing.</string>
 </resources>

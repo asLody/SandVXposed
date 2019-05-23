@@ -473,7 +473,7 @@ public final class VirtualCore {
             return false;
         }
         if (listener != null) {
-            String newName = listener.getName(name);
+            String newName = listener.getNameEx(packageName,name,userId);
             if (newName != null) {
                 name = newName;
             }
@@ -552,7 +552,7 @@ public final class VirtualCore {
             return false;
         }
         if (listener != null) {
-            String newName = listener.getName(name);
+            String newName = listener.getNameEx(packageName,name,userId);
             if (newName != null) {
                 name = newName;
             }
@@ -889,6 +889,8 @@ public final class VirtualCore {
         Bitmap getIcon(Bitmap originIcon);
 
         String getName(String originName);
+
+        String getNameEx(String packageName,String pkgName,int uid);
     }
 
     public static abstract class VirtualInitializer {
