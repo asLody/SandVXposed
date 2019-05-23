@@ -64,7 +64,8 @@ public class VAccountManager {
         try {
             return getService().addAccountExplicitly(VUserHandle.myUserId(), account, password, extras);
         } catch (RemoteException e) {
-            return VirtualRuntime.crash(e);
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -168,7 +169,8 @@ public class VAccountManager {
         try {
             return getService().removeAccountExplicitly(VUserHandle.myUserId(), account);
         } catch (RemoteException e) {
-            return VirtualRuntime.crash(e);
+            e.printStackTrace();
+            return false;
         }
     }
 

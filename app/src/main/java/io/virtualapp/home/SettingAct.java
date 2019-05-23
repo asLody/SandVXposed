@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.ipc.VActivityManager;
 import com.sk.app.SettingUtils;
+import com.sk.app.UpdateExistApp;
 import com.sk.fwindow.skFloattingWin;
 import com.sk.listapp.XAppManager;
 
@@ -31,7 +32,6 @@ import java.util.List;
 
 import io.virtualapp.R;
 import jonathanfinerty.once.Once;
-import sk.vpkg.live.WhiteService;
 import sk.vpkg.provider.BanNotificationProvider;
 
 /**
@@ -194,7 +194,8 @@ public class SettingAct extends AppCompatPreferenceActivity
                 || SKSettings.class.getName().equals(fragmentName)
                 || SKsetAppLiving.class.getName().equals(fragmentName)
                 || SKAppFloatingWindowSetting.class.getName().equals(fragmentName)
-                || SKAppStorageRedirect.class.getName().equals(fragmentName);
+                || SKAppStorageRedirect.class.getName().equals(fragmentName)
+                || SKUpdateAppApps.class.getName().equals(fragmentName);
     }
 
     /**
@@ -556,6 +557,42 @@ public class SettingAct extends AppCompatPreferenceActivity
             })
                     .setCancelable(false);
             hDialog.create().show();
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item)
+        {
+            int id = item.getItemId();
+            if (id == android.R.id.home)
+            {
+                startActivity(new Intent(getActivity(), SettingAct.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class SKUpdateAppApps extends PreferenceFragment
+    {
+        @Override
+        public void onCreate(Bundle savedInstanceState)
+        {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_appset);
+            setHasOptionsMenu(true);
+            if(getActivity()==null)return;
+            AlertDialog.Builder hDialog = new AlertDialog.Builder(getActivity());
+            hDialog.setMessage(R.string.sk_upgrade_localapp);
+            hDialog.setPositiveButton(R.string.accept, (dialog, which) ->
+            {
+                getActivity().startActivity(new Intent(getActivity(), UpdateExistApp.class));
+                getActivity().finish();
+            })
+                    .setNegativeButton(R.string.back, (dialog, which) -> getActivity().finish())
+                    .setTitle(R.string.title_activity_update_exist_app)
+                    .setCancelable(false)
+                    .create().show();
         }
 
         @Override

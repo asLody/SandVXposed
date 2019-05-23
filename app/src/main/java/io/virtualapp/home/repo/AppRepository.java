@@ -79,8 +79,8 @@ public class AppRepository implements AppDataSource {
                 }
                 int[] userIds = info.getInstalledUsers();
                 for (int userId : userIds) {
-                    data = new PackageAppData(mContext, info);
                     if (userId != 0) {
+                        data = new PackageAppData(mContext, info);
                         String lpIsSet = RenameAppUtils.getRenamedApp(data.packageName,userId);
                         if(lpIsSet!=null)
                         {

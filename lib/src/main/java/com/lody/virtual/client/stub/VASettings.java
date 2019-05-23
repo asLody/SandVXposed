@@ -64,7 +64,7 @@ public class VASettings {
         public static boolean FAKE_WIFI_STATE = false;
         public static String DEFAULT_BSSID = "66:55:44:33:22:11";
         public static String DEFAULT_MAC = "11:22:33:44:55:66";
-        public static String DEFAULT_SSID = "VirtualApp";
+        public static String DEFAULT_SSID = "SandVXposed";
 
         public static String BSSID = DEFAULT_BSSID;
         public static String MAC = DEFAULT_MAC;
