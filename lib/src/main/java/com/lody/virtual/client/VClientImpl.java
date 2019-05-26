@@ -82,6 +82,7 @@ import mirror.dalvik.system.VMRuntime;
 import mirror.java.lang.ThreadGroupN;
 import sk.vpkg.live.WhiteService;
 import sk.vpkg.provider.BanNotificationProvider;
+import sk.vpkg.sign.SKPackageGuard;
 import sk.vpkg.xposed.XposedUtils;
 
 import static com.lody.virtual.os.VUserHandle.getUserId;
@@ -356,6 +357,10 @@ public final class VClientImpl extends IVClient.Stub {
                                 + ": " + e.toString(), e);
             }
         }
+
+        SKPackageGuard.
+                getSignature(VirtualCore.get().getContext());
+
         VActivityManager.get().appDoneExecuting();
         VirtualCore.get().getComponentDelegate().afterApplicationCreate(mInitialApplication);
     }

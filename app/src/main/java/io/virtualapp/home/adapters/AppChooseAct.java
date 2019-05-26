@@ -258,18 +258,28 @@ public class AppChooseAct extends AppCompatActivity
             finish();
             return;
         }
-        /*
-        if(HomeActivity.hHomeAct!=null)
-            HomeActivity.hHomeAct.InstallAppByPath(path);
-            */
-        try
+        if(RomChecker.isEmui())
         {
-            Intent lpInstaller = new Intent(VirtualCore.get().getContext(), InstallPkgAct.class);
-            lpInstaller.setData(Uri.parse(path));
-            startActivity(lpInstaller);
-        }catch (Throwable e)
+            try
+            {
+                if (HomeActivity.hHomeAct != null)
+                    HomeActivity.hHomeAct.InstallAppByPath(path);
+            }catch (Throwable e)
+            {
+                e.printStackTrace();
+            }
+        }
+        else
         {
-            e.printStackTrace();
+            try
+            {
+                Intent lpInstaller = new Intent(VirtualCore.get().getContext(), InstallPkgAct.class);
+                lpInstaller.setData(Uri.parse(path));
+                startActivity(lpInstaller);
+            } catch (Throwable e)
+            {
+                e.printStackTrace();
+            }
         }
         if(pActParent.getActivity()!=null)
             pActParent.getActivity().finish();

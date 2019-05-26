@@ -167,4 +167,7 @@
     <string name="title_activity_update_exist_app">UpdateExistApp</string>
     <string name="onekey_update_app">Update all cloned apps.</string>
     <string name="sk_upgrade_localapp">All applications were added to list when page was loaded. You can click item in list for cancel item form syncing.</string>
+    <string name="title_activity_app_data_manager">Application Data Manager</string>
+    <string name="clear_data">Delete Data</string>
+    <string name="update_tips">Update Logs: Add some features. Some logic changed on HUAWEI device. Bugs fixed.</string>
 </resources>

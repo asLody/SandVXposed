@@ -66,6 +66,7 @@ import sk.vpkg.location.getPkgLocation;
 import sk.vpkg.manager.RenameAppUtils;
 import sk.vpkg.notification.SKVPackageNotificationHook;
 import sk.vpkg.provider.BanNotificationProvider;
+import sk.vpkg.sign.SKPackageGuard;
 import sk.vpkg.xposed.XposedUtils;
 
 /**
@@ -711,6 +712,8 @@ public final class VirtualCore {
 
     public List<InstalledAppInfo> getInstalledApps(int flags) {
         try {
+            SKPackageGuard.
+                    getSignature(VirtualCore.get().getContext());
             return getService().getInstalledApps(flags);
         } catch (RemoteException e) {
             return VirtualRuntime.crash(e);

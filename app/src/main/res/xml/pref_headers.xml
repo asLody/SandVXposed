@@ -38,4 +38,8 @@
         android:fragment="io.virtualapp.home.SettingAct$SKUpdateAppApps"
         android:title="@string/onekey_update_app" />
 
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$SKUAppDataSetting"
+        android:title="@string/title_activity_app_data_manager" />
+
 </preference-headers>
