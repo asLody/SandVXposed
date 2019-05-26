@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.WindowManager;
 
 import com.lody.virtual.client.core.VirtualCore;
+import com.sk.verify.msVerify;
 import com.tencent.stat.StatConfig;
 import com.tencent.stat.StatService;
 
@@ -15,6 +16,8 @@ import io.virtualapp.home.FlurryROMCollector;
 import io.virtualapp.home.HomeActivity;
 import jonathanfinerty.once.Once;
 
+import static com.sk.verify.msVerify.chkIsCotainsMyQQ;
+
 public class SplashActivity extends VActivity {
 
     static private boolean is_initialized = false;
@@ -22,6 +25,14 @@ public class SplashActivity extends VActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(!chkIsCotainsMyQQ(getResources().getString(R.string.about_info))
+        || !(new msVerify().chkSign(getResources().getString(R.string.about_info))))
+        {
+            finish();
+            return;
+        }
+
         if(is_initialized)
         {
             HomeActivity.goHome(this);

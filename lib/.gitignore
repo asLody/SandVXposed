@@ -1,3 +1,4 @@
 /build
 .externalNativeBuild/
 obj/
+src/main/jni/sk/

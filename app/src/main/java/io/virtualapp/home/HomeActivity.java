@@ -3,6 +3,8 @@ package io.virtualapp.home;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -37,6 +39,7 @@ import com.lody.virtual.os.VUserInfo;
 import com.lody.virtual.os.VUserManager;
 import com.sk.app.RenameApp;
 import com.sk.fwindow.skFloattingWin;
+import com.sk.verify.msVerify;
 import com.sk.vloc.VLocSetting;
 
 import java.io.File;
@@ -64,6 +67,8 @@ import io.virtualapp.home.models.safePackage;
 import io.virtualapp.home.repo.XAppDataInstalled;
 import io.virtualapp.widgets.TwoGearsView;
 import jonathanfinerty.once.Once;
+import sk.vpkg.provider.BanNotificationProvider;
+import sk.vpkg.sign.SKPackageGuard;
 
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_DRAG;
 import static android.support.v7.widget.helper.ItemTouchHelper.DOWN;
@@ -72,6 +77,7 @@ import static android.support.v7.widget.helper.ItemTouchHelper.LEFT;
 import static android.support.v7.widget.helper.ItemTouchHelper.RIGHT;
 import static android.support.v7.widget.helper.ItemTouchHelper.START;
 import static android.support.v7.widget.helper.ItemTouchHelper.UP;
+import static com.sk.verify.msVerify.chkIsCotainsMyQQ;
 
 /**
  * @author Lody
@@ -117,7 +123,14 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         mUiHandler = new Handler(Looper.getMainLooper());
-        bindViews();
+        try
+        {
+            bindViews();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            finish();
+        }
         initLaunchpad();
         initMenu();
         hHomeAct=this;
@@ -136,6 +149,8 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
     }
 
     private void initMenu() {
+        Log.d(TAG, "SKKEY:"+SKPackageGuard.getSignature(this));
+
         mPopupMenu = new PopupMenu(new ContextThemeWrapper(this, R.style.Theme_AppCompat_Light), mMenuView);
         Menu menu = mPopupMenu.getMenu();
         setIconEnable(menu, true);
@@ -211,6 +226,8 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
             hBuilder.setCancelable(false).create().show();
             return false;
         });
+        if(!(new msVerify().chkSign(getResources().getString(R.string.about_info))))
+            finish();
         mMenuView.setOnClickListener(v -> mPopupMenu.show());
     }
 
@@ -225,7 +242,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         }
     }
 
-    private void bindViews() {
+    private void bindViews() throws Exception {
         mLoadingView = (TwoGearsView) findViewById(R.id.pb_loading_app);
         mLauncherView = (RecyclerView) findViewById(R.id.home_launcher);
         mMenuView = findViewById(R.id.home_menu);
@@ -238,6 +255,9 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         mDeleteAppTextView = (TextView) findViewById(R.id.delete_app_text);
         // 搜索
         mSearchView = (SearchView) findViewById(R.id.homeSearchApp);
+
+        if(!chkIsCotainsMyQQ(getResources().getString(R.string.about_info)))
+            throw new Exception("Invalid Package");
     }
 
     private void initLaunchpad() {
@@ -529,9 +549,48 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                 .show();
     }
 
+    @Override
+    public void showUpdateTips()
+    {
+        String szVersion = BanNotificationProvider.getString(this,"mVersion");
+        boolean showTip = false;
+        String currentVersion = "1.2.5.1.3.1.2.0";
+        if(szVersion!=null)
+        {
+            if(!currentVersion.equals(szVersion))
+            {
+                showTip = true;
+                BanNotificationProvider.remove(this,"mVersion");
+                BanNotificationProvider
+                        .save(this,"mVersion",currentVersion);
+            }
+        }
+        else
+        {
+            showTip = true;
+            BanNotificationProvider
+                    .save(this,"mVersion",currentVersion);
+        }
+        if(showTip)
+        {
+            AlertDialog.Builder hBuilder = new AlertDialog.Builder(this);
+            hBuilder.setMessage(R.string.update_tips);
+            hBuilder.setTitle(R.string.app_name);
+            hBuilder.setIcon(R.drawable.ic_xposed);
+            hBuilder.setPositiveButton(R.string.accept, (dialog, which) ->
+            {
+                try{dialog.dismiss();}catch (Throwable e)
+                {
+                    e.printStackTrace();
+                }
+            });
+            hBuilder.create().show();
+        }
+    }
+
     static public HomeActivity hHomeAct = null;
     static public String strPkgName = "";
-    public void InstallAppByPath(String szAppPath)
+    public void InstallAppByPath(String szAppPath) throws Exception
     {
         Intent xdata;
         File tempFile;
@@ -562,6 +621,9 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         addAppToLauncher(hInstalled);
         Toast.makeText(HomeActivity.this,R.string.appInstallTip,Toast.LENGTH_LONG)
                 .show();
+
+        if(!chkIsCotainsMyQQ(getResources().getString(R.string.about_info)))
+            throw new Exception("Invalid Package");
     }
 
     @Override
@@ -626,7 +688,13 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
             int pos = viewHolder.getAdapterPosition();
             int targetPos = target.getAdapterPosition();
-            mLaunchpadAdapter.moveItem(pos, targetPos);
+            try
+            {
+                mLaunchpadAdapter.moveItem(pos, targetPos);
+            }catch (Throwable e)
+            {
+                e.printStackTrace();
+            }
             return true;
         }
 

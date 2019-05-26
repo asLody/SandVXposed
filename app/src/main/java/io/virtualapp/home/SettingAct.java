@@ -26,6 +26,7 @@ import com.lody.virtual.client.ipc.VActivityManager;
 import com.sk.app.SettingUtils;
 import com.sk.app.UpdateExistApp;
 import com.sk.fwindow.skFloattingWin;
+import com.sk.listapp.AppDataManager;
 import com.sk.listapp.XAppManager;
 
 import java.util.List;
@@ -195,6 +196,7 @@ public class SettingAct extends AppCompatPreferenceActivity
                 || SKsetAppLiving.class.getName().equals(fragmentName)
                 || SKAppFloatingWindowSetting.class.getName().equals(fragmentName)
                 || SKAppStorageRedirect.class.getName().equals(fragmentName)
+                || SKUAppDataSetting.class.getName().equals(fragmentName)
                 || SKUpdateAppApps.class.getName().equals(fragmentName);
     }
 
@@ -593,6 +595,33 @@ public class SettingAct extends AppCompatPreferenceActivity
                     .setTitle(R.string.title_activity_update_exist_app)
                     .setCancelable(false)
                     .create().show();
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item)
+        {
+            int id = item.getItemId();
+            if (id == android.R.id.home)
+            {
+                startActivity(new Intent(getActivity(), SettingAct.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class SKUAppDataSetting extends PreferenceFragment
+    {
+        @Override
+        public void onCreate(Bundle savedInstanceState)
+        {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_appset);
+            setHasOptionsMenu(true);
+            if(getActivity()==null)return;
+            getActivity().startActivity(new Intent(getActivity(), AppDataManager.class));
+            getActivity().finish();
         }
 
         @Override

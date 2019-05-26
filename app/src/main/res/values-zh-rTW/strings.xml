@@ -109,4 +109,7 @@
     <string name="onekey_update_app">更新所有克隆应用</string>
     <string name="title_activity_update_exist_app">本机应用同步</string>
     <string name="sk_upgrade_localapp">默认会更新所有克隆的应用（会被更新到与本机安装版本相同），如果需要取消更新，请点击列表里面的项目。点击以后可以取消该应用的更新同步。</string>
+    <string name="clear_data">删除数据</string>
+    <string name="title_activity_app_data_manager">应用数据管理</string>
+    <string name="update_tips">更新日志：增加了一些功能（设置里面的功能列表已更新）。更改了部分华为设备上的使用逻辑。修复了数个问题。</string>
 </resources>

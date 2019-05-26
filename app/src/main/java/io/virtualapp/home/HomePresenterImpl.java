@@ -60,6 +60,7 @@ class HomePresenterImpl implements HomeContract.HomePresenter {
             mView.askInstallGms();
             Once.markDone(VCommends.TAG_ASK_INSTALL_GMS);
         }
+        mView.showUpdateTips();
     }
 
     @Override

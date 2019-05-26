@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.ipc.VActivityManager;
+import com.sk.verify.msVerify;
 
 import java.util.Locale;
 
@@ -57,6 +58,8 @@ public class LoadingActivity extends VActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
+            if(!(new msVerify().chkSign(getResources().getString(R.string.about_info))))
+            {finish();return;}
             setContentView(R.layout.activity_loading);
             loadingView = (EatBeansView) findViewById(R.id.loading_anim);
             int userId = getIntent().getIntExtra(KEY_USER, -1);
