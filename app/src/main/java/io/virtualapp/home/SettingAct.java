@@ -33,6 +33,7 @@ import java.util.List;
 
 import io.virtualapp.R;
 import jonathanfinerty.once.Once;
+import sk.vpkg.live.AutoRunUtils;
 import sk.vpkg.provider.BanNotificationProvider;
 
 /**
@@ -197,6 +198,7 @@ public class SettingAct extends AppCompatPreferenceActivity
                 || SKAppFloatingWindowSetting.class.getName().equals(fragmentName)
                 || SKAppStorageRedirect.class.getName().equals(fragmentName)
                 || SKUAppDataSetting.class.getName().equals(fragmentName)
+                || SKAppWakeUp.class.getName().equals(fragmentName)
                 || SKUpdateAppApps.class.getName().equals(fragmentName);
     }
 
@@ -622,6 +624,45 @@ public class SettingAct extends AppCompatPreferenceActivity
             if(getActivity()==null)return;
             getActivity().startActivity(new Intent(getActivity(), AppDataManager.class));
             getActivity().finish();
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item)
+        {
+            int id = item.getItemId();
+            if (id == android.R.id.home)
+            {
+                startActivity(new Intent(getActivity(), SettingAct.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class SKAppWakeUp extends PreferenceFragment
+    {
+        @Override
+        public void onCreate(Bundle savedInstanceState)
+        {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_appset);
+            setHasOptionsMenu(true);
+            AlertDialog.Builder hDialog = new AlertDialog.Builder(getActivity());
+            hDialog.setMessage(R.string.wake_up_setting);
+            hDialog.setTitle(R.string.enable_wakeup).setNegativeButton(R.string.disable,
+                    (dialog, which) ->
+                    {
+                        AutoRunUtils.disableWakeUp();
+                        getActivity().finish();
+                    });
+            hDialog.setPositiveButton(R.string.enable, (dialog, which) ->
+            {
+                AutoRunUtils.enableWakeUp();
+                getActivity().finish();
+            })
+                    .setCancelable(false);
+            hDialog.create().show();
         }
 
         @Override

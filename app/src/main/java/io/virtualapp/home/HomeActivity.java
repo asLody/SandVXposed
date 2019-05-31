@@ -8,6 +8,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -549,12 +551,26 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                 .show();
     }
 
+    public static int packageCode(Context context)
+    {
+        PackageManager manager = context.getPackageManager();
+        int code = 0;
+        try {
+            PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
+            code = info.versionCode;
+        }
+        catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return code;
+    }
+
     @Override
     public void showUpdateTips()
     {
         String szVersion = BanNotificationProvider.getString(this,"mVersion");
         boolean showTip = false;
-        String currentVersion = "1.2.5.1.3.1.2.0";
+        String currentVersion = String.valueOf(packageCode(this));
         if(szVersion!=null)
         {
             if(!currentVersion.equals(szVersion))

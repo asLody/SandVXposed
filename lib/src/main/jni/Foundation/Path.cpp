@@ -1,5 +1,5 @@
 #include "Path.h"
-#define MAX_PATH_SIZE 4096
+#define MAX_PATH_SIZE 1024
 
 /* returns last slash position in @s or -1 if there is no one */
 int get_last_slash_pos(char *s) {
