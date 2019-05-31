@@ -42,4 +42,8 @@
         android:fragment="io.virtualapp.home.SettingAct$SKUAppDataSetting"
         android:title="@string/title_activity_app_data_manager" />
 
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$SKAppWakeUp"
+        android:title="@string/enable_wakeup" />
+
 </preference-headers>

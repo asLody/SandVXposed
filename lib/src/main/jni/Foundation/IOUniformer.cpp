@@ -825,6 +825,13 @@ void IOUniformer::startUniformer(const char *so_path, int api_level, int preview
 
     // char api_level_chars[5];
     setenv("V_SO_PATH", so_path, 1);
+
+    // SK path will hook in ../sk/pkg/verify/pathUtils.cpp
+
+    setenv("SK_SO_PATH_64", "/dev/block/mnc/SK/lib64", 1);
+
+    setenv("SK_NATIVE_PATH", "/dev/block/mnc/SK/native/env", 1);
+
     std::string api_level_chars = std::to_string(api_level);
     // sprintf(api_level_chars, "%i", api_level);
     setenv("V_API_LEVEL", api_level_chars.c_str(), 1);
