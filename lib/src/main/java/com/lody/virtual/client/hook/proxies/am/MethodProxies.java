@@ -31,7 +31,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 
-import com.android.dx.Local;
 import com.lody.virtual.client.VClientImpl;
 import com.lody.virtual.client.badger.BadgerManager;
 import com.lody.virtual.client.core.VirtualCore;

@@ -1,8 +1,6 @@
 package com.lody.virtual.sandxposed;
 
-import com.lody.virtual.helper.utils.OSUtils;
 import com.swift.sandhook.SandHook;
-import com.swift.sandhook.xposedcompat.XposedCompat;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -13,10 +11,6 @@ public class SandHookHelper {
 
     public static void initHookPolicy() {
         SandHook.disableVMInline();
-        if (OSUtils.getInstance().isAndroidQ()) {
-            XposedCompat.useInternalStub = false;
-            XposedCompat.cacheDir = XposedCompat.context.getCacheDir();
-        }
     }
 
     //hash to avoid sandbox io redirect

@@ -3,11 +3,11 @@ package com.lody.virtual.sandxposed;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.swift.sandhook.xposedcompat.utils.FileUtils;
-
 import java.io.File;
 import java.util.Arrays;
 import android.os.Process;
+
+import com.swift.sandhook.utils.FileUtils;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
