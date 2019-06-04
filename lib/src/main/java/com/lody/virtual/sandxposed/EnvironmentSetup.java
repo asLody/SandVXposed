@@ -7,17 +7,18 @@ import com.swift.sandhook.xposedcompat.utils.FileUtils;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
+import sk.vpkg.sign.SKPackageGuard;
 
 public class EnvironmentSetup {
 
 
     public static void init(Context context, String packageName, String processName) {
         initSystemProp(context);
-        initForWeChat(context, processName);
+        initForSpecialApps(context, packageName);
     }
 
     private static void initSystemProp(Context context) {
@@ -28,23 +29,42 @@ public class EnvironmentSetup {
         System.setProperty("sandvxp", "1");
     }
 
-    private static void initForWeChat(Context context, String processName) {
-        if (!processName.startsWith("com.tencent.mm"))
+    private final static LinkedList<String> pListCrashBlocker = new LinkedList<>(
+            Arrays.asList("com.tencent",
+                    "com.netease",
+                    "com.eg.android.AlipayGphone",
+                    "com.taobao")
+    );
+    private static boolean is_HookCrash(String packageName)
+    {
+        for(String szPkgName : pListCrashBlocker)
+        {
+            if(packageName.startsWith(szPkgName))
+                return true;
+        }
+        return false;
+    }
+
+    private static void initForSpecialApps(Context context, String packageName) {
+        if (!is_HookCrash(packageName))
             return;
-        //delete tinker patches
-        File dataDir = new File(context.getApplicationInfo().dataDir);
-        File tinker = new File(dataDir, "tinker");
-        File tinker_temp = new File(dataDir, "tinker_temp");
-        File tinker_server = new File(dataDir, "tinker_server");
+        if(packageName.startsWith("com.tencent.mm"))
+        {
+            //delete tinker patches
+            File dataDir = new File(context.getApplicationInfo().dataDir);
+            File tinker = new File(dataDir, "tinker");
+            File tinker_temp = new File(dataDir, "tinker_temp");
+            File tinker_server = new File(dataDir, "tinker_server");
 
         try {
             FileUtils.delete(tinker);
             FileUtils.delete(tinker_temp);
             FileUtils.delete(tinker_server);
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
+        }
 
         //avoid mm kill self
-        final int mainProcessId = Process.myPid();
+        // final int mainProcessId = Process.myPid();
         XC_MethodHook g_Hook = new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
@@ -57,6 +77,7 @@ public class EnvironmentSetup {
                 */
                 // try kill main process, find stack
                 param.setResult(null);
+                /*
                 StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
                 if (stackTrace == null) {
                     return;
@@ -67,10 +88,18 @@ public class EnvironmentSetup {
                         break;
                     }
                 }
+                */
             }
         };
-        XposedHelpers.findAndHookMethod(Process.class, "killProcess", int.class, g_Hook);
-        XposedHelpers.findAndHookMethod(System.class, "exit", int.class, g_Hook);
+        try
+        {
+            XposedHelpers.findAndHookMethod(Process.class, "killProcess", int.class, g_Hook);
+            XposedHelpers.findAndHookMethod(System.class, "exit", int.class, g_Hook);
+            SKPackageGuard.antiXposedCheck(packageName);
+        }catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -41,7 +41,6 @@ import com.lody.virtual.client.ipc.VActivityManager;
 import com.lody.virtual.client.ipc.VDeviceManager;
 import com.lody.virtual.client.ipc.VPackageManager;
 import com.lody.virtual.client.ipc.VirtualStorageManager;
-import com.lody.virtual.sandxposed.SandXposed;
 import com.lody.virtual.client.stub.VASettings;
 import com.lody.virtual.helper.compat.BuildCompat;
 import com.lody.virtual.helper.compat.StorageManagerCompat;
@@ -51,6 +50,7 @@ import com.lody.virtual.os.VUserHandle;
 import com.lody.virtual.remote.InstalledAppInfo;
 import com.lody.virtual.remote.PendingResultData;
 import com.lody.virtual.remote.VDeviceInfo;
+import com.lody.virtual.sandxposed.SandXposed;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -80,9 +80,7 @@ import mirror.android.view.ThreadedRenderer;
 import mirror.com.android.internal.content.ReferrerIntent;
 import mirror.dalvik.system.VMRuntime;
 import mirror.java.lang.ThreadGroupN;
-import sk.vpkg.live.WhiteService;
 import sk.vpkg.provider.BanNotificationProvider;
-import sk.vpkg.sign.SKPackageGuard;
 import sk.vpkg.xposed.XposedUtils;
 
 import static com.lody.virtual.os.VUserHandle.getUserId;
@@ -357,9 +355,6 @@ public final class VClientImpl extends IVClient.Stub {
                                 + ": " + e.toString(), e);
             }
         }
-
-        SKPackageGuard.
-                getSignature(VirtualCore.get().getContext());
 
         VActivityManager.get().appDoneExecuting();
         VirtualCore.get().getComponentDelegate().afterApplicationCreate(mInitialApplication);
