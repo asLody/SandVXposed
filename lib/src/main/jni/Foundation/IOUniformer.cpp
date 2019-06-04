@@ -68,8 +68,10 @@ void IOUniformer::init_env_before_all() {
         g_preview_api_level = preview_api_level;
         char keep_env_name[25];
         char forbid_env_name[25];
-        char replace_src_env_name[25];
-        char replace_dst_env_name[25];
+        // char replace_src_env_name[25];
+        // char replace_dst_env_name[25];
+        std::string replace_src_env_name = "V_REPLACE_ITEM_SRC_";
+        std::string replace_dst_env_name = "V_REPLACE_ITEM_DST_";
         int i = 0;
         while (true) {
             sprintf(keep_env_name, "V_KEEP_ITEM_%d", i);
@@ -91,14 +93,18 @@ void IOUniformer::init_env_before_all() {
             i++;
         }
         i = 0;
+        std::string breplace_src_env_name;
+        std::string breplace_dst_env_name;
         while (true) {
-            sprintf(replace_src_env_name, "V_REPLACE_ITEM_SRC_%d", i);
-            char *item_src = getenv(replace_src_env_name);
+            // sprintf(replace_src_env_name, "V_REPLACE_ITEM_SRC_%d", i);
+            breplace_src_env_name = replace_src_env_name + std::to_string(i);
+            char *item_src = getenv(breplace_src_env_name.c_str());
             if (!item_src) {
                 break;
             }
-            sprintf(replace_dst_env_name, "V_REPLACE_ITEM_DST_%d", i);
-            char *item_dst = getenv(replace_dst_env_name);
+            // sprintf(replace_dst_env_name, "V_REPLACE_ITEM_DST_%d", i);
+            breplace_dst_env_name = replace_dst_env_name + std::to_string(i);
+            char *item_dst = getenv(breplace_dst_env_name.c_str());
             add_replace_item(item_src, item_dst);
             i++;
         }

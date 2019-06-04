@@ -9,6 +9,7 @@ import com.lody.virtual.client.IVClient;
 import com.lody.virtual.os.VUserHandle;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 final class ProcessRecord extends Binder implements Comparable<ProcessRecord> {
@@ -41,7 +42,7 @@ final class ProcessRecord extends Binder implements Comparable<ProcessRecord> {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		ProcessRecord record = (ProcessRecord) o;
-		return processName != null ? processName.equals(record.processName) : record.processName == null;
+		return Objects.equals(processName, record.processName);
 	}
 
     @Override

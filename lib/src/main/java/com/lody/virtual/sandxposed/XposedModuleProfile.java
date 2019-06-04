@@ -15,7 +15,7 @@ public class XposedModuleProfile {
     }
 
     public static void enbaleXposed(boolean enbale) {
-        config.edit().putBoolean("xposed_enable", enbale).commit();
+        config.edit().putBoolean("xposed_enable", enbale).apply();
     }
 
     public static boolean isXposedEnable() {

@@ -24,7 +24,6 @@ import android.os.Bundle;
 import android.os.ConditionVariable;
 import android.os.IBinder;
 import android.os.Looper;
-import android.os.PersistableBundle;
 import android.os.Process;
 import android.os.RemoteException;
 
@@ -48,25 +47,20 @@ import com.lody.virtual.helper.utils.BitmapUtils;
 import com.lody.virtual.os.VUserHandle;
 import com.lody.virtual.remote.InstallResult;
 import com.lody.virtual.remote.InstalledAppInfo;
-import com.lody.virtual.server.interfaces.IAppManager;
 import com.lody.virtual.server.ServiceCache;
+import com.lody.virtual.server.interfaces.IAppManager;
 import com.lody.virtual.server.interfaces.IAppRequestListener;
 import com.lody.virtual.server.interfaces.IPackageObserver;
 import com.lody.virtual.server.interfaces.IUiCallback;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Random;
 
 import dalvik.system.DexFile;
-import mirror.android.app.Activity;
 import mirror.android.app.ActivityThread;
-import sk.vpkg.live.WhiteService;
 import sk.vpkg.location.getPkgLocation;
 import sk.vpkg.manager.RenameAppUtils;
 import sk.vpkg.notification.SKVPackageNotificationHook;
-import sk.vpkg.provider.BanNotificationProvider;
-import sk.vpkg.sign.SKPackageGuard;
 import sk.vpkg.xposed.XposedUtils;
 
 /**
@@ -712,8 +706,6 @@ public final class VirtualCore {
 
     public List<InstalledAppInfo> getInstalledApps(int flags) {
         try {
-            SKPackageGuard.
-                    getSignature(VirtualCore.get().getContext());
             return getService().getInstalledApps(flags);
         } catch (RemoteException e) {
             return VirtualRuntime.crash(e);
