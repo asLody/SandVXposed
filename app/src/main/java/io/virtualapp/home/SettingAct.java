@@ -199,6 +199,7 @@ public class SettingAct extends AppCompatPreferenceActivity
                 || SKAppStorageRedirect.class.getName().equals(fragmentName)
                 || SKUAppDataSetting.class.getName().equals(fragmentName)
                 || SKAppWakeUp.class.getName().equals(fragmentName)
+                || SKAppFullScreen.class.getName().equals(fragmentName)
                 || SKUpdateAppApps.class.getName().equals(fragmentName);
     }
 
@@ -659,6 +660,53 @@ public class SettingAct extends AppCompatPreferenceActivity
             hDialog.setPositiveButton(R.string.enable, (dialog, which) ->
             {
                 AutoRunUtils.enableWakeUp();
+                getActivity().finish();
+            })
+                    .setCancelable(false);
+            hDialog.create().show();
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item)
+        {
+            int id = item.getItemId();
+            if (id == android.R.id.home)
+            {
+                startActivity(new Intent(getActivity(), SettingAct.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class SKAppFullScreen extends PreferenceFragment
+    {
+        @Override
+        public void onCreate(Bundle savedInstanceState)
+        {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_appset);
+            setHasOptionsMenu(true);
+            AlertDialog.Builder hDialog = new AlertDialog.Builder(getActivity());
+            hDialog.setMessage(R.string.enable_full_screen);
+            hDialog.setTitle(R.string.SK_Settings).setNegativeButton(R.string.disable,
+                    (dialog, which) ->
+                    {
+                        String szEnableRedirectStorage = BanNotificationProvider.getString(getActivity(),"enableFullScreen");
+                        if(szEnableRedirectStorage!=null)
+                        {
+                            BanNotificationProvider.remove(getActivity(),"enableFullScreen");
+                        }
+                        getActivity().finish();
+                    });
+            hDialog.setPositiveButton(R.string.enable, (dialog, which) ->
+            {
+                String szEnableRedirectStorage = BanNotificationProvider.getString(getActivity(),"enableFullScreen");
+                if(szEnableRedirectStorage==null)
+                {
+                    BanNotificationProvider.save(getActivity(),"enableFullScreen","Enabled");
+                }
                 getActivity().finish();
             })
                     .setCancelable(false);
