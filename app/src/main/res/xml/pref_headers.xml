@@ -46,4 +46,8 @@
         android:fragment="io.virtualapp.home.SettingAct$SKAppWakeUp"
         android:title="@string/enable_wakeup" />
 
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$SKAppFullScreen"
+        android:title="@string/enable_full_screen" />
+
 </preference-headers>

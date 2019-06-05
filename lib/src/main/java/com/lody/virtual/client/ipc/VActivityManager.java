@@ -34,6 +34,7 @@ import java.util.Map;
 
 import mirror.android.app.ActivityThread;
 import mirror.android.content.ContentProviderNative;
+import sk.vpkg.provider.BanNotificationProvider;
 
 /**
  * @author Lody
@@ -71,6 +72,9 @@ public class VActivityManager {
         }
     }
 
+    static private boolean is_checked = false;
+    static private boolean is_fullscreen = false;
+
     public int startActivity(Intent intent, int userId) {
         if (userId < 0) {
             return ActivityManagerCompat.START_NOT_CURRENT_USER_ACTIVITY;
@@ -78,6 +82,23 @@ public class VActivityManager {
         ActivityInfo info = VirtualCore.get().resolveActivityInfo(intent, userId);
         if (info == null) {
             return ActivityManagerCompat.START_INTENT_NOT_RESOLVED;
+        }
+        try
+        {
+            if (!is_checked)
+            {
+                String szEnableRedirectStorage = BanNotificationProvider.getString(VirtualCore.get().getContext()
+                        , "enableFullScreen");
+                if (szEnableRedirectStorage != null) is_fullscreen = true;
+                is_checked = true;
+            }
+            if (is_fullscreen)
+            {
+                info.metaData.putString("android.max_aspect", "2.1");
+            }
+        }catch (Throwable e)
+        {
+            e.printStackTrace();
         }
         return startActivity(intent, info, null, null, null, 0, userId);
     }

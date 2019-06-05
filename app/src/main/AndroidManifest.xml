@@ -12,6 +12,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+        <meta-data android:name="android.max_aspect" android:value="2.1" />
         <activity android:name="com.sk.listapp.share_to_svxp"
             android:launchMode="singleInstance"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog"
