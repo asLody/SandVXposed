@@ -10,7 +10,7 @@ import com.lody.virtual.helper.utils.OSUtils;
 import com.lody.virtual.remote.InstalledAppInfo;
 import com.swift.sandhook.SandHook;
 import com.swift.sandhook.SandHookConfig;
-import com.swift.sandhook.xposedcompat_new.XposedCompat;
+import com.swift.sandhook.xposedcompat.XposedCompat;
 
 import java.util.List;
 
@@ -23,8 +23,14 @@ public class SandXposed {
         SandHookConfig.DEBUG = true;
         SandHookConfig.SDK_INT = OSUtils.getInstance().isAndroidQ() ? 29 : Build.VERSION.SDK_INT;
         SandHookConfig.compiler = SandHookConfig.SDK_INT < Build.VERSION_CODES.O;
-        SandHook.passApiCheck();
-        Object cls = XposedCompat.classLoader;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            SandHook.passApiCheck();
+        }
+        try {
+            XposedCompat.init();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 
     public static void injectXposedModule(Context context, String packageName, String processName) {
