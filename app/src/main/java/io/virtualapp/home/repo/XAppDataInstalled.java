@@ -1,7 +1,7 @@
 package io.virtualapp.home.repo;
 
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 
 import com.lody.virtual.server.pm.parser.VPackage;
 

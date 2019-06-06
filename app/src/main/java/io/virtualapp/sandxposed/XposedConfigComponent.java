@@ -4,7 +4,7 @@ import com.lody.virtual.sandxposed.XposedConfig;
 import com.lody.virtual.sandxposed.XposedModuleProfile;
 import com.trend.lazyinject.annotation.ComponentImpl;
 
-@ComponentImpl(process = "io.virtualapp.sandvxposed:x")
+// @ComponentImpl(process = "io.virtualapp.sandvxposed:x")
 public class XposedConfigComponent implements XposedConfig {
     @Override
     public boolean xposedEnabled() {

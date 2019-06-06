@@ -1,10 +1,8 @@
 package io.virtualapp.home.adapters;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -12,27 +10,20 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Toast;
 
 
 import com.lody.virtual.client.core.RomChecker;
 import com.lody.virtual.client.core.VirtualCore;
 import com.sk.installapp.InstallPkgAct;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Objects;
 
 import io.virtualapp.R;
-import io.virtualapp.VCommends;
 import io.virtualapp.home.HomeActivity;
 import io.virtualapp.home.ListAppFragment;
-import io.virtualapp.home.ListAppPresenterImpl;
-import io.virtualapp.home.models.AppInfo;
-import io.virtualapp.home.models.AppInfoLite;
 import jonathanfinerty.once.Once;
 
 public class AppChooseAct extends AppCompatActivity

@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/swipeRefreshInstalled">
@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:scrollbars="vertical"
         app:dsrv_autoScrollEnabled="false" />
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <ProgressBar
         android:id="@+id/select_app_progress_bar"
@@ -35,7 +35,7 @@
         android:textSize="17sp"
         tools:ignore="HardcodedText" />
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/buttonAddByPath"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

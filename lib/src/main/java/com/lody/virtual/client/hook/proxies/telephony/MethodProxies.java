@@ -57,6 +57,9 @@ class MethodProxies {
                 if (cell != null) {
                     return getCellLocationInternal(cell);
                 }
+                else {
+                    return getCellLocationInternal(new VCell());
+                }
             }
             return super.call(who, method, args);
         }
@@ -88,14 +91,13 @@ class MethodProxies {
         public Object call(Object who, Method method, Object... args) throws Throwable {
             if (isFakeLocationEnable()) {
                 List<VCell> cells = VirtualLocationManager.get().getAllCell(getAppUserId(), getAppPkg());
+                List<CellInfo> result = new ArrayList<CellInfo>();
                 if (cells != null) {
-                    List<CellInfo> result = new ArrayList<CellInfo>();
                     for (VCell cell : cells) {
                         result.add(createCellInfo(cell));
                     }
-                    return result;
                 }
-
+                return result;
             }
             return super.call(who, method, args);
         }
@@ -112,8 +114,8 @@ class MethodProxies {
         public Object call(Object who, Method method, Object... args) throws Throwable {
             if (isFakeLocationEnable()) {
                 List<VCell> cells = VirtualLocationManager.get().getNeighboringCell(getAppUserId(), getAppPkg());
+                List<NeighboringCellInfo> infos = new ArrayList<>();
                 if (cells != null) {
-                    List<NeighboringCellInfo> infos = new ArrayList<>();
                     for (VCell cell : cells) {
                         NeighboringCellInfo info = new NeighboringCellInfo();
                         mirror.android.telephony.NeighboringCellInfo.mLac.set(info, cell.lac);
@@ -121,8 +123,8 @@ class MethodProxies {
                         mirror.android.telephony.NeighboringCellInfo.mRssi.set(info, 6);
                         infos.add(info);
                     }
-                    return infos;
                 }
+                return infos;
             }
             return super.call(who, method, args);
         }

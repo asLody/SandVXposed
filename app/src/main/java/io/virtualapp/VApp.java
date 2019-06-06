@@ -2,13 +2,13 @@ package io.virtualapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.multidex.MultiDexApplication;
+import androidx.multidex.MultiDexApplication;
 
 import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.stub.VASettings;
 import com.lody.virtual.sandxposed.SandXposed;
-import com.trend.lazyinject.buildmap.Auto_ComponentBuildMap;
-import com.trend.lazyinject.lib.LazyInject;
+// import com.trend.lazyinject.buildmap.Auto_ComponentBuildMap;
+// import com.trend.lazyinject.lib.LazyInject;
 
 import io.virtualapp.delegate.MyAppRequestListener;
 import io.virtualapp.delegate.MyComponentDelegate;
@@ -46,7 +46,7 @@ public class VApp extends MultiDexApplication {
     public void onCreate() {
         gApp = this;
         super.onCreate();
-        lazyInjectInit();
+        // lazyInjectInit();
         VirtualCore virtualCore = VirtualCore.get();
         virtualCore.initialize(new VirtualCore.VirtualInitializer() {
 
@@ -84,9 +84,11 @@ public class VApp extends MultiDexApplication {
         return getApp().mPreferences;
     }
 
+    /*
     private void lazyInjectInit() {
         LazyInject.init(this);
         LazyInject.addBuildMap(Auto_ComponentBuildMap.class);
     }
+    */
 
 }

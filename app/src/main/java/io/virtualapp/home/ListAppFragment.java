@@ -1,14 +1,12 @@
 package io.virtualapp.home;
 
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.OrientationHelper;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+import androidx.annotation.Nullable;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.OrientationHelper;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +15,8 @@ import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Locale;
 
 import io.virtualapp.R;
-import io.virtualapp.VApp;
 import io.virtualapp.VCommends;
 import io.virtualapp.abs.ui.VFragment;
 import io.virtualapp.abs.ui.VUiKit;
@@ -118,7 +117,7 @@ public class ListAppFragment extends VFragment<ListAppContract.ListAppPresenter>
         mRecyclerView = (DragSelectRecyclerView) view.findViewById(R.id.select_app_recycler_view);
         mProgressBar = (ProgressBar) view.findViewById(R.id.select_app_progress_bar);
         mInstallButton = (Button) view.findViewById(R.id.select_app_install_btn);
-        android.support.design.widget.FloatingActionButton hButton = view.findViewById(R.id.buttonAddByPath);
+        FloatingActionButton hButton = view.findViewById(R.id.buttonAddByPath);
         Button hSearchButton = (Button) view.findViewById(R.id.search_app_m);
         if (Once.beenDone("enable_search_app"))
         {
