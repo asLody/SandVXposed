@@ -1,14 +1,13 @@
 package io.virtualapp.home.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Environment;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.lody.virtual.helper.utils.Reflect;
 

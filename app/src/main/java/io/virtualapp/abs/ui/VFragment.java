@@ -3,7 +3,7 @@ package io.virtualapp.abs.ui;
 import org.jdeferred.android.AndroidDeferredManager;
 
 import android.app.Activity;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 import io.virtualapp.abs.BasePresenter;
 
