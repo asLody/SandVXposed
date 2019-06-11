@@ -41,3 +41,7 @@ https://github.com/asLody/VirtualApp
 # Chinese
 
 [VirtualApp 源码分析](https://blog.csdn.net/ganyao939543405/article/details/76146760)
+
+# License
+
+注意！此项目由于使用了 VirtualApp 开源版，License 与 VirtualApp 相同，切勿用作商业用途，否则自负法律风险。
