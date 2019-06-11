@@ -3,6 +3,7 @@ package com.lody.virtual.sandxposed;
 import android.content.Context;
 import android.os.Process;
 
+import com.lody.virtual.helper.utils.VLog;
 import com.swift.sandhook.xposedcompat.utils.FileUtils;
 
 import java.io.File;
@@ -17,6 +18,7 @@ public class EnvironmentSetup {
 
 
     public static void init(Context context, String packageName, String processName) {
+        VLog.d("SandHook","Process attach: "+processName+" in package "+packageName);
         initSystemProp(context);
         initForSpecialApps(context, packageName);
     }
@@ -33,7 +35,8 @@ public class EnvironmentSetup {
             Arrays.asList("com.tencent",
                     "com.netease",
                     "com.eg.android.AlipayGphone",
-                    "com.taobao")
+                    "com.taobao",
+                    "com.tmall")
     );
     private static boolean is_HookCrash(String packageName)
     {

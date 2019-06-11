@@ -62,6 +62,7 @@ public class AppRepository implements AppDataSource {
         return VUiKit.defer().when(() -> {
             List<InstalledAppInfo> infos = VirtualCore.get().getInstalledApps(InstalledAppInfo.FLAG_EXCLUDE_XPOSED_MODULE);
             List<AppData> models = new ArrayList<>();
+            if(infos==null)return models;
             for (InstalledAppInfo info : infos) {
                 if (!VirtualCore.get().isPackageLaunchable(info.packageName)) {
                     continue;
