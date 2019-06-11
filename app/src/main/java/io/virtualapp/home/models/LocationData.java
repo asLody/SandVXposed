@@ -6,7 +6,8 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 
 import com.lody.virtual.remote.InstalledAppInfo;
-import com.lody.virtual.remote.vloc.VLocation;
+
+import sk.vpkg.location.SKLocation;
 
 /**
  * @see android.location.Location
@@ -17,7 +18,7 @@ public class LocationData {
     public String name;
     public Drawable icon;
     public int mode;
-    public VLocation location;
+    public SKLocation location;
 
     public LocationData() {
     }

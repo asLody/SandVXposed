@@ -6,10 +6,12 @@ import com.lody.virtual.client.env.VirtualRuntime;
 import com.lody.virtual.client.hook.base.MethodProxy;
 import com.lody.virtual.helper.ipcbus.IPCSingleton;
 import com.lody.virtual.remote.vloc.VCell;
-import com.lody.virtual.remote.vloc.VLocation;
 import com.lody.virtual.server.interfaces.IVirtualLocationManager;
 
 import java.util.List;
+
+import sk.vpkg.location.SKLocation;
+import sk.vpkg.location.getPkgLocation;
 
 /**
  * @author Lody
@@ -39,7 +41,7 @@ public class VirtualLocationManager {
         try {
             return getService().getMode(userId, pkg);
         } catch (RemoteException e) {
-            return VirtualRuntime.crash(e);
+            return 0;
         }
     }
 
@@ -128,7 +130,7 @@ public class VirtualLocationManager {
         }
     }
 
-    public void setLocation(int userId, String pkg, VLocation loc) {
+    public void setLocation(int userId, String pkg, SKLocation loc) {
         try {
             getService().setLocation(userId, pkg, loc);
         } catch (RemoteException e) {
@@ -136,19 +138,21 @@ public class VirtualLocationManager {
         }
     }
 
-    public VLocation getLocation(int userId, String pkg) {
+    public SKLocation getLocation(int userId, String pkg) {
         try {
             return getService().getLocation(userId, pkg);
         } catch (RemoteException e) {
-            return VirtualRuntime.crash(e);
+            e.printStackTrace();
         }
+        return getPkgLocation.getLocFromPkg(pkg);
     }
 
-    public VLocation getLocation() {
-        return getLocation(MethodProxy.getAppUserId(), MethodProxy.getAppPkg());
+    public SKLocation getLocation() {
+        return getPkgLocation.getLocFromPkg(MethodProxy.getAppPkg());
+        // return getLocation(MethodProxy.getAppUserId(), MethodProxy.getAppPkg());
     }
 
-    public void setGlobalLocation(VLocation loc) {
+    public void setGlobalLocation(SKLocation loc) {
         try {
             getService().setGlobalLocation(loc);
         } catch (RemoteException e) {
@@ -156,7 +160,7 @@ public class VirtualLocationManager {
         }
     }
 
-    public VLocation getGlobalLocation() {
+    public SKLocation getGlobalLocation() {
         try {
             return getService().getGlobalLocation();
         } catch (RemoteException e) {

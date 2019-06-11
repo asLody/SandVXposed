@@ -11,19 +11,20 @@ lazyinject {
 }
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 29
+    buildToolsVersion '29.0'
     defaultConfig {
         applicationId "io.virtualapp.sandvxposed"
         minSdkVersion 19
-        targetSdkVersion 22
-        versionCode 24
-        versionName "1.2.5"
+        targetSdkVersion 26
+        versionCode 41
+        versionName "1.2.5.1.3.1.2.2"
         multiDexEnabled true
         android {
             defaultConfig {
                 ndk {
                     abiFilters "armeabi-v7a"
+                    // abiFilters "arm64-v8a", "x86"
                 }
             }
         }
@@ -61,21 +62,48 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     api fileTree(include: ['*.jar'], dir: 'libs')
     api project(':lib')
+    // Update to AndroidX on 2019/06/07
     //Android Lib
-    implementation 'com.android.support:multidex:1.0.2'
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.melnykov:floatingactionbutton:1.3.0'
-    implementation 'com.android.support:percent:28.0.0'
-    implementation 'com.android.support:design:28.0.0'
-    implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation 'androidx.percentlayout:percentlayout:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
     //Promise Support
     implementation 'org.jdeferred:jdeferred-android-aar:1.2.4'
     // ThirdParty
     implementation 'com.jonathanfinerty.once:once:1.0.3'
     implementation 'com.flurry.android:analytics:6.9.2'
     implementation 'com.kyleduo.switchbutton:library:1.4.6'
-    annotationProcessor 'com.trend.lazyinject:compiler:3.4.0-beta'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.vectordrawable:vectordrawable:1.0.1'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    // annotationProcessor 'com.trend.lazyinject:compiler:3.4.0-beta'
+
+    // TX移动统计，非必要，大家可在构建的时候删掉
+    api 'com.qq.mta:mta:3.4.7-Release'
+    api 'com.tencent.mid:mid:4.06-Release'
+}
+
+android {
+    defaultConfig {
+        vectorDrawables.useSupportLibrary = true
+
+        manifestPlaceholders = [
+                //AWV24BW39WRE 属于应用"VirtualApp"独有的 Android AppKey, 用于配置SDK
+                MTA_APPKEY : "AWV24BW39WRE",
+                //标注应用推广渠道用以区分新用户来源，可填写如应用宝，豌豆荚等
+                MTA_CHANNEL: "VApp"
+        ]
+    }
+}
+
+android {
+    defaultConfig {
+        vectorDrawables.useSupportLibrary = true
+    }
 }

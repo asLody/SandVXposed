@@ -3,19 +3,21 @@ package com.lody.virtual.client.hook.proxies.location;
 import android.location.LocationManager;
 import android.location.LocationRequest;
 import android.os.Build;
+import android.widget.Toast;
 
+import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.hook.base.MethodProxy;
 import com.lody.virtual.client.hook.base.ReplaceLastPkgMethodProxy;
 import com.lody.virtual.client.ipc.VirtualLocationManager;
 import com.lody.virtual.helper.utils.ArrayUtils;
 import com.lody.virtual.helper.utils.Reflect;
-import com.lody.virtual.remote.vloc.VLocation;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
 import mirror.android.location.LocationRequestL;
+import sk.vpkg.location.SKLocation;
 
 /**
  * @author Lody
@@ -117,7 +119,7 @@ public class MethodProxies {
                 fixLocationRequest(request);
             }
             if (isFakeLocationEnable()) {
-                VLocation loc = VirtualLocationManager.get().getLocation();
+                SKLocation loc = VirtualLocationManager.get().getLocation();
                 if (loc != null) {
                     return loc.toSysLocation();
                 } else {
@@ -150,6 +152,11 @@ public class MethodProxies {
 
         @Override
         public Object call(Object who, Method method, Object... args) throws Throwable {
+            if (isFakeLocationEnable()) {
+                return Arrays.asList(
+                        LocationManager.GPS_PROVIDER
+                );
+            }
             return PROVIDERS;
         }
     }
@@ -254,6 +261,7 @@ public class MethodProxies {
 
         @Override
         public Object call(Object who, Method method, Object... args) throws Throwable {
+            // !IMPORTANT
             if (!isFakeLocationEnable()) {
                 return super.call(who, method, args);
             }

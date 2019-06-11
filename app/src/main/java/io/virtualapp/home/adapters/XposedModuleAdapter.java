@@ -1,9 +1,9 @@
 package io.virtualapp.home.adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lody.virtual.sandxposed.XposedConfig;
-import com.trend.lazyinject.annotation.InjectComponent;
 
 import java.util.List;
 
@@ -26,13 +25,16 @@ import io.virtualapp.home.repo.AppRepository;
 public class XposedModuleAdapter extends RecyclerView.Adapter<XposedModuleAdapter.ViewHolder> {
 
 
+    public XposedConfig config;
     private Context context;
     private LayoutInflater mInflater;
     private List<AppData> modules;
     private AppRepository repository;
 
+    /*
     @InjectComponent
     XposedConfig config;
+    */
 
     public XposedModuleAdapter(Context context, AppRepository repository, List<AppData> modules) {
         this.context = context;
@@ -78,7 +80,14 @@ public class XposedModuleAdapter extends RecyclerView.Adapter<XposedModuleAdapte
             icon.setImageDrawable(data.getIcon());
             title.setText(data.getName());
             version.setText(data.versionName());
-            enable.setChecked(config.moduleEnable(data.getPackageName()));
+            try
+            {
+                enable.setChecked(config.moduleEnable(data.getPackageName()));
+            }
+            catch(Throwable e)
+            {
+                e.printStackTrace();
+            }
             enable.setOnCheckedChangeListener((compoundButton, b) -> config.enableModule(data.getPackageName(), b));
             if (data.getXposedModule() != null) {
                 desc.setText(data.getXposedModule().desc);
@@ -113,8 +122,8 @@ public class XposedModuleAdapter extends RecyclerView.Adapter<XposedModuleAdapte
 
         boolean deleteModule(AppData data) {
             new AlertDialog.Builder(context)
-                    .setTitle("Delete Module")
-                    .setMessage("Do you want to delete " + data.getName() + "?")
+                    .setTitle("删除模块")
+                    .setMessage("您真的要删除 " + data.getName() + "?")
                     .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                         try {
                             if (data instanceof PackageAppData) {

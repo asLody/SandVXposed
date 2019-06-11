@@ -148,11 +148,11 @@ public class VAppManagerService implements IAppManager {
     public synchronized InstallResult installPackage(String path, int flags, boolean notify) {
         long installTime = System.currentTimeMillis();
         if (path == null) {
-            return InstallResult.makeFailure("path = NULL");
+            return InstallResult.makeFailure("路径为空！");
         }
         File packageFile = new File(path);
         if (!packageFile.exists() || !packageFile.isFile()) {
-            return InstallResult.makeFailure("Package File is not exist.");
+            return InstallResult.makeFailure("安装包不存在！");
         }
         VPackage pkg = null;
         try {
@@ -161,7 +161,7 @@ public class VAppManagerService implements IAppManager {
             e.printStackTrace();
         }
         if (pkg == null || pkg.packageName == null) {
-            return InstallResult.makeFailure("Unable to parse the package.");
+            return InstallResult.makeFailure("无法解析的应用软件。");
         }
         InstallResult res = new InstallResult();
         res.packageName = pkg.packageName;
@@ -174,7 +174,13 @@ public class VAppManagerService implements IAppManager {
                 return res;
             }
             if (!canUpdate(existOne, pkg, flags)) {
-                return InstallResult.makeFailure("Not allowed to update the package.");
+                try
+                {
+                    Log.w(TAG,"Update as same ver as installed package.");
+                }catch (Throwable e)
+                {
+                    e.printStackTrace();
+                }
             }
             res.isUpdate = true;
         }
@@ -186,7 +192,7 @@ public class VAppManagerService implements IAppManager {
             VActivityManagerService.get().killAppByPkg(pkg.packageName, VUserHandle.USER_ALL);
         }
         if (!libDir.exists() && !libDir.mkdirs()) {
-            return InstallResult.makeFailure("Unable to create lib dir.");
+            return InstallResult.makeFailure("无法创建库目录！");
         }
         boolean dependSystem = (flags & InstallStrategy.DEPEND_SYSTEM_IF_EXIST) != 0
                 && VirtualCore.get().isOutsideInstalled(pkg.packageName);
@@ -211,7 +217,7 @@ public class VAppManagerService implements IAppManager {
                 FileUtils.copyFile(packageFile, privatePackageFile);
             } catch (IOException e) {
                 privatePackageFile.delete();
-                return InstallResult.makeFailure("Unable to copy the package file.");
+                return InstallResult.makeFailure("无法复制安装包文件！");
             }
             packageFile = privatePackageFile;
         }

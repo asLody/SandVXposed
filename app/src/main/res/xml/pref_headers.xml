@@ -1,0 +1,53 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- These settings headers are only used on tablets. -->
+
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$GeneralPreferenceFragment"
+        android:title="@string/about" />
+
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$NotificationPreferenceFragment"
+        android:title="@string/enable_search_app" />
+
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$DataSyncPreferenceFragment"
+        android:title="@string/safe_mode" />
+
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$SKSettings"
+        android:title="@string/SK_Settings" />
+
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$SKsetAppLiving"
+        android:title="@string/prevent_killing" />
+
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$SKResstart"
+        android:title="@string/restartapp" />
+
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$SKAppFloatingWindowSetting"
+        android:title="@string/enable_floating_win" />
+
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$SKAppStorageRedirect"
+        android:title="@string/enable_storage_redirect" />
+
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$SKUpdateAppApps"
+        android:title="@string/onekey_update_app" />
+
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$SKUAppDataSetting"
+        android:title="@string/title_activity_app_data_manager" />
+
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$SKAppWakeUp"
+        android:title="@string/enable_wakeup" />
+
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$SKAppFullScreen"
+        android:title="@string/enable_full_screen" />
+
+</preference-headers>

@@ -20,8 +20,159 @@
     <string name="clone_apps">Clone Apps</string>
     <string name="external_storage">External Storage</string>
     <string name="install_d">Install (%d)</string>
-    <string name="install_too_much_once_time">No more then 9 apps can be chosen at a time!</string>
+    <string name="install_too_much_once_time">Not recommand more then 9 apps be chosen at a time!</string>
 
     <string name="enable_xposed">enable xposed</string>
     <string name="module_install_success">Xposed moudle %s install success!</string>
+    <string name="title_activity_setting">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data and Sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="list_preference_entries">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+    </string-array>
+
+    <string-array name="list_preference_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="multi_select_list_preference_default_value" />
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="SK_Settings">App Settings</string>
+    <string name="SK_Thecoming">Comming soon</string>
+    <string name="back">Back</string>
+    <string name="restartapp">Restart Application</string>
+    <string name="restartfinish">Restart can be done in 1 sec, is it miraculous?</string>
+    <string name="SKRestartTips">Please click settings -> Restart Application to enable or disable modules.</string>
+    <string name="ensurerestart">Wanna restart this application? Your changes must be saved or lost.</string>
+    <string name="manualpath">Install By Path Manually</string>
+    <string name="appInstallTip">Application is installing, take a while and swipe desktop for refresh.</string>
+    <string name="about_info">Special thanks for Gan!##SandVXP is a application that can let user use Xposed module on non-root and non-bootloader-unlock devices. Clone application into this app and xposed modules, then validate it in menu\'s xposed manager, and they will work.##QQ 384550791##E-Mail king@fou.ink##Website https://www.fou.ink/</string>
+    <string name="launch_failed">Launch app failed...</string>
+    <string name="sys_crash">Application may crash but catch by SKActivity.</string>
+    <string name="rom_shortcut_tips">We detected your device must accept permission manual. Please allow shortcut ceration permission in system settings. Allow this in Settings -> App Management -> Permission Management -> this application -> allow shortcut permission.</string>
+    <string name="app_powered_by">Powered by SandHook</string>
+    <string name="app_contributor">Yao Gan, Lixin Liang, Saurik</string>
+    <string name="software_license">Introduction of SandVXP Open Source Software Protocol  In order to effectively protect the transparency, purity, security and stability of the software used by users and the related rights and interests of the software enjoyed by users,  At the same time, it can better contribute to the sustainable development of domestic open source software. AMH official website drafted and formulated the following open source software protocol, named SandVXP open source software protocol.  SandVXP Open Source Software Agreement will strive to promote software transparency, open source innovation and development, advocate perfectionism, focus on quality, and call for respect for original copyright, promote adherence to the spirit of contract.  This software is produced for the organization, completely free and open source, has nothing to do with my company, and the software is used for non-profit.  The following protocols are abbreviated for use  Software Product Developer: Software Official  Software Product User: User  SandVXP Open Source Software Protocol Agreement  Software official Compliance Agreement  1) Prohibit the publication of closed source programs, all source program users can read.  2) Complete source code programs must be provided in any way, such as online downloads, CD-ROMs and disk copies.  3) Transparent source code programs must be provided, and obfuscation of source code programs by any reversible or irreversible means must be prohibited.  4) Prohibit any infringement, including software source code procedures, data documents, document information.  5) It is forbidden for software products to insert any advertising information, including text, image and media information, which is not related to the official software.  6) Prohibit any third-party plug-ins or components built into software products that are not related to the application of official software programs.  7) Prohibit any control program executed by remote response without user\'s permission.  8) SandVXP software does not bear any responsibility for the consequences of users\'use.  9) Please note that the software (and its source code) is not responsible for your security needs.  10) The original authors GanYao and Lixin Liang must be noted in the source code of this software. And the source of the software must be indicated.   User Compliance with Agreement  1) Users are prohibited from modifying any official copyright information of the software, including the description of the copyright agreement of the program, the official link of the software, the text description, the image logo and the media information.  2) It is forbidden for users to destroy or infringe upon the normal development and operation of the official software in any way, including the normal operation of the official software procedures and the commercial authorization mechanism.  Statement of Agreement Use and Entry into Force  Software authorities using the SandVXP Open Source Software Protocol need to annotate the use of the SandVXP Open Source Software Protocol and the accompanying protocol documentation in the source program annotations.  Since the user installs the software using SandVXP open source protocol, the protocol will take effect immediately.</string>
+    <string name="accept">Accept</string>
+    <string name="appchoose_tips">You can select files by this method. Click menu at right top and click \"Show Internal Storage\" at file explorer and do not choose third part file explorer or this method will failed.</string>
+    <string name="search">Search</string>
+    <string name="enable_search_app">Enable search app in app clone list.</string>
+    <string name="disable">Disable</string>
+    <string name="click_search_tips">Click search button left below this button for search. Swipe down for refreshing.</string>
+    <string name="safe_mode">Safe Mode Control</string>
+    <string name="safe_mode_tips">Disable this mode will bring risk such as trojan, malware etc. Make sure you can accept those risk and press disable button. You must know what risk you will undertake for.</string>
+    <string name="safe_mode_enforcing">Safe mode is enforcing. Please turn off safe mode in application settings.</string>
+    <string name="sk_failed">Failed</string>
+    <string name="unknown_package">Safe mode is enforcing, an unknown package was arrested by installer. Disable safe mode in app settings.</string>
+    <string name="still_safe">Make My Sandbox Safe!</string>
+    <string name="non_stop">Prevent process from killing. Press enable for lead you to system settings.</string>
+    <string name="title_activity_xapp_manager">SK AppManager</string>
+    <string name="title_home">App Detail</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">App Notifications</string>
+    <string name="delete_ok">Delete app finish. Swipe for refresh.</string>
+    <string name="refresh">Refresh View</string>
+    <string name="disable_notification">Disable/Enable Notification</string>
+    <string name="perm_need_notify">Need Notification Permission</string>
+    <string name="notify_disabled">Notification is already disabled.</string>
+    <string name="title_activity_install_pkg">SK Package Installer</string>
+    <string name="package_installer">Installing Package</string>
+    <string name="ensure_install">Do you wanna install this application? Click Without dependence to avoid crash after sysapp uninstall.</string>
+    <string name="install_success">Install %s Success!!!</string>
+    <string name="upgrade_success">Update %s Success!!!</string>
+    <string name="install_no_depend">Install Without Dependence</string>
+    <string name="enable_odex">Enable DEX2OAT</string>
+    <string name="ensure_odex">Are you sure to enable DEX2OAT? Enable this can speed up application, but modules cannot work anymore.</string>
+    <string name="enable_floating_win">Enable Floating Window</string>
+    <string name="ensure_enable_floating_win">Disable or enable floating window for this application. Enable this for prevent application from system killing.</string>
+    <string name="kill_app">Kill Process</string>
+    <string name="odex_failed">Some error occured, maybe application will crash on next launching. Uninstall it and reinstall it can fix.</string>
+    <string name="override_app">Override App</string>
+    <string name="ensure_override_app">Overlay this application with the versionly app you selected, clone this app with version same as sandbox installed  or abort?</string>
+    <string name="save_success_need_restart">Save success. You can validate it after restart all apps(Desktop - Menu[Button right top] - Resatrt all apps).</string>
+    <string name="enable_storage_redirect">Enable storage path redirect</string>
+    <string name="ensure_enable_storage_redirect">Some app may not work while you enable this options. This will redirect diretories that create by app in your TF card to \"skdir\" directory in root path of storage.</string>
+    <string name="open">Open</string>
+    <string name="enable_fakeloc_gps">Ues network method instead of GPS method.</string>
+    <string name="loc_latitude">Latitude</string>
+    <string name="loc_longitude">Longitude</string>
+    <string name="loc_speed">Current Speed</string>
+    <string name="choose_app">Choose Application</string>
+    <string name="about_vloc">This page lead you to set application\'s virtual location. For pickup latitude and longitude, press pick button. The longitude and latitude is same as (x,y).</string>
+    <string name="pick">Pickup</string>
+    <string name="rename">Rename</string>
+    <string name="prevent_killing">Prevent process from killing.</string>
+    <string name="title_activity_rename_app">RenameApp</string>
+    <string name="disable_xposed">Disable Xposed</string>
+    <string name="title_activity_update_exist_app">UpdateExistApp</string>
+    <string name="onekey_update_app">Update all cloned apps.</string>
+    <string name="sk_upgrade_localapp">All applications were added to list when page was loaded. You can click item in list for cancel item form syncing.</string>
+    <string name="title_activity_app_data_manager">Application Data Manager</string>
+    <string name="clear_data">Delete Data</string>
+    <string name="update_tips">Update Logs: Alipay login error fixed. Taobao Tmall crash fixed. Performance improvment.</string>
+    <string name="enable_wakeup">Application Wake Up</string>
+    <string name="wake_up_setting">Enable or disable application wake up</string>
+    <string name="shared_to_inner_app">Shared to SVXP\'s applications.</string>
+    <string name="user">User</string>
+    <string name="enable_full_screen">Enable full screen</string>
 </resources>

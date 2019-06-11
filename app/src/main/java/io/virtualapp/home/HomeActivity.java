@@ -5,32 +5,46 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.OrientationHelper;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import androidx.annotation.Nullable;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.OrientationHelper;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lody.virtual.GmsSupport;
+import com.lody.virtual.client.core.RomChecker;
+import com.lody.virtual.client.ipc.VActivityManager;
 import com.lody.virtual.client.stub.ChooseTypeAndAccountActivity;
 import com.lody.virtual.os.VUserInfo;
 import com.lody.virtual.os.VUserManager;
+import com.sk.app.RenameApp;
+import com.sk.fwindow.skFloattingWin;
+import com.sk.verify.msVerify;
+import com.sk.vloc.VLocSetting;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import io.virtualapp.R;
@@ -40,22 +54,27 @@ import io.virtualapp.abs.ui.VActivity;
 import io.virtualapp.abs.ui.VUiKit;
 import io.virtualapp.home.adapters.LaunchpadAdapter;
 import io.virtualapp.home.adapters.decorations.ItemOffsetDecoration;
-import io.virtualapp.home.location.VirtualLocationSettings;
 import io.virtualapp.home.models.AddAppButton;
 import io.virtualapp.home.models.AppData;
 import io.virtualapp.home.models.AppInfoLite;
 import io.virtualapp.home.models.EmptyAppData;
 import io.virtualapp.home.models.MultiplePackageAppData;
 import io.virtualapp.home.models.PackageAppData;
+import io.virtualapp.home.models.safePackage;
+import io.virtualapp.home.repo.XAppDataInstalled;
 import io.virtualapp.widgets.TwoGearsView;
+import jonathanfinerty.once.Once;
+import sk.vpkg.provider.BanNotificationProvider;
+import sk.vpkg.sign.SKPackageGuard;
 
-import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_DRAG;
-import static android.support.v7.widget.helper.ItemTouchHelper.DOWN;
-import static android.support.v7.widget.helper.ItemTouchHelper.END;
-import static android.support.v7.widget.helper.ItemTouchHelper.LEFT;
-import static android.support.v7.widget.helper.ItemTouchHelper.RIGHT;
-import static android.support.v7.widget.helper.ItemTouchHelper.START;
-import static android.support.v7.widget.helper.ItemTouchHelper.UP;
+import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG;
+import static androidx.recyclerview.widget.ItemTouchHelper.DOWN;
+import static androidx.recyclerview.widget.ItemTouchHelper.END;
+import static androidx.recyclerview.widget.ItemTouchHelper.LEFT;
+import static androidx.recyclerview.widget.ItemTouchHelper.RIGHT;
+import static androidx.recyclerview.widget.ItemTouchHelper.START;
+import static androidx.recyclerview.widget.ItemTouchHelper.UP;
+import static com.sk.verify.msVerify.chkIsCotainsMyQQ;
 
 /**
  * @author Lody
@@ -70,12 +89,16 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
     private View mMenuView;
     private PopupMenu mPopupMenu;
     private View mBottomArea;
+    private View mRenameArea;
     private View mCreateShortcutBox;
     private TextView mCreateShortcutTextView;
+    private TextView mRenameTextView;
     private View mDeleteAppBox;
     private TextView mDeleteAppTextView;
     private LaunchpadAdapter mLaunchpadAdapter;
     private Handler mUiHandler;
+    private SearchView mSearchView;
+    private List<AppData> listAppData;
 
 
     public static void goHome(Context context) {
@@ -86,37 +109,75 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
     }
 
     @Override
+    protected void onResume()
+    {
+        super.onResume();
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         overridePendingTransition(0, 0);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         mUiHandler = new Handler(Looper.getMainLooper());
-        bindViews();
+        try
+        {
+            bindViews();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            finish();
+        }
         initLaunchpad();
         initMenu();
+        hHomeAct=this;
         new HomePresenterImpl(this).start();
+
+        if (!Once.beenDone("user_license")) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.about)
+                    .setMessage(R.string.software_license)
+                    .setCancelable(false)
+                    .setNegativeButton(R.string.back, (dialog, which) -> finish())
+                    .setPositiveButton(R.string.accept, (dialog, which) ->
+                            Once.markDone("user_license"))
+                    .create().show();
+        }
     }
 
     private void initMenu() {
+        Log.d(TAG, "SKKEY:"+SKPackageGuard.getSignature(this));
+
         mPopupMenu = new PopupMenu(new ContextThemeWrapper(this, R.style.Theme_AppCompat_Light), mMenuView);
         Menu menu = mPopupMenu.getMenu();
         setIconEnable(menu, true);
-        menu.add("Xposed Manager").setIcon(R.drawable.ic_xposed).setOnMenuItemClickListener(item -> {
+        menu.add("Xposed管理器").setIcon(R.drawable.ic_xposed).setOnMenuItemClickListener(item -> {
             startActivity(new Intent(this, XposedManagerActivity.class));
             return false;
         });
-        menu.add("Accounts").setIcon(R.drawable.ic_account).setOnMenuItemClickListener(item -> {
-            List<VUserInfo> users = VUserManager.get().getUsers();
-            List<String> names = new ArrayList<>(users.size());
-            for (VUserInfo info : users) {
-                names.add(info.name);
+        menu.add("账户").setIcon(R.drawable.ic_account).setOnMenuItemClickListener(item -> {
+            List<String> names;
+            List<VUserInfo> users;
+            try
+            {
+                users = VUserManager.get().getUsers();
+                names = new ArrayList<>(users.size());
+                for (VUserInfo info : users)
+                {
+                    names.add(info.name);
+                }
+            }
+            catch(Throwable e)
+            {
+                e.printStackTrace();
+                return false;
             }
             CharSequence[] items = new CharSequence[names.size()];
             for (int i = 0; i < names.size(); i++) {
                 items[i] = names.get(i);
             }
             new AlertDialog.Builder(this)
-                    .setTitle("Please select an user")
+                    .setTitle("请选择一个用户")
                     .setItems(items, (dialog, which) -> {
                         VUserInfo info = users.get(which);
                         Intent intent = new Intent(this, ChooseTypeAndAccountActivity.class);
@@ -125,22 +186,45 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                     }).show();
             return false;
         });
-        menu.add("Virtual Storage").setIcon(R.drawable.ic_vs).setOnMenuItemClickListener(item -> {
+        /*
+        // 去掉没用的项目防止卡顿
+        menu.add("虚拟存储").setIcon(R.drawable.ic_vs).setOnMenuItemClickListener(item -> {
             Toast.makeText(this, "The coming", Toast.LENGTH_SHORT).show();
             return false;
         });
-        menu.add("Notification").setIcon(R.drawable.ic_notification).setOnMenuItemClickListener(item -> {
+        menu.add("通知管理").setIcon(R.drawable.ic_notification).setOnMenuItemClickListener(item -> {
             Toast.makeText(this, "The coming", Toast.LENGTH_SHORT).show();
             return false;
         });
-        menu.add("Virtual Location").setIcon(R.drawable.ic_notification).setOnMenuItemClickListener(item -> {
-            startActivity(new Intent(this, VirtualLocationSettings.class));
+        */
+        menu.add("虚拟位置").setIcon(R.drawable.ic_notification).setOnMenuItemClickListener(item -> {
+            // startActivity(new Intent(this, VirtualLocationSettings.class));
+            startActivity(new Intent(this, VLocSetting.class));
             return true;
         });
-        menu.add("Settings").setIcon(R.drawable.ic_settings).setOnMenuItemClickListener(item -> {
-            Toast.makeText(this, "The coming", Toast.LENGTH_SHORT).show();
+        menu.add("设置").setIcon(R.drawable.ic_settings).setOnMenuItemClickListener(item -> {
+            startActivity(new Intent(this, SettingAct.class));
             return false;
         });
+        menu.add(R.string.restartapp).setIcon(R.drawable.ic_settings).setOnMenuItemClickListener(item -> {
+            AlertDialog.Builder hBuilder = new AlertDialog.Builder(HomeActivity.this);
+            hBuilder.setTitle(R.string.restartapp).setMessage(R.string.ensurerestart);
+            hBuilder.
+                    setNegativeButton("×", (dialog, which) ->
+                    {
+                        // 不做任何事情
+                        return;
+                    }) .
+                    setPositiveButton("√", (dialog, which) ->
+                    {
+                        VActivityManager.get().killAllApps();
+                        Toast.makeText(this,R.string.restartfinish,Toast.LENGTH_LONG).show();
+                    });
+            hBuilder.setCancelable(false).create().show();
+            return false;
+        });
+        if(!(new msVerify().chkSign(getResources().getString(R.string.about_info))))
+            finish();
         mMenuView.setOnClickListener(v -> mPopupMenu.show());
     }
 
@@ -155,15 +239,22 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         }
     }
 
-    private void bindViews() {
+    private void bindViews() throws Exception {
         mLoadingView = (TwoGearsView) findViewById(R.id.pb_loading_app);
         mLauncherView = (RecyclerView) findViewById(R.id.home_launcher);
         mMenuView = findViewById(R.id.home_menu);
         mBottomArea = findViewById(R.id.bottom_area);
+        mRenameArea = findViewById(R.id.rename_area);
         mCreateShortcutBox = findViewById(R.id.create_shortcut_area);
         mCreateShortcutTextView = (TextView) findViewById(R.id.create_shortcut_text);
+        mRenameTextView = (TextView) findViewById(R.id.rename_app_text);
         mDeleteAppBox = findViewById(R.id.delete_app_area);
         mDeleteAppTextView = (TextView) findViewById(R.id.delete_app_text);
+        // 搜索
+        mSearchView = (SearchView) findViewById(R.id.homeSearchApp);
+
+        if(!chkIsCotainsMyQQ(getResources().getString(R.string.about_info)))
+            throw new Exception("Invalid Package");
     }
 
     private void initLaunchpad() {
@@ -188,6 +279,81 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                 mPresenter.launchApp(data);
             }
         });
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+        {
+            @Override
+            public boolean onQueryTextSubmit(String query)
+            {
+                try
+                {
+                    if (listAppData == null) return false;
+                    if (listAppData.isEmpty()) return false;
+                    Iterator<AppData> lpAppData = listAppData.iterator();
+                    while (lpAppData.hasNext())
+                    {
+                        AppData lpData = lpAppData.next();
+                        if (!lpData.getName().contains(query))
+                            lpAppData.remove();
+                    }
+                    mLaunchpadAdapter.setList(listAppData);
+                }
+                catch (Throwable e)
+                {
+                    e.printStackTrace();
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText)
+            {
+                try
+                {
+                    if (listAppData == null)
+                    {
+                        listAppData = mLaunchpadAdapter.getList();
+                    }
+                    if (newText.isEmpty())
+                    {
+                        if (listAppData != null)
+                        {
+                            new HomePresenterImpl(HomeActivity.this).start();
+                            listAppData = null;
+                        }
+                    }
+                }
+                catch(Throwable e)
+                {
+                    e.printStackTrace();
+                }
+                return false;
+            }
+        });
+        SwipeRefreshLayout hRefreshControl = findViewById(R.id.swipeRefreshDesktop_HomeAct);
+        hRefreshControl.setOnRefreshListener(() ->
+        {
+            RefreshDesktop();
+            ((SwipeRefreshLayout)findViewById(R.id.swipeRefreshDesktop_HomeAct))
+                    .setRefreshing(false);
+        });
+        if (Once.beenDone("enable_floating_win"))
+        {
+            startService(new Intent
+                    (this, skFloattingWin.class));
+        }
+    }
+
+    public void RefreshDesktop()
+    {
+        new HomePresenterImpl(HomeActivity.this).start();
+        listAppData = null;
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        HomeActivity.hHomeAct=null;
     }
 
     private void onAddAppButtonClick() {
@@ -197,8 +363,8 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
     private void deleteApp(int position) {
         AppData data = mLaunchpadAdapter.getList().get(position);
         new AlertDialog.Builder(this)
-                .setTitle("Delete app")
-                .setMessage("Do you want to delete " + data.getName() + "?")
+                .setTitle("删除应用")
+                .setMessage("您真的要删除 " + data.getName() + "?")
                 .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                     mPresenter.deleteApp(data);
                 })
@@ -207,6 +373,29 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
     }
 
     private void createShortcut(int position) {
+        try
+        {
+            boolean bIsEMUI = RomChecker.isEmui();
+            if (bIsEMUI)
+            {
+                if (!Once.beenDone("emui_shortcut_perm"))
+                {
+                    AlertDialog.Builder hDialog = new AlertDialog.Builder(HomeActivity.hHomeAct);
+                    // 消极
+                    hDialog.setNegativeButton("知道了", (dialog, which) ->
+                            {
+                                Once.markDone("emui_shortcut_perm");
+                                Toast.makeText(HomeActivity.hHomeAct, "记得允许权限哦~", Toast.LENGTH_SHORT).show();
+                            });
+                    hDialog.setMessage(R.string.rom_shortcut_tips);
+                    hDialog.setTitle(R.string.create_shortcut).setCancelable(false);
+                    hDialog.create().show();
+                }
+            }
+        }catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
         AppData model = mLaunchpadAdapter.getList().get(position);
         if (model instanceof PackageAppData || model instanceof MultiplePackageAppData) {
             mPresenter.createShortcut(model);
@@ -223,6 +412,9 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         mBottomArea.setTranslationY(mBottomArea.getHeight());
         mBottomArea.setVisibility(View.VISIBLE);
         mBottomArea.animate().translationY(0).setDuration(500L).start();
+        mRenameArea.setTranslationY(mBottomArea.getHeight());
+        mRenameArea.setVisibility(View.VISIBLE);
+        mRenameArea.animate().translationY(0).setDuration(500L).start();
     }
 
     @Override
@@ -252,6 +444,31 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         });
         transAnim.setDuration(500L);
         transAnim.start();
+        mRenameArea.setTranslationY(0);
+        ObjectAnimator transAnim2 = ObjectAnimator.ofFloat(mRenameArea, "translationY", 0, mRenameArea.getHeight());
+        transAnim2.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                mRenameArea.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+                mRenameArea.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        transAnim2.setDuration(500L);
+        transAnim2.start();
     }
 
     @Override
@@ -316,29 +533,133 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
     @Override
     public void askInstallGms() {
         new AlertDialog.Builder(this)
-                .setTitle("Hi")
-                .setMessage("We found that your device has been installed the Google service, whether you need to install them?")
-                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                    defer().when(() -> {
-                        GmsSupport.installGApps(0);
-                    }).done((res) -> {
-                        mPresenter.dataChanged();
-                    });
-                })
+                .setTitle("欢迎使用")
+                .setMessage("你好，我们在您的手机上查找到了谷歌服务，需要将谷歌服务添加到本应用当中吗？")
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> defer().when(
+                        () ->
+                        GmsSupport.installGApps(0)
+                ).done((res) -> mPresenter.dataChanged()))
                 .setNegativeButton(android.R.string.cancel, (dialog, which) ->
-                        Toast.makeText(HomeActivity.this, "You can also find it in the Settings~", Toast.LENGTH_LONG).show())
+                        Toast.makeText(HomeActivity.this,
+                                "以后您也可以在设置里面添加谷歌服务。", Toast.LENGTH_LONG).show())
                 .setCancelable(false)
                 .show();
+    }
+
+    public static int packageCode(Context context)
+    {
+        PackageManager manager = context.getPackageManager();
+        int code = 0;
+        try {
+            PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
+            code = info.versionCode;
+        }
+        catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return code;
+    }
+
+    @Override
+    public void showUpdateTips()
+    {
+        String szVersion = BanNotificationProvider.getString(this,"mVersion");
+        boolean showTip = false;
+        String currentVersion = String.valueOf(packageCode(this));
+        if(szVersion!=null)
+        {
+            if(!currentVersion.equals(szVersion))
+            {
+                showTip = true;
+                BanNotificationProvider.remove(this,"mVersion");
+                BanNotificationProvider
+                        .save(this,"mVersion",currentVersion);
+            }
+        }
+        else
+        {
+            showTip = true;
+            BanNotificationProvider
+                    .save(this,"mVersion",currentVersion);
+        }
+        if(showTip)
+        {
+            AlertDialog.Builder hBuilder = new AlertDialog.Builder(this);
+            hBuilder.setMessage(R.string.update_tips);
+            hBuilder.setTitle(R.string.app_name);
+            hBuilder.setIcon(R.drawable.ic_xposed);
+            hBuilder.setPositiveButton(R.string.accept, (dialog, which) ->
+            {
+                try{dialog.dismiss();}catch (Throwable e)
+                {
+                    e.printStackTrace();
+                }
+            });
+            hBuilder.create().show();
+        }
+    }
+
+    static public HomeActivity hHomeAct = null;
+    static public String strPkgName = "";
+    public void InstallAppByPath(String szAppPath) throws Exception
+    {
+        Intent xdata;
+        File tempFile;
+        try
+        {
+            ArrayList<AppInfoLite> dataList = new ArrayList<AppInfoLite>(1);
+            tempFile = new File(szAppPath.trim());
+            dataList.add(new AppInfoLite(tempFile.getName(), szAppPath.trim(), true));
+            xdata = new Intent();
+            xdata.putParcelableArrayListExtra(VCommends.EXTRA_APP_INFO_LIST, dataList);
+            strPkgName=tempFile.getName();
+        }
+        catch(Throwable e)
+        {
+            e.printStackTrace();
+            return;
+        }
+        try
+        {
+            onActivityResult(1,RESULT_OK,xdata);
+        }
+        catch(Throwable e)
+        {
+            e.printStackTrace();
+        }
+        XAppDataInstalled hInstalled = new XAppDataInstalled();
+        hInstalled.pkgName=tempFile.getName();
+        addAppToLauncher(hInstalled);
+        Toast.makeText(HomeActivity.this,R.string.appInstallTip,Toast.LENGTH_LONG)
+                .show();
+
+        if(!chkIsCotainsMyQQ(getResources().getString(R.string.about_info)))
+            throw new Exception("Invalid Package");
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && data != null) {
+            List<String> pkg_Det = Arrays.asList(safePackage.safe_Package);
             List<AppInfoLite> appList = data.getParcelableArrayListExtra(VCommends.EXTRA_APP_INFO_LIST);
             if (appList != null) {
                 for (AppInfoLite info : appList) {
-                    mPresenter.addApp(info);
+                    if (!Once.beenDone("disable_safe_mode")&&!pkg_Det.contains(info.packageName))
+                    {
+                        android.app.AlertDialog.Builder hBuilder
+                                = new android.app.AlertDialog.Builder(HomeActivity.this);
+                        hBuilder.setTitle(R.string.sk_failed)
+                                .setMessage(R.string.unknown_package)
+                                .setCancelable(false);
+                        hBuilder.setPositiveButton(R.string.back, (dialog, which) ->
+                                Toast.makeText(HomeActivity.this,R.string.launch_failed,Toast.LENGTH_SHORT)
+                                        .show())
+                                .create().show();
+                        break;
+                    }
+                    else
+                        mPresenter.addApp(info);
                 }
             }
         }
@@ -349,6 +670,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         int[] location = new int[2];
         boolean upAtDeleteAppArea;
         boolean upAtCreateShortcutArea;
+        boolean upAtRenameArea = false;
         RecyclerView.ViewHolder dragHolder;
 
         LauncherTouchCallback() {
@@ -377,7 +699,13 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
             int pos = viewHolder.getAdapterPosition();
             int targetPos = target.getAdapterPosition();
-            mLaunchpadAdapter.moveItem(pos, targetPos);
+            try
+            {
+                mLaunchpadAdapter.moveItem(pos, targetPos);
+            }catch (Throwable e)
+            {
+                e.printStackTrace();
+            }
             return true;
         }
 
@@ -410,7 +738,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
 
         @Override
         public boolean canDropOver(RecyclerView recyclerView, RecyclerView.ViewHolder current, RecyclerView.ViewHolder target) {
-            if (upAtCreateShortcutArea || upAtDeleteAppArea) {
+            if (upAtCreateShortcutArea || upAtDeleteAppArea || upAtRenameArea) {
                 return false;
             }
             try {
@@ -438,6 +766,24 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                         createShortcut(viewHolder.getAdapterPosition());
                     } else if (upAtDeleteAppArea) {
                         deleteApp(viewHolder.getAdapterPosition());
+                    }
+                    else if(upAtRenameArea)
+                    {
+                        try
+                        {
+                            Intent hIntent = new Intent(
+                                    HomeActivity.this, RenameApp.class);
+                            AppData appData = mLaunchpadAdapter.getList().get(viewHolder.getAdapterPosition());
+                            int userId = 0;
+                            if (appData instanceof MultiplePackageAppData)
+                                userId=((MultiplePackageAppData) appData).userId;
+                            String lpStr[] = {appData.getPackageName(),String.valueOf(userId)};
+                            hIntent.putExtra("appInfo", lpStr);
+                            startActivity(hIntent);
+                        }catch (Throwable e)
+                        {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 dragHolder = null;
@@ -468,19 +814,35 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                 if (x < deleteAppAreaStartX) {
                     upAtCreateShortcutArea = true;
                     upAtDeleteAppArea = false;
+                    upAtRenameArea = false;
                     mCreateShortcutTextView.setTextColor(Color.parseColor("#0099cc"));
                     mDeleteAppTextView.setTextColor(Color.WHITE);
+                    mRenameTextView.setTextColor(Color.WHITE);
                 } else {
                     upAtDeleteAppArea = true;
                     upAtCreateShortcutArea = false;
+                    upAtRenameArea = false;
                     mDeleteAppTextView.setTextColor(Color.parseColor("#0099cc"));
                     mCreateShortcutTextView.setTextColor(Color.WHITE);
+                    mRenameTextView.setTextColor(Color.WHITE);
                 }
-            } else {
-                upAtCreateShortcutArea = false;
-                upAtDeleteAppArea = false;
+            } else if(y >= baseLine - mRenameArea.getHeight())
+            {
+                // TODO: 优化一下位置，要不然那个位置太难被触及了。
+                mRenameTextView.setTextColor(Color.parseColor("#0099cc"));
                 mDeleteAppTextView.setTextColor(Color.WHITE);
                 mCreateShortcutTextView.setTextColor(Color.WHITE);
+                upAtRenameArea = true;
+                upAtCreateShortcutArea = false;
+                upAtDeleteAppArea = false;
+            }
+            else{
+                upAtCreateShortcutArea = false;
+                upAtDeleteAppArea = false;
+                upAtRenameArea = false;
+                mDeleteAppTextView.setTextColor(Color.WHITE);
+                mCreateShortcutTextView.setTextColor(Color.WHITE);
+                mRenameTextView.setTextColor(Color.WHITE);
             }
         }
     }

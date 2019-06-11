@@ -5,9 +5,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lody.virtual.helper.utils.VLog;
-import com.lody.virtual.remote.vloc.VLocation;
 import com.tencent.lbssearch.TencentSearch;
 import com.tencent.lbssearch.httpresponse.BaseObject;
 import com.tencent.lbssearch.httpresponse.HttpResponseListener;
@@ -34,8 +32,9 @@ import com.tencent.tencentmap.mapsdk.map.CameraUpdateFactory;
 import com.tencent.tencentmap.mapsdk.map.MapView;
 import com.tencent.tencentmap.mapsdk.map.TencentMap;
 
-import io.virtualapp.abs.ui.VActivity;
 import io.virtualapp.R;
+import io.virtualapp.abs.ui.VActivity;
+import sk.vpkg.location.SKLocation;
 
 public class MarkerActivity extends VActivity implements TencentMap.OnMapClickListener, TencentLocationListener {
     private TencentMap mMap;
@@ -45,38 +44,48 @@ public class MarkerActivity extends VActivity implements TencentMap.OnMapClickLi
     private TencentSearch geocoderSearch;
     private String mAddress;
     private boolean isNoPoint = true;
-    private VLocation mVLocation;
+    private SKLocation mVLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_marker);
-        setResult(Activity.RESULT_CANCELED);
-        Toolbar toolbar = bind(R.id.task_top_toolbar);
-        setSupportActionBar(toolbar);
-        //地址显示，暂时不用
-        pathText = bind(R.id.address);
-        pathText.setVisibility(View.VISIBLE);
-        enableBackHome();
-        mapView = (MapView) findViewById(R.id.map);
-        mapView.onCreate(savedInstanceState); // 此方法必须重写
-        mMap = mapView.getMap();
-        mMap.setOnMapClickListener(this);
-        geocoderSearch = new TencentSearch(this);
-        //
-        Intent data = getIntent();
-        if (data != null) {
-            mVLocation = data.getParcelableExtra(EXTRA_LOCATION);
-            if (mVLocation != null && mVLocation.latitude != 0 && mVLocation.longitude != 0) {
-                mLatLng = new LatLng(mVLocation.latitude, mVLocation.longitude);
-                isNoPoint = false;
+        try
+        {
+            setContentView(R.layout.activity_marker);
+            setResult(Activity.RESULT_CANCELED);
+            Toolbar toolbar = bind(R.id.task_top_toolbar);
+            setSupportActionBar(toolbar);
+            //地址显示，暂时不用
+            pathText = bind(R.id.address);
+            pathText.setVisibility(View.VISIBLE);
+            enableBackHome();
+            mapView = (MapView) findViewById(R.id.map);
+            mapView.onCreate(savedInstanceState); // 此方法必须重写
+            mMap = mapView.getMap();
+            mMap.setOnMapClickListener(this);
+            geocoderSearch = new TencentSearch(this);
+            //
+            Intent data = getIntent();
+            if (data != null)
+            {
+                mVLocation = data.getParcelableExtra(EXTRA_LOCATION);
+                if (mVLocation != null && mVLocation.latitude != 0 && mVLocation.longitude != 0)
+                {
+                    mLatLng = new LatLng(mVLocation.latitude, mVLocation.longitude);
+                    isNoPoint = false;
+                }
             }
-        }
 
-        if (isNoPoint) {
-            startLocation();
-        } else {
-            onMapClick(mLatLng);
+            if (isNoPoint)
+            {
+                startLocation();
+            } else
+            {
+                onMapClick(mLatLng);
+            }
+        }catch(Throwable e)
+        {
+            e.printStackTrace();
         }
     }
 
@@ -122,7 +131,13 @@ public class MarkerActivity extends VActivity implements TencentMap.OnMapClickLi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.marktet_map, menu);
+        try
+        {
+            getMenuInflater().inflate(R.menu.marktet_map, menu);
+        }catch(Throwable e)
+        {
+            e.printStackTrace();
+        }
         return true;
     }
 
@@ -153,13 +168,13 @@ public class MarkerActivity extends VActivity implements TencentMap.OnMapClickLi
                 if (mLatLng != null) {
                     /**
                      * TODO edit info
-                     * @see com.lody.virtual.remote.vloc.VLocation#altitude
-                     * @see com.lody.virtual.remote.vloc.VLocation#accuracy
-                     * @see com.lody.virtual.remote.vloc.VLocation#speed
-                     * @see com.lody.virtual.remote.vloc.VLocation#bearing
+                     * @see com.lody.virtual.remote.vloc.SKLocation#altitude
+                     * @see com.lody.virtual.remote.vloc.SKLocation#accuracy
+                     * @see com.lody.virtual.remote.vloc.SKLocation#speed
+                     * @see com.lody.virtual.remote.vloc.SKLocation#bearing
                      */
                     if (mVLocation == null) {
-                        mVLocation = new VLocation();
+                        mVLocation = new SKLocation();
                         mVLocation.accuracy = 50;
                     }
                     mVLocation.latitude = mLatLng.getLatitude();
@@ -198,12 +213,25 @@ public class MarkerActivity extends VActivity implements TencentMap.OnMapClickLi
                     pathText.setText(oj.result.address);
                     mAddress = oj.result.address;
                 }
-                dialog.dismiss();
+                try
+                {
+                    dialog.dismiss();
+                }catch (Throwable e)
+                {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFailure(int i, String s, Throwable throwable) {
-                dialog.dismiss();
+                try
+                {
+                    dialog.dismiss();
+                }
+                catch (Throwable e)
+                {
+                    e.printStackTrace();
+                }
                 pathText.setText("error:" + s);
             }
         });
@@ -246,7 +274,7 @@ public class MarkerActivity extends VActivity implements TencentMap.OnMapClickLi
     }
 
 
-    private void setResultOk(VLocation location) {
+    private void setResultOk(SKLocation location) {
         Intent intent = new Intent();
         intent.putExtra(EXTRA_LOCATION, location);
         setResult(Activity.RESULT_OK, intent);

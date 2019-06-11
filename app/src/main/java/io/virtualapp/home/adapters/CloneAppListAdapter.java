@@ -1,8 +1,8 @@
 package io.virtualapp.home.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,7 +112,21 @@ public class CloneAppListAdapter extends DragSelectRecyclerViewAdapter<CloneAppL
     }
 
     public AppInfo getItem(int index) {
-        return mAppList.get(index);
+        try
+        {
+            return mAppList.get(index);
+        }
+        catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
+        AppInfo theRet = new AppInfo();
+        theRet.name= "Unknown";
+        theRet.cloneCount = 0;
+        theRet.fastOpen = false;
+        theRet.packageName = "Unknown";
+        theRet.path = "Unknown";
+        return theRet;
     }
 
     public interface ItemEventListener {

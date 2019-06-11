@@ -3,8 +3,7 @@ package io.virtualapp.home.location;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.util.Log;
+import androidx.annotation.Nullable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -13,7 +12,6 @@ import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.ipc.VirtualLocationManager;
 import com.lody.virtual.helper.utils.VLog;
 import com.lody.virtual.remote.InstalledAppInfo;
-import com.lody.virtual.remote.vloc.VLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +22,7 @@ import io.virtualapp.abs.ui.VUiKit;
 import io.virtualapp.home.adapters.AppLocationAdapter;
 import io.virtualapp.home.models.LocationData;
 import io.virtualapp.home.repo.AppRepository;
+import sk.vpkg.location.SKLocation;
 
 import static io.virtualapp.home.location.MarkerActivity.EXTRA_LOCATION;
 
@@ -100,7 +99,7 @@ public class VirtualLocationSettings extends VActivity implements AdapterView.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUSET_CODE) {
             if (resultCode == RESULT_OK) {
-                VLocation location = data.getParcelableExtra(EXTRA_LOCATION);
+                SKLocation location = data.getParcelableExtra(EXTRA_LOCATION);
                 if (mSelectData != null) {
                     mSelectData.location = location;
                     VLog.i("kk", "set" + mSelectData);

@@ -46,7 +46,6 @@ public class AutoFillManagerStub extends BinderInvocationProxy {
             Log.e(TAG, "AutoFillManagerStub inject error.", tr);
             return;
         }
-
         addMethodProxy(new ReplacePkgAndComponentProxy("startSession"));
         addMethodProxy(new ReplacePkgAndComponentProxy("updateOrRestartSession"));
         addMethodProxy(new ReplaceLastPkgMethodProxy("isServiceEnabled"));

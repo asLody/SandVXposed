@@ -11,7 +11,9 @@ import java.util.Set;
  */
 public class VLog {
 
-	public static boolean OPEN_LOG = true;
+	// 可以手动选择开启或者禁用日志等等。。。
+
+	public static boolean OPEN_LOG = false;
 
 	public static void i(String tag, String msg, Object... format) {
 		if (OPEN_LOG) {

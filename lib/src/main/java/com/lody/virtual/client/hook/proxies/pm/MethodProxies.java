@@ -268,7 +268,11 @@ class MethodProxies {
                         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                             switch (method.getName()) {
                                 case "createSession": {
-                                    SessionParams params = SessionParams.create((PackageInstaller.SessionParams) args[0]);
+                                    SessionParams params = null;
+                                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
+                                    {
+                                        params = SessionParams.create((PackageInstaller.SessionParams) args[0]);
+                                    }
                                     String installerPackageName = (String) args[1];
                                     return vInstaller.createSession(params, installerPackageName, VUserHandle.myUserId());
                                 }

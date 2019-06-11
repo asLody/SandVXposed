@@ -6,12 +6,17 @@
     android:layout_height="match_parent">
 
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/swipeRefreshInstalled">
     <io.virtualapp.widgets.DragSelectRecyclerView
         android:id="@+id/select_app_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
         app:dsrv_autoScrollEnabled="false" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <ProgressBar
         android:id="@+id/select_app_progress_bar"
@@ -29,4 +34,32 @@
         android:text="Install to SandBox (1)"
         android:textSize="17sp"
         tools:ignore="HardcodedText" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/buttonAddByPath"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_add"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="128dp"
+        />
+
+    <Button
+        android:id="@+id/search_app_m"
+        style="@android:style/Widget.Holo.Light.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#33B5E5"
+        android:paddingLeft="20px"
+        android:paddingRight="20px"
+        android:visibility="invisible"
+        android:text="@string/search" />
+
+    <SearchView
+        android:id="@+id/search_box_vi"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dip"/>
 </FrameLayout>

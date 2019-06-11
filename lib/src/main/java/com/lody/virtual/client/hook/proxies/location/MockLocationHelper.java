@@ -1,11 +1,8 @@
 package com.lody.virtual.client.hook.proxies.location;
 
-import android.util.Log;
-
 import com.lody.virtual.client.env.VirtualGPSSatalines;
 import com.lody.virtual.client.ipc.VirtualLocationManager;
 import com.lody.virtual.helper.utils.Reflect;
-import com.lody.virtual.remote.vloc.VLocation;
 
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -13,6 +10,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import mirror.android.location.LocationManager;
+import sk.vpkg.location.SKLocation;
 
 /**
  * @author Lody
@@ -23,7 +21,7 @@ public class MockLocationHelper {
         if (listener != null) {
             VirtualGPSSatalines satalines = VirtualGPSSatalines.get();
             try {
-                VLocation location = VirtualLocationManager.get().getLocation();
+                SKLocation location = VirtualLocationManager.get().getLocation();
                 if (location != null) {
                     String date = new SimpleDateFormat("HHmmss:SS", Locale.US).format(new Date());
                     String lat = getGPSLat(location.latitude);
@@ -108,13 +106,14 @@ public class MockLocationHelper {
                 float[] snrs;
                 float[] elevations;
                 float[] azimuths;
+                float[] carrierFreqs = new float[0];
                 if (aClass == LocationManager.GnssStatusListenerTransport.TYPE) {
                     svCount = satalines.getSvCount();
                     int[] prnWithFlags = satalines.getPrnWithFlags();
                     snrs = satalines.getSnrs();
                     elevations = satalines.getElevations();
                     azimuths = satalines.getAzimuths();
-                    LocationManager.GnssStatusListenerTransport.onSvStatusChanged.call(transport, svCount, prnWithFlags, snrs, elevations, azimuths);
+                    LocationManager.GnssStatusListenerTransport.onSvStatusChanged.call(transport, svCount, prnWithFlags, snrs, elevations, azimuths, carrierFreqs);
                 } else if (aClass == LocationManager.GpsStatusListenerTransport.TYPE) {
                     svCount = satalines.getSvCount();
                     int[] prns = satalines.getPrns();
@@ -153,14 +152,14 @@ public class MockLocationHelper {
         }
     }
 
-    private static String getSouthEast(VLocation location) {
+    private static String getSouthEast(SKLocation location) {
         if (location.longitude > 0.0d) {
             return "E";
         }
         return "W";
     }
 
-    private static String getNorthWest(VLocation location) {
+    private static String getNorthWest(SKLocation location) {
         if (location.latitude > 0.0d) {
             return "N";
         }

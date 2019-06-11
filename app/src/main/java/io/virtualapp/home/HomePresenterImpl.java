@@ -1,6 +1,8 @@
 package io.virtualapp.home;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.widget.Toast;
 
@@ -12,6 +14,8 @@ import com.lody.virtual.remote.InstallResult;
 import com.lody.virtual.remote.InstalledAppInfo;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import io.virtualapp.R;
 import io.virtualapp.VCommends;
@@ -20,9 +24,12 @@ import io.virtualapp.home.models.AppData;
 import io.virtualapp.home.models.AppInfoLite;
 import io.virtualapp.home.models.MultiplePackageAppData;
 import io.virtualapp.home.models.PackageAppData;
+import io.virtualapp.home.models.safePackage;
 import io.virtualapp.home.repo.AppRepository;
 import io.virtualapp.home.repo.PackageAppDataStorage;
+import io.virtualapp.home.repo.XAppDataInstalled;
 import jonathanfinerty.once.Once;
+import sk.vpkg.manager.RenameAppUtils;
 
 /**
  * @author Lody
@@ -53,6 +60,7 @@ class HomePresenterImpl implements HomeContract.HomePresenter {
             mView.askInstallGms();
             Once.markDone(VCommends.TAG_ASK_INSTALL_GMS);
         }
+        mView.showUpdateTips();
     }
 
     @Override
@@ -78,7 +86,6 @@ class HomePresenterImpl implements HomeContract.HomePresenter {
         mRepo.getVirtualApps().done(mView::loadFinish).fail(mView::loadError);
     }
 
-
     @Override
     public void addApp(AppInfoLite info) {
         class AddResult {
@@ -86,69 +93,293 @@ class HomePresenterImpl implements HomeContract.HomePresenter {
             private int userId;
             private boolean justEnableHidden;
         }
+        XAppDataInstalled lpXappData = new XAppDataInstalled();
+        try
+        {
+            lpXappData.pkgName = info.packageName;
+            mView.addAppToLauncher(lpXappData);
+        }
+        catch(Throwable e)
+        {
+            e.printStackTrace();
+            return;
+        }
         AddResult addResult = new AddResult();
-        VUiKit.defer().when(() -> {
-            InstalledAppInfo installedAppInfo = VirtualCore.get().getInstalledAppInfo(info.packageName, 0);
-            addResult.justEnableHidden = installedAppInfo != null;
-            if (addResult.justEnableHidden) {
-                int[] userIds = installedAppInfo.getInstalledUsers();
-                int nextUserId = userIds.length;
-                /*
-                  Input : userIds = {0, 1, 3}
-                  Output: nextUserId = 2
-                 */
-                for (int i = 0; i < userIds.length; i++) {
-                    if (userIds[i] != i) {
-                        nextUserId = i;
-                        break;
+        InstalledAppInfo lpInstallInfo = null;
+        try {
+            lpInstallInfo= VirtualCore.get().getInstalledAppInfo(info.packageName, 0);
+        } catch (Throwable e) {
+            // ignored
+        }
+        if(lpInstallInfo!=null)
+        {
+            if(HomeActivity.hHomeAct!=null) {
+                AlertDialog.Builder hBuilder = new AlertDialog.Builder(HomeActivity.hHomeAct);
+                hBuilder.setMessage(R.string.ensure_override_app)
+                        .setTitle(R.string.virtual_installer)
+                        .setPositiveButton(R.string.override_app, (dialog, which) -> VUiKit.defer().when(()-> {
+                            // Empty for reserve.
+                        }).done((rest)-> VUiKit.defer().when(() -> {
+                            addResult.justEnableHidden = false;
+                            List<String> pkg_Det = Arrays.asList(safePackage.safe_Package);
+                            if (Once.beenDone("disable_safe_mode") || pkg_Det.contains(info.packageName)) {
+                                InstallResult res = mRepo.addVirtualApp(info);
+                            }
+                        }).then((res) -> {
+                            try {
+                                addResult.appData = PackageAppDataStorage.get().acquire(info.packageName);
+                            } catch (Throwable e) {
+                                e.printStackTrace();
+                                mView.removeAppToLauncher(lpXappData);
+                            }
+                        }).done(res -> {
+                            boolean multipleVersion = addResult.justEnableHidden && addResult.userId != 0;
+                            try {
+                                if (addResult.appData.getXposedModule() != null) {
+                                    Toast.makeText(mActivity, String.format(mActivity.getString(R.string.module_install_success), addResult.appData.name), Toast.LENGTH_SHORT).show();
+                                    mView.removeAppToLauncher(lpXappData);
+                                    return;
+                                }
+                            } catch (Throwable e) {
+                                e.printStackTrace();
+                                mView.removeAppToLauncher(lpXappData);
+                                return;
+                            }
+                            mView.removeAppToLauncher(lpXappData);
+                            if (!multipleVersion) {
+                                PackageAppData data = addResult.appData;
+                                data.isLoading = true;
+                                mView.addAppToLauncher(data);
+                                handleOptApp(data, info.packageName, true);
+                            } else {
+                                MultiplePackageAppData data = new MultiplePackageAppData(addResult.appData, addResult.userId);
+                                data.isLoading = true;
+                                mView.addAppToLauncher(data);
+                                handleOptApp(data, info.packageName, false);
+                            }
+                        })))
+                        .setNegativeButton(R.string.clone_apps, (dialog, which) -> VUiKit.defer().when(()-> {
+                            // Empty for reserve.
+                        }).done((rest)-> VUiKit.defer().when(() -> {
+                            InstalledAppInfo installedAppInfo = null;
+                            try {
+                                installedAppInfo = VirtualCore.get().getInstalledAppInfo(info.packageName, 0);
+                            } catch (Throwable e) {
+                                e.printStackTrace();
+                                try {
+                                    if (HomeActivity.hHomeAct != null)
+                                        Toast.makeText(HomeActivity.hHomeAct, R.string.launch_failed, Toast.LENGTH_SHORT)
+                                                .show();
+                                } catch (Throwable hE) {
+                                    // ignored
+                                }
+                                return;
+                            }
+                            addResult.justEnableHidden = true;
+                            try{
+                                int[] userIds = installedAppInfo != null ?
+                                        installedAppInfo.getInstalledUsers() : new int[0];
+                                int nextUserId = userIds.length;
+                                for (int i = 0; i < userIds.length; i++) {
+                                    if (userIds[i] != i) {
+                                        nextUserId = i;
+                                        break;
+                                    }
+                                }
+                                addResult.userId = nextUserId;
+                                if (VUserManager.get().getUserInfo(nextUserId) == null) {
+                                    String nextUserName = "Space " + (nextUserId + 1);
+                                    VUserInfo newUserInfo = VUserManager.get().createUser(nextUserName, VUserInfo.FLAG_ADMIN);
+                                    if (newUserInfo == null) {
+                                        return;
+                                    }
+                                }
+                                VirtualCore.get().installPackageAsUser(nextUserId, info.packageName);
+                            }
+                            catch (Throwable installExp)
+                            {
+                                installExp.printStackTrace();
+                            }
+                        }).then((res) -> {
+                            try {
+                                addResult.appData = PackageAppDataStorage.get().acquire(info.packageName);
+                            } catch (Throwable e) {
+                                e.printStackTrace();
+                                mView.removeAppToLauncher(lpXappData);
+                                return;
+                            }
+                        }).done(res -> {
+                            boolean multipleVersion = addResult.justEnableHidden && addResult.userId != 0;
+                            try {
+                                if (addResult.appData.getXposedModule() != null) {
+                                    Toast.makeText(mActivity, String.format(mActivity.getString(R.string.module_install_success), addResult.appData.name), Toast.LENGTH_SHORT).show();
+                                    mView.removeAppToLauncher(lpXappData);
+                                    return;
+                                }
+                            } catch (Throwable e) {
+                                e.printStackTrace();
+                                mView.removeAppToLauncher(lpXappData);
+                                return;
+                            }
+                            mView.removeAppToLauncher(lpXappData);
+                            if (!multipleVersion) {
+                                PackageAppData data = addResult.appData;
+                                data.isLoading = true;
+                                mView.addAppToLauncher(data);
+                                handleOptApp(data, info.packageName, true);
+                            } else {
+                                MultiplePackageAppData data = new MultiplePackageAppData(addResult.appData, addResult.userId);
+                                data.isLoading = true;
+                                mView.addAppToLauncher(data);
+                                handleOptApp(data, info.packageName, false);
+                            }
+                        })))
+                        .setNeutralButton(R.string.back, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    mView.removeAppToLauncher(lpXappData);
+                                }
+                                catch (Throwable t)
+                                {
+                                    t.printStackTrace();
+                                }
+                            }
+                        })
+                        .create().show();
+            }
+            else
+            {
+                VUiKit.defer().when(()-> {
+                    // Empty for reserve.
+                }).done((rest)-> VUiKit.defer().when(() -> {
+                    InstalledAppInfo installedAppInfo = null;
+                    try {
+                        installedAppInfo = VirtualCore.get().getInstalledAppInfo(info.packageName, 0);
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                        try {
+                            if (HomeActivity.hHomeAct != null)
+                                Toast.makeText(HomeActivity.hHomeAct, R.string.launch_failed, Toast.LENGTH_SHORT)
+                                        .show();
+                        } catch (Throwable hE) {
+                            // ignored
+                        }
+                        return;
                     }
-                }
-                addResult.userId = nextUserId;
-
-                if (VUserManager.get().getUserInfo(nextUserId) == null) {
-                    // user not exist, create it automatically.
-                    String nextUserName = "Space " + (nextUserId + 1);
-                    VUserInfo newUserInfo = VUserManager.get().createUser(nextUserName, VUserInfo.FLAG_ADMIN);
-                    if (newUserInfo == null) {
-                        throw new IllegalStateException();
+                    addResult.justEnableHidden = installedAppInfo != null;
+                    if (addResult.justEnableHidden) {
+                        int[] userIds = installedAppInfo.getInstalledUsers();
+                        int nextUserId = userIds.length;
+                        for (int i = 0; i < userIds.length; i++) {
+                            if (userIds[i] != i) {
+                                nextUserId = i;
+                                break;
+                            }
+                        }
+                        addResult.userId = nextUserId;
+                        if (VUserManager.get().getUserInfo(nextUserId) == null) {
+                            String nextUserName = "Space " + (nextUserId + 1);
+                            VUserInfo newUserInfo = VUserManager.get().createUser(nextUserName, VUserInfo.FLAG_ADMIN);
+                            if (newUserInfo == null) {
+                                throw new IllegalStateException();
+                            }
+                        }
+                        List<String> pkg_Det = Arrays.asList(safePackage.safe_Package);
+                        if (!Once.beenDone("disable_safe_mode") && !pkg_Det.contains(info.packageName)) {
+                            return;
+                        } else {
+                            boolean success = VirtualCore.get().installPackageAsUser(nextUserId, info.packageName);
+                            if (!success) {
+                                throw new IllegalStateException();
+                            }
+                        }
+                    } else {
+                        List<String> pkg_Det = Arrays.asList(safePackage.safe_Package);
+                        if (Once.beenDone("disable_safe_mode") || pkg_Det.contains(info.packageName)) {
+                            InstallResult res = mRepo.addVirtualApp(info);
+                        }
                     }
+                }).then((res) -> {
+                    try {
+                        addResult.appData = PackageAppDataStorage.get().acquire(info.packageName);
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                        mView.removeAppToLauncher(lpXappData);
+                        return;
+                    }
+                }).done(res -> {
+                    boolean multipleVersion = addResult.justEnableHidden && addResult.userId != 0;
+                    try {
+                        if (addResult.appData.getXposedModule() != null) {
+                            Toast.makeText(mActivity, String.format(mActivity.getString(R.string.module_install_success), addResult.appData.name), Toast.LENGTH_SHORT).show();
+                            mView.removeAppToLauncher(lpXappData);
+                            return;
+                        }
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                        mView.removeAppToLauncher(lpXappData);
+                        return;
+                    }
+                    mView.removeAppToLauncher(lpXappData);
+                    if (!multipleVersion) {
+                        PackageAppData data = addResult.appData;
+                        data.isLoading = true;
+                        mView.addAppToLauncher(data);
+                        handleOptApp(data, info.packageName, true);
+                    } else {
+                        MultiplePackageAppData data = new MultiplePackageAppData(addResult.appData, addResult.userId);
+                        data.isLoading = true;
+                        mView.addAppToLauncher(data);
+                        handleOptApp(data, info.packageName, false);
+                    }
+                }));
+            }
+        }
+        else
+        {
+            VUiKit.defer().when(()-> {
+                // Empty for reserve.
+            }).done((rest)-> VUiKit.defer().when(() -> {
+                addResult.justEnableHidden = false;
+                List<String> pkg_Det = Arrays.asList(safePackage.safe_Package);
+                if (Once.beenDone("disable_safe_mode") || pkg_Det.contains(info.packageName)) {
+                    mRepo.addVirtualApp(info);
                 }
-                boolean success = VirtualCore.get().installPackageAsUser(nextUserId, info.packageName);
-                if (!success) {
-                    throw new IllegalStateException();
+            }).then((res) -> {
+                try {
+                    addResult.appData = PackageAppDataStorage.get().acquire(info.packageName);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                    mView.removeAppToLauncher(lpXappData);
                 }
-            } else {
-                InstallResult res = mRepo.addVirtualApp(info);
-                if (!res.isSuccess) {
-                    throw new IllegalStateException();
+            }).done(res -> {
+                boolean multipleVersion = addResult.justEnableHidden && addResult.userId != 0;
+                try {
+                    if (addResult.appData.getXposedModule() != null) {
+                        Toast.makeText(mActivity, String.format(mActivity.getString(R.string.module_install_success), addResult.appData.name), Toast.LENGTH_SHORT).show();
+                        mView.removeAppToLauncher(lpXappData);
+                        return;
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                    mView.removeAppToLauncher(lpXappData);
+                    return;
+                }
+                mView.removeAppToLauncher(lpXappData);
+                if (!multipleVersion) {
+                    PackageAppData data = addResult.appData;
+                    data.isLoading = true;
+                    mView.addAppToLauncher(data);
+                    handleOptApp(data, info.packageName, true);
                 } else {
-                    InstalledAppInfo ins = VirtualCore.get().getInstalledAppInfo(info.packageName, 0);
-                    if (ins != null && ins.xposedModule != null) {
-                        String name = ins.getApplicationInfo(0).name;
-
-                    }
+                    MultiplePackageAppData data = new MultiplePackageAppData(addResult.appData, addResult.userId);
+                    data.isLoading = true;
+                    mView.addAppToLauncher(data);
+                    handleOptApp(data, info.packageName, false);
                 }
-            }
-        }).then((res) -> {
-            addResult.appData = PackageAppDataStorage.get().acquire(info.packageName);
-        }).done(res -> {
-            boolean multipleVersion = addResult.justEnableHidden && addResult.userId != 0;
-            if (addResult.appData.getXposedModule() != null) {
-                Toast.makeText(mActivity, String.format(mActivity.getString(R.string.module_install_success), addResult.appData.name), Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (!multipleVersion) {
-                PackageAppData data = addResult.appData;
-                data.isLoading = true;
-                mView.addAppToLauncher(data);
-                handleOptApp(data, info.packageName, true);
-            } else {
-                MultiplePackageAppData data = new MultiplePackageAppData(addResult.appData, addResult.userId);
-                data.isLoading = true;
-                mView.addAppToLauncher(data);
-                handleOptApp(data, info.packageName, false);
-            }
-        });
+            }));
+        }
     }
 
 
@@ -207,7 +438,14 @@ class HomePresenterImpl implements HomeContract.HomePresenter {
 
             @Override
             public String getName(String originName) {
-                return originName + "(VA)";
+                return originName + "(SVX)";
+            }
+
+            @Override
+            public String getNameEx(String packageName, String origName, int uid)
+            {
+                if(origName==null||packageName==null)return null;
+                return (RenameAppUtils.getRenamedApp(packageName,uid,origName) + "(SVX)");
             }
         };
         if (data instanceof PackageAppData) {

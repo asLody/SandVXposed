@@ -4,6 +4,7 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.Process;
 
+import com.lody.virtual.BuildConfig;
 import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.env.VirtualRuntime;
 import com.lody.virtual.client.ipc.VActivityManager;
@@ -28,6 +29,19 @@ public class NativeEngine {
     private static final String TAG = NativeEngine.class.getSimpleName();
 
     private static Map<String, InstalledAppInfo> sDexOverrideMap;
+
+    private static final String SAGACIOUS = "/ar89n034h89sanka934f";
+
+    public static String getEscapePath(String path) {
+        if (path == null) {
+            return null;
+        }
+        File file = new File(path);
+        if (file.exists()) {
+            return file.getAbsolutePath();
+        }
+        return new File(SAGACIOUS, path).getAbsolutePath();
+    }
 
     private static boolean sFlag = false;
 
@@ -122,12 +136,54 @@ public class NativeEngine {
         }
     }
 
+    private static boolean is64BitImpl() {
+        try {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                // Android API 21之前不支持64位CPU
+                return false;
+            }
+
+
+            Class<?> clzVMRuntime = Class.forName("dalvik.system.VMRuntime");
+            if (clzVMRuntime == null) {
+                return false;
+            }
+            Method mthVMRuntimeGet = clzVMRuntime.getDeclaredMethod("getRuntime");
+            if (mthVMRuntimeGet == null) {
+                return false;
+            }
+            Object objVMRuntime = mthVMRuntimeGet.invoke(null);
+            if (objVMRuntime == null) {
+                return false;
+            }
+            Method sVMRuntimeIs64BitMethod = clzVMRuntime.getDeclaredMethod("is64Bit");
+            if (sVMRuntimeIs64BitMethod == null) {
+                return false;
+            }
+            Object objIs64Bit = sVMRuntimeIs64BitMethod.invoke(objVMRuntime);
+            if (objIs64Bit instanceof Boolean) {
+                return (boolean) objIs64Bit;
+            }
+        } catch (Throwable e) {
+            if (BuildConfig.DEBUG) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+
+    }
+
     public static void enableIORedirect() {
         try {
-            String soPath = String.format("/data/data/%s/lib/libva++.so", VirtualCore.get().getHostPkg());
+            String soPath;
+            if(is64BitImpl())
+                soPath = String.format("/data/data/%s/lib64/libva++.so", VirtualCore.get().getHostPkg());
+            else
+                soPath = String.format("/data/data/%s/lib/libva++.so", VirtualCore.get().getHostPkg());
             if (!new File(soPath).exists()) {
                 throw new RuntimeException("Unable to find the so.");
             }
+            redirectDirectory(SAGACIOUS, "/");
             nativeEnableIORedirect(soPath, Build.VERSION.SDK_INT, BuildCompat.getPreviewSDKInt());
         } catch (Throwable e) {
             VLog.e(TAG, VLog.getStackTraceString(e));

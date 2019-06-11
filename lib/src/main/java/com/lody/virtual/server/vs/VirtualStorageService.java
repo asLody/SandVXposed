@@ -49,7 +49,8 @@ public class VirtualStorageService implements IVirtualStorageService {
         VSConfig config = userMap.get(packageName);
         if (config == null) {
             config = new VSConfig();
-            config.enable = true;
+            // config.enable = true;
+            config.enable = false;
             userMap.put(packageName, config);
         }
         return config;

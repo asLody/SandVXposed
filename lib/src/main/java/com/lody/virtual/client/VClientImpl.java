@@ -16,6 +16,7 @@ import android.content.res.Configuration;
 import android.os.Binder;
 import android.os.Build;
 import android.os.ConditionVariable;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.IInterface;
@@ -40,7 +41,6 @@ import com.lody.virtual.client.ipc.VActivityManager;
 import com.lody.virtual.client.ipc.VDeviceManager;
 import com.lody.virtual.client.ipc.VPackageManager;
 import com.lody.virtual.client.ipc.VirtualStorageManager;
-import com.lody.virtual.sandxposed.SandXposed;
 import com.lody.virtual.client.stub.VASettings;
 import com.lody.virtual.helper.compat.BuildCompat;
 import com.lody.virtual.helper.compat.StorageManagerCompat;
@@ -50,6 +50,7 @@ import com.lody.virtual.os.VUserHandle;
 import com.lody.virtual.remote.InstalledAppInfo;
 import com.lody.virtual.remote.PendingResultData;
 import com.lody.virtual.remote.VDeviceInfo;
+import com.lody.virtual.sandxposed.SandXposed;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -79,6 +80,8 @@ import mirror.android.view.ThreadedRenderer;
 import mirror.com.android.internal.content.ReferrerIntent;
 import mirror.dalvik.system.VMRuntime;
 import mirror.java.lang.ThreadGroupN;
+import sk.vpkg.provider.BanNotificationProvider;
+import sk.vpkg.xposed.XposedUtils;
 
 import static com.lody.virtual.os.VUserHandle.getUserId;
 
@@ -314,7 +317,8 @@ public final class VClientImpl extends IVClient.Stub {
             InvocationStubManager.getInstance().checkEnv(AppInstrumentation.class);
         }
 
-        SandXposed.injectXposedModule(context, packageName, processName);
+        if(XposedUtils.isEnabledXposed(packageName))
+            SandXposed.injectXposedModule(context, packageName, processName);
 
         mInitialApplication = LoadedApk.makeApplication.call(data.info, false, null);
 
@@ -351,6 +355,7 @@ public final class VClientImpl extends IVClient.Stub {
                                 + ": " + e.toString(), e);
             }
         }
+
         VActivityManager.get().appDoneExecuting();
         VirtualCore.get().getComponentDelegate().afterApplicationCreate(mInitialApplication);
     }
@@ -437,6 +442,32 @@ public final class VClientImpl extends IVClient.Stub {
                 }
             }
         }
+
+        String szEnableRedirectStorage = BanNotificationProvider.getString(VirtualCore.get().getContext(),"StorageRedirect");
+        if(szEnableRedirectStorage!=null)
+        {
+            try
+            {
+                String szExtStoragePath = Environment.getExternalStorageDirectory().getAbsolutePath();
+                //新建一个File，传入文件夹目录
+                File file = new File(szExtStoragePath + "/skdir");
+//判断文件夹是否存在，如果不存在就创建，否则不创建
+                if (!file.exists())
+                {
+                    //通过file的mkdirs()方法创建目录中包含却不存在的文件夹
+                    if(!file.mkdirs())
+                    {
+                        VLog.d(TAG,"Make directory failed.");
+                    }
+                }
+                NativeEngine.redirectDirectory(szExtStoragePath, szExtStoragePath + "/skdir");
+            }catch (Throwable e)
+            {
+                // ignored.
+                e.printStackTrace();
+            }
+        }
+
         NativeEngine.enableIORedirect();
     }
 

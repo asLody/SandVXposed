@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 import com.lody.virtual.GmsSupport;
 import com.lody.virtual.client.core.InstallStrategy;
@@ -26,6 +27,8 @@ import io.virtualapp.home.models.AppInfo;
 import io.virtualapp.home.models.AppInfoLite;
 import io.virtualapp.home.models.MultiplePackageAppData;
 import io.virtualapp.home.models.PackageAppData;
+import sk.vpkg.manager.RenameAppUtils;
+import sk.vpkg.provider.BanNotificationProvider;
 
 /**
  * @author Lody
@@ -65,12 +68,27 @@ public class AppRepository implements AppDataSource {
                 }
                 PackageAppData data = new PackageAppData(mContext, info);
                 if (VirtualCore.get().isAppInstalledAsUser(0, info.packageName)) {
-                    models.add(data);
+                    String lpIsSet = RenameAppUtils.getRenamedApp(data.packageName,0);
+                    if(lpIsSet!=null)
+                    {
+                        data.name = lpIsSet;
+                        models.add(data);
+                    }
+                    else
+                        models.add(data);
                 }
                 int[] userIds = info.getInstalledUsers();
                 for (int userId : userIds) {
                     if (userId != 0) {
-                        models.add(new MultiplePackageAppData(data, userId));
+                        data = new PackageAppData(mContext, info);
+                        String lpIsSet = RenameAppUtils.getRenamedApp(data.packageName,userId);
+                        if(lpIsSet!=null)
+                        {
+                            data.name = lpIsSet;
+                            models.add(new MultiplePackageAppData(data, userId));
+                        }
+                        else
+                            models.add(new MultiplePackageAppData(data, userId));
                     }
                 }
             }
@@ -81,19 +99,31 @@ public class AppRepository implements AppDataSource {
     @Override
     public Promise<List<AppData>, Throwable, Void> getVirtualXposedModules() {
         return VUiKit.defer().when(() -> {
-            List<InstalledAppInfo> infos = VirtualCore.get().getInstalledApps(InstalledAppInfo.FLAG_XPOSED_MODULE);
             List<AppData> models = new ArrayList<>();
-            for (InstalledAppInfo info : infos) {
-                PackageAppData data = new PackageAppData(mContext, info);
-                if (VirtualCore.get().isAppInstalledAsUser(0, info.packageName)) {
-                    models.add(data);
-                }
-                int[] userIds = info.getInstalledUsers();
-                for (int userId : userIds) {
-                    if (userId != 0) {
-                        models.add(new MultiplePackageAppData(data, userId));
+            try
+            {
+                List<InstalledAppInfo> infos = VirtualCore.get().getInstalledApps(InstalledAppInfo.FLAG_XPOSED_MODULE);
+                for (InstalledAppInfo info : infos)
+                {
+                    PackageAppData data = new PackageAppData(mContext, info);
+                    if (VirtualCore.get().isAppInstalledAsUser(0, info.packageName))
+                    {
+                        models.add(data);
+                    }
+                    int[] userIds = info.getInstalledUsers();
+                    for (int userId : userIds)
+                    {
+                        if (userId != 0)
+                        {
+                            models.add(new MultiplePackageAppData(data, userId));
+                        }
                     }
                 }
+            }
+            catch (Throwable e)
+            {
+                e.printStackTrace();
+                models = new ArrayList<>();
             }
             return models;
         });
@@ -164,7 +194,13 @@ public class AppRepository implements AppDataSource {
             info.path = path;
             info.icon = ai.loadIcon(pm);
             info.name = ai.loadLabel(pm);
-            InstalledAppInfo installedAppInfo = VirtualCore.get().getInstalledAppInfo(pkg.packageName, 0);
+            InstalledAppInfo installedAppInfo = null;
+            try {
+                installedAppInfo = VirtualCore.get().getInstalledAppInfo(pkg.packageName, 0);
+            }catch (Throwable exp)
+            {
+                exp.printStackTrace();
+            }
             if (installedAppInfo != null) {
                 info.cloneCount = installedAppInfo.getInstalledUsers().length;
             }

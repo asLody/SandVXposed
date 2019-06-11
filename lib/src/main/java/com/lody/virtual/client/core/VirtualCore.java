@@ -2,6 +2,8 @@ package com.lody.virtual.client.core;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -11,9 +13,13 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Icon;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.ConditionVariable;
 import android.os.IBinder;
@@ -41,8 +47,8 @@ import com.lody.virtual.helper.utils.BitmapUtils;
 import com.lody.virtual.os.VUserHandle;
 import com.lody.virtual.remote.InstallResult;
 import com.lody.virtual.remote.InstalledAppInfo;
-import com.lody.virtual.server.interfaces.IAppManager;
 import com.lody.virtual.server.ServiceCache;
+import com.lody.virtual.server.interfaces.IAppManager;
 import com.lody.virtual.server.interfaces.IAppRequestListener;
 import com.lody.virtual.server.interfaces.IPackageObserver;
 import com.lody.virtual.server.interfaces.IUiCallback;
@@ -52,6 +58,10 @@ import java.util.List;
 
 import dalvik.system.DexFile;
 import mirror.android.app.ActivityThread;
+import sk.vpkg.location.getPkgLocation;
+import sk.vpkg.manager.RenameAppUtils;
+import sk.vpkg.notification.SKVPackageNotificationHook;
+import sk.vpkg.xposed.XposedUtils;
 
 /**
  * @author Lody
@@ -365,7 +375,8 @@ public final class VirtualCore {
         try {
             return getService().isOutsidePackageVisible(pkg);
         } catch (RemoteException e) {
-            return VirtualRuntime.crash(e);
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -373,7 +384,8 @@ public final class VirtualCore {
         try {
             return getService().isAppInstalled(pkg);
         } catch (RemoteException e) {
-            return VirtualRuntime.crash(e);
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -401,10 +413,22 @@ public final class VirtualCore {
         if (ris == null || ris.size() <= 0) {
             return null;
         }
+        ActivityInfo activityInfo = null;
+        for (ResolveInfo resolveInfo : ris) {
+            if (resolveInfo.activityInfo.enabled) {
+                // select the first enabled component
+                activityInfo = resolveInfo.activityInfo;
+                break;
+            }
+        }
+
+        if (activityInfo == null) {
+            activityInfo = ris.get(0).activityInfo;
+        }
         Intent intent = new Intent(intentToResolve);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setClassName(ris.get(0).activityInfo.packageName,
-                ris.get(0).activityInfo.name);
+        intent.setClassName(activityInfo.packageName,
+                activityInfo.name);
         return intent;
     }
 
@@ -412,8 +436,23 @@ public final class VirtualCore {
         return createShortcut(userId, packageName, null, listener);
     }
 
+    public class VReceiver extends BroadcastReceiver
+    {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Do nothing
+        }
+    }
+
     public boolean createShortcut(int userId, String packageName, Intent splash, OnEmitShortcutListener listener) {
-        InstalledAppInfo setting = getInstalledAppInfo(packageName, 0);
+        InstalledAppInfo setting = null;
+        try {
+            setting = getInstalledAppInfo(packageName, 0);
+        }catch (Throwable e)
+        {
+            e.printStackTrace();
+            return false;
+        }
         if (setting == null) {
             return false;
         }
@@ -429,7 +468,7 @@ public final class VirtualCore {
             return false;
         }
         if (listener != null) {
-            String newName = listener.getName(name);
+            String newName = listener.getNameEx(packageName,name,userId);
             if (newName != null) {
                 name = newName;
             }
@@ -451,13 +490,45 @@ public final class VirtualCore {
         shortcutIntent.putExtra("_VA_|_intent_", targetIntent);
         shortcutIntent.putExtra("_VA_|_uri_", targetIntent.toUri(0));
         shortcutIntent.putExtra("_VA_|_user_id_", userId);
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O)
+        {
+            ShortcutManager shortcutManager = (ShortcutManager) context.getSystemService(Context.SHORTCUT_SERVICE);
+            if(shortcutManager.isRequestPinShortcutSupported()) {
+                ShortcutInfo info = null;
+                try
+                {
+                    Intent shortcutInfoIntent = new Intent();
+                    shortcutInfoIntent.setAction("com.sk.vxpmain");
+                    shortcutInfoIntent.putExtra("pArgsToLaunch", packageName);
+                    shortcutInfoIntent.putExtra("dwUserID", userId);
 
-        Intent addIntent = new Intent();
-        addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
-        addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, icon);
-        addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
-        context.sendBroadcast(addIntent);
+                    info = new ShortcutInfo.Builder(context, targetIntent.toUri(0) + userId)
+                            .setIcon(Icon.createWithBitmap(icon))
+                            .setShortLabel(name)
+                            .setIntent(shortcutInfoIntent)
+                            .build();
+                    //当添加快捷方式的确认弹框弹出来时，将被回调
+                    PendingIntent shortcutCallbackIntent = PendingIntent.getBroadcast(context, 0, new Intent(context, VReceiver.class),
+                            PendingIntent.FLAG_UPDATE_CURRENT);
+                    shortcutManager.requestPinShortcut(info, shortcutCallbackIntent.getIntentSender());
+                }
+                catch (Throwable e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        else
+        {
+            Intent addIntent = new Intent();
+            // 内置内容
+            addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+            addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
+            addIntent.putExtra("duplicate", true);
+            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, icon);
+            addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+            context.sendBroadcast(addIntent);
+        }
         return true;
     }
 
@@ -476,7 +547,7 @@ public final class VirtualCore {
             return false;
         }
         if (listener != null) {
-            String newName = listener.getName(name);
+            String newName = listener.getNameEx(packageName,name,userId);
             if (newName != null) {
                 name = newName;
             }
@@ -518,7 +589,8 @@ public final class VirtualCore {
         try {
             return getService().getInstalledAppInfo(pkg, flags);
         } catch (RemoteException e) {
-            return VirtualRuntime.crash(e);
+            // return VirtualRuntime.crash(e);
+            return null;
         }
     }
 
@@ -526,7 +598,9 @@ public final class VirtualCore {
         try {
             return getService().getInstalledAppCount();
         } catch (RemoteException e) {
-            return VirtualRuntime.crash(e);
+            e.printStackTrace();
+            return 0;
+            // return VirtualRuntime.crash(e);
         }
     }
 
@@ -536,6 +610,13 @@ public final class VirtualCore {
 
     public boolean uninstallPackageAsUser(String pkgName, int userId) {
         try {
+            try{
+                RenameAppUtils.undoRenameByUid(pkgName, userId);
+            }
+            catch (Throwable e)
+            {
+                e.printStackTrace();
+            }
             return getService().uninstallPackageAsUser(pkgName, userId);
         } catch (RemoteException e) {
             // Ignore
@@ -544,6 +625,24 @@ public final class VirtualCore {
     }
 
     public boolean uninstallPackage(String pkgName) {
+        try{
+            RenameAppUtils.undoRenameByUid(pkgName, 0);
+        }
+        catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
+        try
+        {
+            SKVPackageNotificationHook hHook = new SKVPackageNotificationHook();
+            hHook.CleanPackage(pkgName);
+        }
+        catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
+        getPkgLocation.removeLocFromPkg(pkgName);
+        XposedUtils.clearXposed(pkgName);
         try {
             return getService().uninstallPackage(pkgName);
         } catch (RemoteException e) {
@@ -678,7 +777,9 @@ public final class VirtualCore {
         try {
             return getService().isPackageLaunched(userId, packageName);
         } catch (RemoteException e) {
-            return VirtualRuntime.crash(e);
+            e.printStackTrace();
+            return false;
+            // return VirtualRuntime.crash(e);
         }
     }
 
@@ -694,7 +795,9 @@ public final class VirtualCore {
         try {
             return getService().installPackageAsUser(userId, packageName);
         } catch (RemoteException e) {
-            return VirtualRuntime.crash(e);
+            e.printStackTrace();
+            return false;
+            // return VirtualRuntime.crash(e);
         }
     }
 
@@ -702,7 +805,9 @@ public final class VirtualCore {
         try {
             return getService().isAppInstalledAsUser(userId, packageName);
         } catch (RemoteException e) {
-            return VirtualRuntime.crash(e);
+            e.printStackTrace();
+            return false;
+            // return VirtualRuntime.crash(e);
         }
     }
 
@@ -779,6 +884,8 @@ public final class VirtualCore {
         Bitmap getIcon(Bitmap originIcon);
 
         String getName(String originName);
+
+        String getNameEx(String packageName,String pkgName,int uid);
     }
 
     public static abstract class VirtualInitializer {

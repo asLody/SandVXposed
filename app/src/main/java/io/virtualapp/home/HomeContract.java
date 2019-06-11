@@ -36,6 +36,8 @@ import io.virtualapp.home.models.AppInfoLite;
 		void refreshLauncherItem(AppData model);
 
 		void askInstallGms();
+
+		void showUpdateTips();
 	}
 
 	/* package */ interface HomePresenter extends BasePresenter {

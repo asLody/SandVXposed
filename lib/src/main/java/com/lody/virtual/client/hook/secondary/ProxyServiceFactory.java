@@ -35,9 +35,10 @@ public class ProxyServiceFactory {
 									return method.invoke(base, args);
 								} catch (InvocationTargetException e) {
 									if (e.getCause() != null) {
-										throw e.getCause();
+										e.printStackTrace();
 									}
-									throw e;
+									// throw e;
+									return null;
 								}
 							}
 						};
@@ -59,9 +60,10 @@ public class ProxyServiceFactory {
 									return method.invoke(base, args);
 								} catch (InvocationTargetException e) {
 									if (e.getCause() != null) {
-										throw e.getCause();
+										e.printStackTrace();
 									}
-									throw e;
+									// throw e;
+									return null;
 								}
 							}
 						};
@@ -84,9 +86,10 @@ public class ProxyServiceFactory {
 									return method.invoke(base, args);
 								} catch (InvocationTargetException e) {
 									if (e.getCause() != null) {
-										throw e.getCause();
+										e.printStackTrace();
 									}
-									throw e;
+									// throw e;
+									return null;
 								}
 							}
 						};

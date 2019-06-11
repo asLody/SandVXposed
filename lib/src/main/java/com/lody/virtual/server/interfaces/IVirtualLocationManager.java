@@ -3,9 +3,10 @@ package com.lody.virtual.server.interfaces;
 import android.os.RemoteException;
 
 import com.lody.virtual.remote.vloc.VCell;
-import com.lody.virtual.remote.vloc.VLocation;
 
 import java.util.List;
+
+import sk.vpkg.location.SKLocation;
 
 /**
  * @author Lody
@@ -34,11 +35,11 @@ public interface IVirtualLocationManager {
 
     List<VCell> getNeighboringCell(int userId, String pkg) throws RemoteException;
 
-    void setLocation(int userId, String pkg, VLocation loc) throws RemoteException;
+    void setLocation(int userId, String pkg, SKLocation loc) throws RemoteException;
 
-    VLocation getLocation(int userId, String pkg) throws RemoteException;
+    SKLocation getLocation(int userId, String pkg) throws RemoteException;
 
-    void setGlobalLocation(VLocation loc) throws RemoteException;
+    void setGlobalLocation(SKLocation loc) throws RemoteException;
 
-    VLocation getGlobalLocation() throws RemoteException;
+    SKLocation getGlobalLocation() throws RemoteException;
 }
