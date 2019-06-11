@@ -6,7 +6,6 @@ import android.content.Intent;
 import com.lody.virtual.remote.AppTaskInfo;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -14,7 +13,7 @@ import java.util.List;
  */
 
 class TaskRecord {
-    public final List<ActivityRecord> activities = Collections.synchronizedList(new ArrayList<ActivityRecord>());
+    public final List<ActivityRecord> activities = new ArrayList<>();
     public int taskId;
     public int userId;
     public String affinity;
@@ -25,6 +24,38 @@ class TaskRecord {
         this.userId = userId;
         this.affinity = affinity;
         this.taskRoot = intent;
+    }
+
+    ActivityRecord getRootActivityRecord() {
+        synchronized (activities) {
+            for (int i = 0; i < activities.size(); i++) {
+                final ActivityRecord r = activities.get(i);
+                if (r.marked) {
+                    continue;
+                }
+                return r;
+            }
+        }
+        return null;
+    }
+
+    public ActivityRecord getTopActivityRecord() {
+        return getTopActivityRecord(false);
+    }
+
+    public ActivityRecord getTopActivityRecord(boolean containFinishedActivity) {
+        synchronized (activities) {
+            if (activities.isEmpty()) {
+                return null;
+            }
+            for (int i = activities.size() - 1; i >= 0; i--) {
+                ActivityRecord r = activities.get(i);
+                if (containFinishedActivity || !r.marked) {
+                    return r;
+                }
+            }
+            return null;
+        }
     }
 
     AppTaskInfo getAppTaskInfo() {
@@ -42,5 +73,13 @@ class TaskRecord {
             if (!r.marked) allFinish = false;
         }
         return allFinish;
+    }
+
+    public void finish() {
+        synchronized (activities) {
+            for (ActivityRecord r : activities) {
+                r.marked = true;
+            }
+        }
     }
 }

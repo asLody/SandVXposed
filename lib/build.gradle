@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     buildToolsVersion '28.0.3'
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         externalNativeBuild {
@@ -42,8 +42,8 @@ dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
     //    compile project(':hooklib')
     //    compile project(':xposedcompat')
-    api 'com.swift.sandhook:hooklib:4.0.0'
-    api 'com.swift.sandhook:xposedcompat:4.0.0'
+    api 'com.swift.sandhook:hooklib:4.0.2'
+    api 'com.swift.sandhook:xposedcompat:4.0.2'
     api 'com.trend.lazyinject:lib:3.4.0-beta'
     annotationProcessor 'com.trend.lazyinject:compiler:3.4.0-beta'
 }

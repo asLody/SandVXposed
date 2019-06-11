@@ -123,8 +123,82 @@ public class SKWinNTUtils
             long                hTemplateFile
     );
 
+    public static native long OpenProcess(
+            int dwDesiredAccess,
+            int  bInheritHandle,
+            int dwProcessId     // Not pid but VProcess id.
+    );
+
+    public static native long CreateRemoteThreadEx(
+            long                       hProcess,
+            long        lpThreadAttributes,
+            long                       dwStackSize,
+            long       lpStartAddress,
+            long                       lpParameter,
+            int                        dwCreationFlags,
+            long lpAttributeList,
+            long                      lpThreadId
+    );
+
+    public static native int TlsAlloc(
+
+    );
+
+    public static native int TlsFree(
+            int dwTlsIndex
+    );
+
+    public static native int GetThreadContext(
+            long    hThread,
+            long lpContext
+    );
+
+    public static native int QueueUserAPC(
+            long  pfnAPC,
+            long    hThread,
+            long dwData
+    );
+
+    public static native int TerminateProcess(
+            long hProcess,
+            int   uExitCode
+    );
+
+    public static native long OpenThread(
+            int dwDesiredAccess,
+            int  bInheritHandle,
+            int dwThreadId
+    );
+
+    public static native int ResumeThread(
+            long hThread
+    );
+
+    public static native int SuspendThread(
+            long hThread
+    );
+
+    public static native int SwitchToThread(
+            // yield
+    );
+
+    public static native int CreateProcessAsUserW(
+            long                hToken,
+            long               lpApplicationName,
+            long                lpCommandLine,
+            long lpProcessAttributes,
+            long lpThreadAttributes,
+            int                  bInheritHandles,
+            int                 dwCreationFlags,
+            long                lpEnvironment,
+            long               lpCurrentDirectory,
+            long        lpStartupInfo,
+            long lpProcessInformation
+    );
+
     static public class ntHelpUtils
     {
         public static native long File2HFILE(File fils);
+        public static native int linuxPid2VProcessId(int pid);
     };
 };
