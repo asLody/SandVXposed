@@ -17,8 +17,8 @@ android {
         applicationId "io.virtualapp.sandvxposed"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 43
-        versionName "1.2.5.1.3.1.2.4"
+        versionCode 44
+        versionName "1.2.5.1.3.1.2.5"
         multiDexEnabled true
         android {
             defaultConfig {
@@ -88,6 +88,9 @@ dependencies {
     // TX移动统计，非必要，大家可在构建的时候删掉
     api 'com.qq.mta:mta:3.4.7-Release'
     api 'com.tencent.mid:mid:4.06-Release'
+
+    // ZLoadingView
+    api 'com.zyao89:zloading:1.2.0'
 }
 
 android {

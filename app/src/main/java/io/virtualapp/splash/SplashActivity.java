@@ -51,8 +51,9 @@ public class SplashActivity extends VActivity {
                 Once.markDone("collect_flurry");
             }
             doActionInThread();
+            com.sk.SKAppLoad.InitApp.InitVApp();
             time = System.currentTimeMillis() - time;
-            long delta = 1500L - time;
+            long delta = 5000L - time;
             if (delta > 0) {
                 VUiKit.sleep(delta);
             }

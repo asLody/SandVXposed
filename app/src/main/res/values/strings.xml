@@ -169,10 +169,12 @@
     <string name="sk_upgrade_localapp">All applications were added to list when page was loaded. You can click item in list for cancel item form syncing.</string>
     <string name="title_activity_app_data_manager">Application Data Manager</string>
     <string name="clear_data">Delete Data</string>
-    <string name="update_tips">Update Logs: Fix crash on Android Q. Update targetsdk version to 29.</string>
+    <string name="update_tips">Update Logs: Fix crash and add bugs.</string>
     <string name="enable_wakeup">Application Wake Up</string>
     <string name="wake_up_setting">Enable or disable application wake up</string>
     <string name="shared_to_inner_app">Shared to SVXP\'s applications.</string>
     <string name="user">User</string>
     <string name="enable_full_screen">Enable full screen</string>
+    <string name="app_loading_tips">If you stay too long on this page, press back button or press cancel for abort loading.</string>
+    <string name="abort">Abort</string>
 </resources>

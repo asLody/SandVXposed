@@ -2,41 +2,77 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#77000000">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="#F8F8F8"
+        android:layout_height="match_parent">
+
+        <com.zyao89.view.zloading.ZLoadingView
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:id="@+id/loadingView_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:z_type="SnakeCircleBuilder"
+            app:z_color="@android:color/holo_green_light"/>
+
+        <TextView
+            android:id="@+id/loadingapp_tips"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="@dimen/dp24"
+            android:text="@string/app_loading_tips"
+            android:textColor="@android:color/black"
+            />
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="128dp"
+        android:layout_height="200dp"
         android:layout_gravity="bottom"
         android:background="#F8F8F8">
 
-        <io.virtualapp.widgets.EatBeansView
+        <!--io.virtualapp.widgets.EatBeansView
             android:id="@+id/loading_anim"
             android:layout_width="match_parent"
-            android:layout_height="30dp" />
+            android:layout_height="30dp" /-->
 
         <ImageView
             android:id="@+id/app_icon"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="64dp"
-            android:layout_marginStart="64dp" />
-
+            android:layout_marginStart="64dp"
+            android:contentDescription="@string/app_name" />
 
         <TextView
             android:id="@+id/app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/app_icon"
-            android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:layout_toEndOf="@id/app_icon"
-            android:layout_toRightOf="@id/app_icon"
             android:gravity="center"
             android:paddingBottom="25dp"
             android:text="@string/preparing"
             android:textColor="@android:color/black" />
+
+        <Button
+            android:textColor="#FFF"
+            android:background="@color/holo_blue_dark"
+            android:text="@string/abort"
+            android:id="@+id/cancel_loading_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="@dimen/dp8"
+            android:paddingStart="@dimen/dp8"
+            android:layout_centerHorizontal="true"/>
 
     </RelativeLayout>
 
