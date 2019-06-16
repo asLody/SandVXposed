@@ -112,105 +112,119 @@ public class ListAppFragment extends VFragment<ListAppContract.ListAppPresenter>
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        if(getContext()==null)return;
-        if(getActivity()==null)return;
-        mRecyclerView = (DragSelectRecyclerView) view.findViewById(R.id.select_app_recycler_view);
-        mProgressBar = (ProgressBar) view.findViewById(R.id.select_app_progress_bar);
-        mInstallButton = (Button) view.findViewById(R.id.select_app_install_btn);
-        FloatingActionButton hButton = view.findViewById(R.id.buttonAddByPath);
-        Button hSearchButton = (Button) view.findViewById(R.id.search_app_m);
-        if (Once.beenDone("enable_search_app"))
+        try
         {
-            hSearchButton.setVisibility(View.VISIBLE);
-        }
-        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, OrientationHelper.VERTICAL));
-        mRecyclerView.addItemDecoration(new ItemOffsetDecoration(VUiKit.dpToPx(getContext(), 2)));
-        mAdapter = new CloneAppListAdapter(getActivity());
-        mRecyclerView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(new CloneAppListAdapter.ItemEventListener() {
-            @Override
-            public void onItemClick(AppInfo info, int position) {
-                int count = mAdapter.getSelectedCount();
-                if (!mAdapter.isIndexSelected(position)) {
-                    if (count >= 9) {
-                        Toast.makeText(getContext(), R.string.install_too_much_once_time, Toast.LENGTH_SHORT).show();
-                        // return;
+            if (getContext() == null) return;
+            if (getActivity() == null) return;
+            mRecyclerView = (DragSelectRecyclerView) view.findViewById(R.id.select_app_recycler_view);
+            mProgressBar = (ProgressBar) view.findViewById(R.id.select_app_progress_bar);
+            mInstallButton = (Button) view.findViewById(R.id.select_app_install_btn);
+            FloatingActionButton hButton = view.findViewById(R.id.buttonAddByPath);
+            Button hSearchButton = (Button) view.findViewById(R.id.search_app_m);
+            if (Once.beenDone("enable_search_app"))
+            {
+                hSearchButton.setVisibility(View.VISIBLE);
+            }
+            mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, OrientationHelper.VERTICAL));
+            mRecyclerView.addItemDecoration(new ItemOffsetDecoration(VUiKit.dpToPx(getContext(), 2)));
+            mAdapter = new CloneAppListAdapter(getActivity());
+            mRecyclerView.setAdapter(mAdapter);
+            mAdapter.setOnItemClickListener(new CloneAppListAdapter.ItemEventListener()
+            {
+                @Override
+                public void onItemClick(AppInfo info, int position)
+                {
+                    int count = mAdapter.getSelectedCount();
+                    if (!mAdapter.isIndexSelected(position))
+                    {
+                        if (count >= 9)
+                        {
+                            Toast.makeText(getContext(), R.string.install_too_much_once_time, Toast.LENGTH_SHORT).show();
+                            // return;
+                        }
                     }
+                    mAdapter.toggleSelected(position);
                 }
-                mAdapter.toggleSelected(position);
-            }
 
-            @Override
-            public boolean isSelectable(int position) {
-                return true;
-                //return mAdapter.isIndexSelected(position) || mAdapter.getSelectedCount() < 9;
-            }
-        });
-        mAdapter.setSelectionListener(count -> {
-            mInstallButton.setEnabled(count > 0);
-            try
+                @Override
+                public boolean isSelectable(int position)
+                {
+                    return true;
+                    //return mAdapter.isIndexSelected(position) || mAdapter.getSelectedCount() < 9;
+                }
+            });
+            mAdapter.setSelectionListener(count ->
             {
-                mInstallButton.setText(String.format(Locale.ENGLISH, getResources().getString(R.string.install_d), count));
-            }catch (Throwable e)
-            {
-                e.printStackTrace();
-            }
-        });
-        mInstallButton.setOnClickListener(v -> {
-            Integer[] selectedIndices = mAdapter.getSelectedIndices();
-            ArrayList<AppInfoLite> dataList = new ArrayList<AppInfoLite>(selectedIndices.length);
-            for (int index : selectedIndices) {
+                mInstallButton.setEnabled(count > 0);
                 try
                 {
-                    AppInfo info = mAdapter.getItem(index);
-                    dataList.add(new AppInfoLite(info.packageName, info.path, info.fastOpen));
-                }catch (Throwable e)
+                    mInstallButton.setText(String.format(Locale.ENGLISH, getResources().getString(R.string.install_d), count));
+                } catch (Throwable e)
                 {
                     e.printStackTrace();
                 }
-            }
-            Intent data = new Intent();
-            data.putParcelableArrayListExtra(VCommends.EXTRA_APP_INFO_LIST, dataList);
-            getActivity().setResult(Activity.RESULT_OK, data);
-            getActivity().finish();
-        });
-        hButton.setOnClickListener(v ->
-        {
-            AppChooseAct.pActParent=this;
-            Intent hIntent = new Intent(getActivity(), AppChooseAct.class);
-            getActivity().startActivity(hIntent);
-        });
-        hSearch = view.findViewById(R.id.search_box_vi);
-        hSearchButton.setOnClickListener(v ->
-        {
-            hSearch.setVisibility(View.VISIBLE);
-            Toast.makeText(getActivity(),R.string.click_search_tips,Toast.LENGTH_LONG).show();
-        });
-        hSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener()
-        {
-            @Override
-            public boolean onQueryTextSubmit(String query)
+            });
+            mInstallButton.setOnClickListener(v ->
             {
-                hSearch.setVisibility(View.INVISIBLE);
-                privList = mAdapter.getList();
-                onSearchAppByName(query);
-                return false;
-            }
+                Integer[] selectedIndices = mAdapter.getSelectedIndices();
+                ArrayList<AppInfoLite> dataList = new ArrayList<AppInfoLite>(selectedIndices.length);
+                for (int index : selectedIndices)
+                {
+                    try
+                    {
+                        AppInfo info = mAdapter.getItem(index);
+                        dataList.add(new AppInfoLite(info.packageName, info.path, info.fastOpen));
+                    } catch (Throwable e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                Intent data = new Intent();
+                data.putParcelableArrayListExtra(VCommends.EXTRA_APP_INFO_LIST, dataList);
+                getActivity().setResult(Activity.RESULT_OK, data);
+                getActivity().finish();
+            });
+            hButton.setOnClickListener(v ->
+            {
+                AppChooseAct.pActParent = this;
+                Intent hIntent = new Intent(getActivity(), AppChooseAct.class);
+                getActivity().startActivity(hIntent);
+            });
+            hSearch = view.findViewById(R.id.search_box_vi);
+            hSearchButton.setOnClickListener(v ->
+            {
+                hSearch.setVisibility(View.VISIBLE);
+                Toast.makeText(getActivity(), R.string.click_search_tips, Toast.LENGTH_LONG).show();
+            });
+            hSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+            {
+                @Override
+                public boolean onQueryTextSubmit(String query)
+                {
+                    hSearch.setVisibility(View.INVISIBLE);
+                    privList = mAdapter.getList();
+                    onSearchAppByName(query);
+                    return false;
+                }
 
-            @Override
-            public boolean onQueryTextChange(String newText)
+                @Override
+                public boolean onQueryTextChange(String newText)
+                {
+                    return false;
+                }
+            });
+            hLayoutSwipe = view.findViewById(R.id.swipeRefreshInstalled);
+            hLayoutSwipe.setOnRefreshListener(() ->
             {
-                return false;
-            }
-        });
-        hLayoutSwipe = view.findViewById(R.id.swipeRefreshInstalled);
-        hLayoutSwipe.setOnRefreshListener(() ->
+                new ListAppPresenterImpl(getActivity(),
+                        ListAppFragment.this, getSelectFrom()).start();
+                hLayoutSwipe.setRefreshing(false);
+            });
+            startRemoteThread();
+        }catch (Throwable e)
         {
-            new ListAppPresenterImpl(getActivity(),
-                ListAppFragment.this, getSelectFrom()).start();
-            hLayoutSwipe.setRefreshing(false);
-        });
-        startRemoteThread();
+            e.printStackTrace();
+        }
     }
 
     @Override
