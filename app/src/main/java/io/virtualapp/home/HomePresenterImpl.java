@@ -258,13 +258,6 @@ class HomePresenterImpl implements HomeContract.HomePresenter {
                         installedAppInfo = VirtualCore.get().getInstalledAppInfo(info.packageName, 0);
                     } catch (Throwable e) {
                         e.printStackTrace();
-                        try {
-                            if (HomeActivity.hHomeAct != null)
-                                Toast.makeText(HomeActivity.hHomeAct, R.string.launch_failed, Toast.LENGTH_SHORT)
-                                        .show();
-                        } catch (Throwable hE) {
-                            // ignored
-                        }
                         return;
                     }
                     addResult.justEnableHidden = installedAppInfo != null;
@@ -352,6 +345,17 @@ class HomePresenterImpl implements HomeContract.HomePresenter {
                 } catch (Throwable e) {
                     e.printStackTrace();
                     mView.removeAppToLauncher(lpXappData);
+                    try
+                    {
+                        if(HomeActivity.hHomeAct!=null)
+                        {
+                            HomeActivity.hHomeAct.RefreshDesktop();
+                        }
+                    }
+                    catch (Throwable px)
+                    {
+                        px.printStackTrace();
+                    }
                 }
             }).done(res -> {
                 boolean multipleVersion = addResult.justEnableHidden && addResult.userId != 0;

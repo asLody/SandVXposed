@@ -46,6 +46,14 @@
         android:layout_marginLeft="@dimen/dp16"
         android:layout_marginTop="300dp"/>
 
+    <com.zyao89.view.zloading.ZLoadingView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/loading_SKPkgInstaller"
+        android:layout_gravity="center"
+        app:z_type="StarBuilder"
+        app:z_color="@color/colorAccent"/>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatInstallerRetBtn"
         android:layout_width="wrap_content"

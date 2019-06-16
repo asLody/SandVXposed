@@ -66,8 +66,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_install_pkg"
-            android:launchMode="singleInstance"
-            android:screenOrientation="unspecified">
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.INSTALL_PACKAGE" />
@@ -106,7 +105,6 @@
 
         <activity
             android:name=".splash.SplashActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -120,26 +118,20 @@
         <activity
             android:name=".home.HomeActivity"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait"
             android:theme="@style/UITheme" />
         <activity
             android:name=".home.ListAppActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/UITheme" />
         <activity
             android:name=".home.LoadingActivity"
             android:excludeFromRecents="true"
             android:noHistory="true"
-            android:screenOrientation="portrait"
-            android:taskAffinity="va.task.loading"
-            android:theme="@style/TransparentTheme" />
+            android:taskAffinity="va.task.loading" />
         <activity
             android:name=".home.location.VirtualLocationSettings"
-            android:screenOrientation="portrait"
             android:theme="@style/UITheme" />
         <activity
             android:name=".home.location.MarkerActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/UITheme" />
         <activity
             android:name=".home.XposedManagerActivity"

@@ -30,6 +30,12 @@ public class AppPagerAdapter extends FragmentPagerAdapter {
         super(fm);
         titles.add(VApp.getApp().getResources().getString(R.string.clone_apps));
         dirs.add(null);
+        // 部分设备根目录有中文，会立即崩溃。
+        // 需要用JNI处理，但是目前不打算在APP里面上JNI，这个会导致一堆问题。
+        // JNI处理的思路是，JNI里面获取路径，然后去掉那些中文和emoji之类的，
+        // 再返回到Java层。主要引起崩溃的函数是dir.listFiles()，目前无解。
+        // 懒得搞了，大家自己玩吧。
+        /*
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Context ctx = VApp.getApp();
             StorageManager storage = (StorageManager) ctx.getSystemService(Context.STORAGE_SERVICE);
@@ -51,6 +57,7 @@ public class AppPagerAdapter extends FragmentPagerAdapter {
                 dirs.add(storageFir);
             }
         }
+        */
     }
 
     @Override
