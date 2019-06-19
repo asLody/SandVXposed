@@ -3,6 +3,7 @@ package io.virtualapp.home.adapters;
 import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -30,11 +31,10 @@ public class AppChooseAct extends AppCompatActivity
 {
     static public ListAppFragment pActParent = null;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
+    private boolean useSKInstaller = true;
+
+    private void setupChooseAct()
     {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_app_choose);
         try
         {
             if (!Once.beenDone("disable_safe_mode"))
@@ -72,6 +72,29 @@ public class AppChooseAct extends AppCompatActivity
         {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_app_choose);
+        AlertDialog.Builder hBuilder = new AlertDialog.Builder(this);
+        hBuilder.setMessage(R.string.use_sk_installer);
+        hBuilder.setTitle(R.string.SK_Settings);
+        hBuilder.setOnCancelListener(dialogInterface -> setupChooseAct());
+        hBuilder.setNegativeButton(R.string.do_not_use, (dialogInterface, i) ->
+        {
+            useSKInstaller = false;
+            setupChooseAct();
+        });
+        hBuilder.setPositiveButton(R.string.use, (dialogInterface, i) ->
+        {
+            useSKInstaller = true;
+            setupChooseAct();
+        })
+                .setCancelable(true)
+                .create().show();
     }
 
     @Override
@@ -249,13 +272,15 @@ public class AppChooseAct extends AppCompatActivity
             finish();
             return;
         }
-        if(RomChecker.isEmui())
+        if (useSKInstaller)
         {
+            // 推荐使用安装器安装，选项更多
             try
             {
-                if (HomeActivity.hHomeAct != null)
-                    HomeActivity.hHomeAct.InstallAppByPath(path);
-            }catch (Throwable e)
+                Intent lpInstaller = new Intent(VirtualCore.get().getContext(), InstallPkgAct.class);
+                lpInstaller.setData(Uri.parse(path));
+                startActivity(lpInstaller);
+            } catch (Throwable e)
             {
                 e.printStackTrace();
             }
@@ -264,10 +289,9 @@ public class AppChooseAct extends AppCompatActivity
         {
             try
             {
-                Intent lpInstaller = new Intent(VirtualCore.get().getContext(), InstallPkgAct.class);
-                lpInstaller.setData(Uri.parse(path));
-                startActivity(lpInstaller);
-            } catch (Throwable e)
+                if (HomeActivity.hHomeAct != null)
+                    HomeActivity.hHomeAct.InstallAppByPath(path);
+            }catch (Throwable e)
             {
                 e.printStackTrace();
             }

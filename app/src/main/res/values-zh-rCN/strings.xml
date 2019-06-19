@@ -111,7 +111,7 @@
     <string name="sk_upgrade_localapp">默认会更新所有克隆的应用（会被更新到与本机安装版本相同），如果需要取消更新，请点击列表里面的项目。点击以后可以取消该应用的更新同步。</string>
     <string name="clear_data">删除数据</string>
     <string name="title_activity_app_data_manager">应用数据管理</string>
-    <string name="update_tips">更新日志：修复了部分崩溃问题，增加了数个特性（BUG）。</string>
+    <string name="update_tips">更新日志：加入了是否开启应用适配开关（如VX或者企鹅崩溃、插件无法使用，可以在设置里面开启或者禁用应用适配，默认为开启状态），加入了是否使用程式安装器开关（默认开启）。</string>
     <string name="enable_wakeup">应用唤醒设置</string>
     <string name="wake_up_setting">启用或者禁用程序唤醒（切断唤醒）</string>
     <string name="shared_to_inner_app">分享到SVXP内部的应用</string>
@@ -119,4 +119,9 @@
     <string name="enable_full_screen">强制适配全面屏</string>
     <string name="app_loading_tips">如果您在本页面停留过久（超过五分钟），请点击返回键或者点击取消以中止加载。</string>
     <string name="abort">中止</string>
+    <string name="disable_app_adapt">禁用特定应用适配</string>
+    <string name="disabel_app_adapt_tip">如果发现腾讯、网易或者阿里的应用无法使用，可以禁用特定应用的适配。</string>
+    <string name="use_sk_installer">是否使用SK程序安装器？如果安装器崩溃或者无响应（选择apk以后没有反应），或者你不喜欢安装器的外观，可以选择以普通模式安装。</string>
+    <string name="do_not_use">不使用</string>
+    <string name="use">使用</string>
 </resources>

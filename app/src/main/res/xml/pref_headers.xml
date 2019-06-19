@@ -50,4 +50,8 @@
         android:fragment="io.virtualapp.home.SettingAct$SKAppFullScreen"
         android:title="@string/enable_full_screen" />
 
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$SKDisableAppAdapt"
+        android:title="@string/disable_app_adapt" />
+
 </preference-headers>

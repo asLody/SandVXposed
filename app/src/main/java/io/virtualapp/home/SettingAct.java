@@ -200,7 +200,8 @@ public class SettingAct extends AppCompatPreferenceActivity
                 || SKUAppDataSetting.class.getName().equals(fragmentName)
                 || SKAppWakeUp.class.getName().equals(fragmentName)
                 || SKAppFullScreen.class.getName().equals(fragmentName)
-                || SKUpdateAppApps.class.getName().equals(fragmentName);
+                || SKUpdateAppApps.class.getName().equals(fragmentName)
+                || SKDisableAppAdapt.class.getName().equals(fragmentName);
     }
 
     /**
@@ -706,6 +707,53 @@ public class SettingAct extends AppCompatPreferenceActivity
                 if(szEnableRedirectStorage==null)
                 {
                     BanNotificationProvider.save(getActivity(),"enableFullScreen","Enabled");
+                }
+                getActivity().finish();
+            })
+                    .setCancelable(false);
+            hDialog.create().show();
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item)
+        {
+            int id = item.getItemId();
+            if (id == android.R.id.home)
+            {
+                startActivity(new Intent(getActivity(), SettingAct.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class SKDisableAppAdapt extends PreferenceFragment
+    {
+        @Override
+        public void onCreate(Bundle savedInstanceState)
+        {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_appset);
+            setHasOptionsMenu(true);
+            AlertDialog.Builder hDialog = new AlertDialog.Builder(getActivity());
+            hDialog.setMessage(R.string.disabel_app_adapt_tip);
+            hDialog.setTitle(R.string.disable_app_adapt).setNegativeButton(R.string.disable,
+                    (dialog, which) ->
+                    {
+                        String szEnableRedirectStorage = BanNotificationProvider.getString(getActivity(),"disableAdaptApp");
+                        if(szEnableRedirectStorage==null)
+                        {
+                            BanNotificationProvider.save(getActivity(),"disableAdaptApp","disabled");
+                        }
+                        getActivity().finish();
+                    });
+            hDialog.setPositiveButton(R.string.enable, (dialog, which) ->
+            {
+                String szEnableRedirectStorage = BanNotificationProvider.getString(getActivity(),"disableAdaptApp");
+                if(szEnableRedirectStorage!=null)
+                {
+                    BanNotificationProvider.remove(getActivity(),"disableAdaptApp");
                 }
                 getActivity().finish();
             })
