@@ -169,7 +169,7 @@
     <string name="sk_upgrade_localapp">All applications were added to list when page was loaded. You can click item in list for cancel item form syncing.</string>
     <string name="title_activity_app_data_manager">Application Data Manager</string>
     <string name="clear_data">Delete Data</string>
-    <string name="update_tips">Update Logs: Add disable app adapt option and use SK Installer option.</string>
+    <string name="update_tips">Update Logs: Fix bugs on desktop devices. Our application is now adapt Android Q.</string>
     <string name="enable_wakeup">Application Wake Up</string>
     <string name="wake_up_setting">Enable or disable application wake up</string>
     <string name="shared_to_inner_app">Shared to SVXP\'s applications.</string>
@@ -182,4 +182,6 @@
     <string name="use_sk_installer">Do you wanna use SK APP Installer? If you\'ve found installer not work(crash, never respond when apk was selected, ugly appearance... etc.), you can use ordinary installer instead of SK Installed.</string>
     <string name="do_not_use">Do not use</string>
     <string name="use">Use</string>
+    <string name="enable_app_scan">Enable installable package scan</string>
+    <string name="enable_scan_app_tips">Some files may lead crash when you install or clone apps. This problem cause by file name that contains malformed chars.</string>
 </resources>

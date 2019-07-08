@@ -111,7 +111,7 @@
     <string name="sk_upgrade_localapp">默认会更新所有克隆的应用（会被更新到与本机安装版本相同），如果需要取消更新，请点击列表里面的项目。点击以后可以取消该应用的更新同步。</string>
     <string name="clear_data">删除数据</string>
     <string name="title_activity_app_data_manager">应用数据管理</string>
-    <string name="update_tips">更新日志：加入了是否开启应用适配开关（如VX或者企鹅崩溃、插件无法使用，可以在设置里面开启或者禁用应用适配，默认为开启状态），加入了是否使用程式安装器开关（默认开启）。</string>
+    <string name="update_tips">更新日志：修复了平板电脑的问题，完善了安卓Q上的文件存储控制。</string>
     <string name="enable_wakeup">应用唤醒设置</string>
     <string name="wake_up_setting">启用或者禁用程序唤醒（切断唤醒）</string>
     <string name="shared_to_inner_app">分享到SVXP内部的应用</string>
@@ -124,4 +124,6 @@
     <string name="use_sk_installer">是否使用SK程序安装器？如果安装器崩溃或者无响应（选择apk以后没有反应），或者你不喜欢安装器的外观，可以选择以普通模式安装。</string>
     <string name="do_not_use">不使用</string>
     <string name="use">使用</string>
+    <string name="enable_app_scan">启用内置存储安装包扫描</string>
+    <string name="enable_scan_app_tips">开启选项以后可能导致安装或者克隆应用的时候崩溃，这个是由于有的文件名包含特殊字符所引起的。</string>
 </resources>

@@ -75,6 +75,44 @@ public final class BinderProvider extends ContentProvider {
         return true;
     }
 
+    public BinderProvider(Context ctx)
+    {
+        // Just be used for restart.
+    }
+
+    public BinderProvider()
+    {
+        super();
+    }
+
+    public boolean onRestart(Context ctx)
+    {
+        DaemonService.startup(ctx);
+        if (!VirtualCore.get().isStartup()) {
+            return true;
+        }
+        VPackageManagerService.systemReady();
+        IPCBus.register(IPackageManager.class, VPackageManagerService.get());
+        VActivityManagerService.systemReady(ctx);
+        IPCBus.register(IActivityManager.class, VActivityManagerService.get());
+        IPCBus.register(IUserManager.class, VUserManagerService.get());
+        VAppManagerService.systemReady();
+        IPCBus.register(IAppManager.class, VAppManagerService.get());
+        BroadcastSystem.attach(VActivityManagerService.get(), VAppManagerService.get());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            IPCBus.register(IJobService.class, VJobSchedulerService.get());
+        }
+        VNotificationManagerService.systemReady(ctx);
+        IPCBus.register(INotificationManager.class, VNotificationManagerService.get());
+        VAppManagerService.get().scanApps();
+        VAccountManagerService.systemReady();
+        IPCBus.register(IAccountManager.class, VAccountManagerService.get());
+        IPCBus.register(IVirtualStorageService.class, VirtualStorageService.get());
+        IPCBus.register(IDeviceInfoManager.class, VDeviceManagerService.get());
+        IPCBus.register(IVirtualLocationManager.class, VirtualLocationService.get());
+        return true;
+    }
+
     @Override
     public Bundle call(String method, String arg, Bundle extras) {
         if ("@".equals(method)) {

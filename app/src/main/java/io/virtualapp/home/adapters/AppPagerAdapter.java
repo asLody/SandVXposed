@@ -18,6 +18,7 @@ import java.util.List;
 import io.virtualapp.R;
 import io.virtualapp.VApp;
 import io.virtualapp.home.ListAppFragment;
+import sk.vpkg.provider.BanNotificationProvider;
 
 /**
  * @author Lody
@@ -35,29 +36,48 @@ public class AppPagerAdapter extends FragmentPagerAdapter {
         // JNI处理的思路是，JNI里面获取路径，然后去掉那些中文和emoji之类的，
         // 再返回到Java层。主要引起崩溃的函数是dir.listFiles()，目前无解。
         // 懒得搞了，大家自己玩吧。
-        /*
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Context ctx = VApp.getApp();
-            StorageManager storage = (StorageManager) ctx.getSystemService(Context.STORAGE_SERVICE);
-            for (StorageVolume volume : storage.getStorageVolumes()) {
-                //Why the fuck are getPathFile and getUserLabel hidden?!
-                //StorageVolume is kinda useless without those...
-                File dir = Reflect.on(volume).call("getPathFile").get();
-                String label = Reflect.on(volume).call("getUserLabel").get();
-                if (dir.listFiles() != null) {
-                    titles.add(label);
-                    dirs.add(dir);
+        String szEnableRedirectStorage = BanNotificationProvider.getString(VApp.getApp(),"enablePackageScan");
+        if(szEnableRedirectStorage!=null)
+        {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            {
+                try
+                {
+                    File storageFir = VApp.getApp()
+                            .getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
+                    if (storageFir != null && storageFir.isDirectory())
+                    {
+                        titles.add(VApp.getApp().getResources().getString(R.string.external_storage));
+                        dirs.add(storageFir);
+                    }
+                }catch (Throwable throwable)
+                {
+                    throwable.printStackTrace();
                 }
             }
-        } else {
-            // Fallback: only support the default storage sources
-            File storageFir = Environment.getExternalStorageDirectory();
-            if (storageFir != null && storageFir.isDirectory()) {
-                titles.add(VApp.getApp().getResources().getString(R.string.external_storage));
-                dirs.add(storageFir);
+            else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Context ctx = VApp.getApp();
+                StorageManager storage = (StorageManager) ctx.getSystemService(Context.STORAGE_SERVICE);
+                if(storage!=null)
+                    for (StorageVolume volume : storage.getStorageVolumes()) {
+                        //Why the fuck are getPathFile and getUserLabel hidden?!
+                        //StorageVolume is kinda useless without those...
+                        File dir = Reflect.on(volume).call("getPathFile").get();
+                        String label = Reflect.on(volume).call("getUserLabel").get();
+                        if (dir.listFiles() != null) {
+                            titles.add(label);
+                            dirs.add(dir);
+                        }
+                    }
+            } else {
+                // Fallback: only support the default storage sources
+                File storageFir = Environment.getExternalStorageDirectory();
+                if (storageFir != null && storageFir.isDirectory()) {
+                    titles.add(VApp.getApp().getResources().getString(R.string.external_storage));
+                    dirs.add(storageFir);
+                }
             }
         }
-        */
     }
 
     @Override

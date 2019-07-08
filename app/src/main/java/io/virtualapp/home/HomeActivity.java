@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.lody.virtual.GmsSupport;
 import com.lody.virtual.client.core.RomChecker;
+import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.ipc.VActivityManager;
 import com.lody.virtual.client.stub.ChooseTypeAndAccountActivity;
 import com.lody.virtual.os.VUserInfo;
@@ -218,7 +219,25 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                     setPositiveButton("√", (dialog, which) ->
                     {
                         VActivityManager.get().killAllApps();
-                        Toast.makeText(this,R.string.restartfinish,Toast.LENGTH_LONG).show();
+                        runOnUiThread(
+                                () ->
+                                {
+                                    try
+                                    {
+                                        VirtualCore.get().startup(HomeActivity.this);
+                                        com.lody.virtual.server.BinderProvider lpProvider =
+                                                new com.lody.virtual.server.BinderProvider(
+                                                HomeActivity.this
+                                        );
+                                        // 重启应用
+                                        lpProvider.onRestart(HomeActivity.this);
+                                    } catch (Throwable throwable)
+                                    {
+                                        throwable.printStackTrace();
+                                    }
+                                    Toast.makeText(this,R.string.restartfinish,Toast.LENGTH_LONG).show();
+                                }
+                        );
                     });
             hBuilder.setCancelable(false).create().show();
             return false;

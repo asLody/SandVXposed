@@ -54,4 +54,8 @@
         android:fragment="io.virtualapp.home.SettingAct$SKDisableAppAdapt"
         android:title="@string/disable_app_adapt" />
 
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$SKEnableAppSearch"
+        android:title="@string/enable_app_scan" />
+
 </preference-headers>

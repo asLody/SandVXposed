@@ -448,7 +448,20 @@ public final class VClientImpl extends IVClient.Stub {
         {
             try
             {
-                String szExtStoragePath = Environment.getExternalStorageDirectory().getAbsolutePath();
+                String szExtStoragePath;
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                {
+                    File lpFile = VirtualCore.get().getContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
+                    if(lpFile!=null)
+                        szExtStoragePath =
+                                lpFile.getAbsolutePath();
+                    else
+                        szExtStoragePath =
+                                Environment.getExternalStorageDirectory()
+                                        .getAbsolutePath();
+                }
+                else
+                    szExtStoragePath = Environment.getExternalStorageDirectory().getAbsolutePath();
                 //新建一个File，传入文件夹目录
                 File file = new File(szExtStoragePath + "/skdir");
 //判断文件夹是否存在，如果不存在就创建，否则不创建
@@ -460,7 +473,9 @@ public final class VClientImpl extends IVClient.Stub {
                         VLog.d(TAG,"Make directory failed.");
                     }
                 }
-                NativeEngine.redirectDirectory(szExtStoragePath, szExtStoragePath + "/skdir");
+                NativeEngine.redirectDirectory(Environment.
+                        getExternalStorageDirectory().
+                        getAbsolutePath(), szExtStoragePath + "/skdir");
             }catch (Throwable e)
             {
                 // ignored.

@@ -44,6 +44,7 @@ import com.lody.virtual.helper.ipcbus.IPCBus;
 import com.lody.virtual.helper.ipcbus.IPCSingleton;
 import com.lody.virtual.helper.ipcbus.IServerCache;
 import com.lody.virtual.helper.utils.BitmapUtils;
+import com.lody.virtual.helper.utils.VLog;
 import com.lody.virtual.os.VUserHandle;
 import com.lody.virtual.remote.InstallResult;
 import com.lody.virtual.remote.InstalledAppInfo;
@@ -184,7 +185,8 @@ public final class VirtualCore {
     public void startup(Context context) throws Throwable {
         if (!isStartUp) {
             if (Looper.myLooper() != Looper.getMainLooper()) {
-                throw new IllegalStateException("VirtualCore.startup() must called in main thread.");
+                // throw new IllegalStateException("VirtualCore.startup() must called in main thread.");
+                VLog.e("VirtualCore","VirtualCore.startup() must called in main thread.");
             }
             VASettings.STUB_CP_AUTHORITY = context.getPackageName() + "." + VASettings.STUB_DEF_AUTHORITY;
             ServiceManagerNative.SERVICE_CP_AUTH = context.getPackageName() + "." + ServiceManagerNative.SERVICE_DEF_AUTH;

@@ -158,30 +158,32 @@ public class AppRepository implements AppDataSource {
         // Now those can scan most application in sdcard.
         // WARNING this method may lead crash on HUAWEI Device.
 
-        /*
-        try
-        {
-            try
-            {
-                return convertPackageInfoToAppData(context, findAndParseApkRecursively(context, rootDir, null, 0), false);
-            } catch (Throwable e)
-            {
-                e.printStackTrace();
-            }
-            return convertPackageInfoToAppData(context, findAndParseAPKs(context, rootDir, SCAN_PATH_LIST), false);
-        }
-        catch (Throwable e)
-        {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
-
-        */
-        return VUiKit.defer().when((Callable<List<AppInfo>>) ArrayList::new
+        return VUiKit.defer().when(()->
+                {
+                    try
+                    {
+                        try
+                        {
+                            return convertPackageInfoToAppData(context, findAndParseApkRecursively(context, rootDir, null, 0), false);
+                        } catch (Throwable e)
+                        {
+                            e.printStackTrace();
+                        }
+                        return convertPackageInfoToAppData(context, findAndParseAPKs(context, rootDir, SCAN_PATH_LIST), false);
+                    } catch (Throwable e)
+                    {
+                        e.printStackTrace();
+                        return new ArrayList<>();
+                    }
+                }
         );
+
+
+        // return VUiKit.defer().when((Callable<List<AppInfo>>) ArrayList::new
+        // );
     }
 
-    private static final int MAX_SCAN_DEPTH = 3;
+    private static final int MAX_SCAN_DEPTH = 2;
 
     private List<PackageInfo> findAndParseApkRecursively(Context context, File rootDir, List<PackageInfo> result, int depth) {
         if (result == null) {
