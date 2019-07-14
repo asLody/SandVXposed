@@ -96,7 +96,7 @@ public class VActivityManager {
                 }
                 if (is_fullscreen)
                 {
-                    info.metaData.putString("android.max_aspect", "2.1");
+                    info.metaData.putString("android.max_aspect", "2.3");
                 }
             }
         }catch (Throwable e)

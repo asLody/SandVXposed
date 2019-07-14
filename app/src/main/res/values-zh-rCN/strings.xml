@@ -111,7 +111,7 @@
     <string name="sk_upgrade_localapp">默认会更新所有克隆的应用（会被更新到与本机安装版本相同），如果需要取消更新，请点击列表里面的项目。点击以后可以取消该应用的更新同步。</string>
     <string name="clear_data">删除数据</string>
     <string name="title_activity_app_data_manager">应用数据管理</string>
-    <string name="update_tips">更新日志：修复了平板电脑的问题，完善了安卓Q上的文件存储控制。</string>
+    <string name="update_tips">更新日志：修复了部分问题，加入应用密码锁设置。</string>
     <string name="enable_wakeup">应用唤醒设置</string>
     <string name="wake_up_setting">启用或者禁用程序唤醒（切断唤醒）</string>
     <string name="shared_to_inner_app">分享到SVXP内部的应用</string>
@@ -126,4 +126,8 @@
     <string name="use">使用</string>
     <string name="enable_app_scan">启用内置存储安装包扫描</string>
     <string name="enable_scan_app_tips">开启选项以后可能导致安装或者克隆应用的时候崩溃，这个是由于有的文件名包含特殊字符所引起的。</string>
+    <string name="pwd_incorrect">密码错误</string>
+    <string name="pwd_must_remove_before_add">您必须删除旧密码以后再设置新密码。</string>
+    <string name="pwd_incorrect_change">密码错误，您可以卸载您的应用（包括分身）并重新安装来重置密码。</string>
+    <string name="pwd_setting">应用密码锁</string>
 </resources>

@@ -14,7 +14,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.android.tools.build:gradle:3.4.2'
         // classpath 'com.android.tools.build:gradle-experimental:3.3.2'
         classpath 'com.trend.lazyinject:aopweave:3.4.0-beta'
         // NOTE: Do not place your application dependencies here; they belong

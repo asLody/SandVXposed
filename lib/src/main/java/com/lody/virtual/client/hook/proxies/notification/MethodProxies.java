@@ -220,7 +220,7 @@ class MethodProxies {
         @Override
         public Object call(Object who, Method method, Object... args) throws Throwable {
             String pkg = (String) args[0];
-            Toast.makeText(VirtualCore.get().getContext(),pkg+5,Toast.LENGTH_SHORT).show();
+            // Toast.makeText(VirtualCore.get().getContext(),pkg+5,Toast.LENGTH_SHORT).show();
             if (getHostPkg().equals(pkg)) {
                 return method.invoke(who, args);
             }
@@ -237,7 +237,7 @@ class MethodProxies {
         @Override
         public Object call(Object who, Method method, Object... args) throws Throwable {
             String pkg = (String) args[0];
-            Toast.makeText(VirtualCore.get().getContext(),pkg+6,Toast.LENGTH_SHORT).show();
+            // Toast.makeText(VirtualCore.get().getContext(),pkg+6,Toast.LENGTH_SHORT).show();
             if (getHostPkg().equals(pkg)) {
                 return method.invoke(who, args);
             }

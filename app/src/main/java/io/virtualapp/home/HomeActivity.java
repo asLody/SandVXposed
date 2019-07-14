@@ -38,6 +38,7 @@ import com.lody.virtual.os.VUserInfo;
 import com.lody.virtual.os.VUserManager;
 import com.sk.app.RenameApp;
 import com.sk.fwindow.skFloattingWin;
+import com.sk.listapp.AppPwdSetting;
 import com.sk.verify.msVerify;
 import com.sk.vloc.VLocSetting;
 
@@ -207,6 +208,16 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
             startActivity(new Intent(this, SettingAct.class));
             return false;
         });
+        menu.add(R.string.pwd_setting).setIcon(R.drawable.ic_settings).setOnMenuItemClickListener(item ->
+                {
+                    startActivity(
+                            new Intent(
+                                    this,
+                                    AppPwdSetting.class)
+                    );
+                    return false;
+                }
+        );
         menu.add(R.string.restartapp).setIcon(R.drawable.ic_settings).setOnMenuItemClickListener(item -> {
             AlertDialog.Builder hBuilder = new AlertDialog.Builder(HomeActivity.this);
             hBuilder.setTitle(R.string.restartapp).setMessage(R.string.ensurerestart);
