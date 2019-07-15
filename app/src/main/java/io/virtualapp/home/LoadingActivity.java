@@ -268,7 +268,7 @@ public class LoadingActivity extends VActivity {
     }
 
     private void launchActivityWithDelay(Intent intent, int userId) {
-        final int MAX_WAIT = 1000;
+        final int MAX_WAIT = 500;
         long delta = SystemClock.elapsedRealtime() - start;
         long waitTime = MAX_WAIT - delta;
 
