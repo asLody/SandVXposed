@@ -1,5 +1,6 @@
 package com.lody.virtual.sandxposed;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Process;
 
@@ -24,10 +25,12 @@ public class EnvironmentSetup {
         initForSpecialApps(context, packageName);
     }
 
+    @SuppressLint("SdCardPath")
     private static void initSystemProp(Context context) {
         //inject vxp name
         System.setProperty("vxp", "1");
-        System.setProperty("vxp_user_dir", new File(context.getApplicationInfo().dataDir).getParent());
+        String xPath = new File(context.getApplicationInfo().dataDir).getParent();
+        System.setProperty("vxp_user_dir", xPath!=null?xPath:"/data/data/io.virtualapp.sandvxposed/cache/");
         //sandvxp
         System.setProperty("sandvxp", "1");
     }

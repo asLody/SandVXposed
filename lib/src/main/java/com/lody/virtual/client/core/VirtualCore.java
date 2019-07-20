@@ -479,6 +479,17 @@ public final class VirtualCore {
                 icon = newIcon;
             }
         }
+        try{
+            if(icon.getByteCount()>1000000)
+            {
+                // 图标过大
+                return false;
+            }
+        }
+        catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
         Intent targetIntent = getLaunchIntent(packageName, userId);
         if (targetIntent == null) {
             return false;
@@ -495,6 +506,7 @@ public final class VirtualCore {
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O)
         {
             ShortcutManager shortcutManager = (ShortcutManager) context.getSystemService(Context.SHORTCUT_SERVICE);
+            if(shortcutManager==null)return false;
             if(shortcutManager.isRequestPinShortcutSupported()) {
                 ShortcutInfo info = null;
                 try
@@ -522,14 +534,20 @@ public final class VirtualCore {
         }
         else
         {
-            Intent addIntent = new Intent();
-            // 内置内容
-            addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-            addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
-            addIntent.putExtra("duplicate", true);
-            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, icon);
-            addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
-            context.sendBroadcast(addIntent);
+            try{
+                Intent addIntent = new Intent();
+                // 内置内容
+                addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+                addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
+                addIntent.putExtra("duplicate", true);
+                addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, icon);
+                addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+                context.sendBroadcast(addIntent);
+            }
+            catch (Throwable e)
+            {
+                e.printStackTrace();
+            }
         }
         return true;
     }

@@ -391,15 +391,22 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
     }
 
     private void deleteApp(int position) {
-        AppData data = mLaunchpadAdapter.getList().get(position);
-        new AlertDialog.Builder(this)
-                .setTitle("删除应用")
-                .setMessage("您真的要删除 " + data.getName() + "?")
-                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                    mPresenter.deleteApp(data);
-                })
-                .setNegativeButton(android.R.string.no, null)
-                .show();
+        try
+        {
+            AppData data = mLaunchpadAdapter.getList().get(position);
+            new AlertDialog.Builder(this)
+                    .setTitle("删除应用")
+                    .setMessage("您真的要删除 " + data.getName() + "?")
+                    .setPositiveButton(android.R.string.yes, (dialog, which) ->
+                    {
+                        mPresenter.deleteApp(data);
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .show();
+        }catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void createShortcut(int position) {
