@@ -169,7 +169,7 @@
     <string name="sk_upgrade_localapp">All applications were added to list when page was loaded. You can click item in list for cancel item form syncing.</string>
     <string name="title_activity_app_data_manager">Application Data Manager</string>
     <string name="clear_data">Delete Data</string>
-    <string name="update_tips">Update Logs: Fix  some bugs.</string>
+    <string name="update_tips">Update Logs:  Add app manual installer.</string>
     <string name="enable_wakeup">Application Wake Up</string>
     <string name="wake_up_setting">Enable or disable application wake up</string>
     <string name="shared_to_inner_app">Shared to SVXP\'s applications.</string>
@@ -188,4 +188,6 @@
     <string name="pwd_must_remove_before_add">You must remove your old password before you change the password.</string>
     <string name="pwd_incorrect_change">Password incorrect. You can uninstall your app and reinstall it for password reset.</string>
     <string name="pwd_setting">App Lock</string>
+    <string name="sk_app_manual_install_tips">You can install application by input path absolutely（such as /sdcard/demo.apk). Then this applicaiton will launch installer for application install.</string>
+    <string name="sk_install_app_by_path">Install App By Path Manually</string>
 </resources>

@@ -111,7 +111,7 @@
     <string name="sk_upgrade_localapp">默认会更新所有克隆的应用（会被更新到与本机安装版本相同），如果需要取消更新，请点击列表里面的项目。点击以后可以取消该应用的更新同步。</string>
     <string name="clear_data">删除数据</string>
     <string name="title_activity_app_data_manager">应用数据管理</string>
-    <string name="update_tips">更新日志：修复了部分问题。</string>
+    <string name="update_tips">更新日志：增加了手动输入路径安装功能。</string>
     <string name="enable_wakeup">应用唤醒设置</string>
     <string name="wake_up_setting">启用或者禁用程序唤醒（切断唤醒）</string>
     <string name="shared_to_inner_app">分享到SVXP内部的应用</string>
@@ -130,4 +130,6 @@
     <string name="pwd_must_remove_before_add">您必须删除旧密码以后再设置新密码。</string>
     <string name="pwd_incorrect_change">密码错误，您可以卸载您的应用（包括分身）并重新安装来重置密码。</string>
     <string name="pwd_setting">应用密码锁</string>
+    <string name="sk_app_manual_install_tips">您可以输入绝对路径进行安装，例如 /mnt/sdcard/demo.apk ，然后应用会调用安装器进行应用安装。</string>
+    <string name="sk_install_app_by_path">手动输入路径安装</string>
 </resources>

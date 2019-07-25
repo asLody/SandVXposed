@@ -15,11 +15,14 @@
         android:networkSecurityConfig="@xml/sknetsec"
         android:theme="@style/AppTheme">
         <activity
+            android:name="com.sk.installapp.ManualInstallAct"
+            android:launchMode="singleInstance" />
+        <activity
             android:name="com.sk.listapp.AppPwdSetting"
             android:launchMode="singleInstance" />
-        <activity android:name="com.sk.verify.SKAppLock"
-            android:launchMode="singleInstance"
-            />
+        <activity
+            android:name="com.sk.verify.SKAppLock"
+            android:launchMode="singleInstance" />
 
         <uses-library
             android:name="org.apache.http.legacy"

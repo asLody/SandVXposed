@@ -151,8 +151,12 @@ public class VAppManagerService implements IAppManager {
             return InstallResult.makeFailure("路径为空！");
         }
         File packageFile = new File(path);
-        if (!packageFile.exists() || !packageFile.isFile()) {
+        if (!packageFile.exists()) {
             return InstallResult.makeFailure("安装包不存在！");
+        }
+        if(!packageFile.isFile())
+        {
+            return InstallResult.makeFailure("路径并非文件！");
         }
         VPackage pkg = null;
         try {

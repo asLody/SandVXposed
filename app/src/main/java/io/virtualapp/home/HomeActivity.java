@@ -38,7 +38,9 @@ import com.lody.virtual.os.VUserInfo;
 import com.lody.virtual.os.VUserManager;
 import com.sk.app.RenameApp;
 import com.sk.fwindow.skFloattingWin;
+import com.sk.installapp.ManualInstallAct;
 import com.sk.listapp.AppPwdSetting;
+import com.sk.listapp.XAppManager;
 import com.sk.verify.msVerify;
 import com.sk.vloc.VLocSetting;
 
@@ -188,18 +190,20 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                     }).show();
             return false;
         });
-        /*
-        // 去掉没用的项目防止卡顿
-        menu.add("虚拟存储").setIcon(R.drawable.ic_vs).setOnMenuItemClickListener(item -> {
-            Toast.makeText(this, "The coming", Toast.LENGTH_SHORT).show();
+        menu.add(R.string.sk_install_app_by_path).setIcon(R.drawable.ic_vs).setOnMenuItemClickListener(item -> {
+            startActivity(
+                    new Intent(
+                            this,
+                            ManualInstallAct.class
+                    )
+            );
             return false;
         });
         menu.add("通知管理").setIcon(R.drawable.ic_notification).setOnMenuItemClickListener(item -> {
-            Toast.makeText(this, "The coming", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, XAppManager.class));
             return false;
         });
-        */
-        menu.add("虚拟位置").setIcon(R.drawable.ic_notification).setOnMenuItemClickListener(item -> {
+        menu.add("虚拟位置").setIcon(R.drawable.ic_loc).setOnMenuItemClickListener(item -> {
             // startActivity(new Intent(this, VirtualLocationSettings.class));
             startActivity(new Intent(this, VLocSetting.class));
             return true;
@@ -208,7 +212,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
             startActivity(new Intent(this, SettingAct.class));
             return false;
         });
-        menu.add(R.string.pwd_setting).setIcon(R.drawable.ic_settings).setOnMenuItemClickListener(item ->
+        menu.add(R.string.pwd_setting).setIcon(R.drawable.ic_sec).setOnMenuItemClickListener(item ->
                 {
                     startActivity(
                             new Intent(
@@ -218,7 +222,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                     return false;
                 }
         );
-        menu.add(R.string.restartapp).setIcon(R.drawable.ic_settings).setOnMenuItemClickListener(item -> {
+        menu.add(R.string.restartapp).setIcon(R.drawable.ic_restart).setOnMenuItemClickListener(item -> {
             AlertDialog.Builder hBuilder = new AlertDialog.Builder(HomeActivity.this);
             hBuilder.setTitle(R.string.restartapp).setMessage(R.string.ensurerestart);
             hBuilder.
@@ -398,9 +402,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                     .setTitle("删除应用")
                     .setMessage("您真的要删除 " + data.getName() + "?")
                     .setPositiveButton(android.R.string.yes, (dialog, which) ->
-                    {
-                        mPresenter.deleteApp(data);
-                    })
+                            mPresenter.deleteApp(data))
                     .setNegativeButton(android.R.string.no, null)
                     .show();
         }catch (Throwable e)
