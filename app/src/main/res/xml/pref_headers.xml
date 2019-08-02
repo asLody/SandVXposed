@@ -58,4 +58,8 @@
         android:fragment="io.virtualapp.home.SettingAct$SKEnableAppSearch"
         android:title="@string/enable_app_scan" />
 
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$SKUseNewDesktop"
+        android:title="@string/sk_use_desktop" />
+
 </preference-headers>

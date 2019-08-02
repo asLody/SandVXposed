@@ -1,3 +1,4 @@
 /build
 /release
 *.apk
+src/main/res2

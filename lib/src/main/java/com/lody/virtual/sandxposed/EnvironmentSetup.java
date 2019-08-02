@@ -103,7 +103,7 @@ public class EnvironmentSetup {
             XposedHelpers.findAndHookMethod(Process.class, "killProcess", int.class, g_Hook);
             XposedHelpers.findAndHookMethod(System.class, "exit", int.class, g_Hook);
             String szEnableRedirectStorage = BanNotificationProvider.getString(context,"disableAdaptApp");
-            if(szEnableRedirectStorage==null)
+            if(szEnableRedirectStorage!=null)
                 SKPackageGuard.antiXposedCheck(packageName);
         }catch (Throwable e)
         {

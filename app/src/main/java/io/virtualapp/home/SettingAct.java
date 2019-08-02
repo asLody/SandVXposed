@@ -202,6 +202,7 @@ public class SettingAct extends AppCompatPreferenceActivity
                 || SKAppFullScreen.class.getName().equals(fragmentName)
                 || SKUpdateAppApps.class.getName().equals(fragmentName)
                 || SKDisableAppAdapt.class.getName().equals(fragmentName)
+                || SKUseNewDesktop.class.getName().equals(fragmentName)
                 || SKEnableAppSearch.class.getName().equals(fragmentName);
     }
 
@@ -758,7 +759,7 @@ public class SettingAct extends AppCompatPreferenceActivity
             setHasOptionsMenu(true);
             AlertDialog.Builder hDialog = new AlertDialog.Builder(getActivity());
             hDialog.setMessage(R.string.disabel_app_adapt_tip);
-            hDialog.setTitle(R.string.disable_app_adapt).setNegativeButton(R.string.disable,
+            hDialog.setTitle(R.string.disable_app_adapt).setNegativeButton(R.string.enable,
                     (dialog, which) ->
                     {
                         String szEnableRedirectStorage = BanNotificationProvider.getString(getActivity(),"disableAdaptApp");
@@ -768,7 +769,7 @@ public class SettingAct extends AppCompatPreferenceActivity
                         }
                         getActivity().finish();
                     });
-            hDialog.setPositiveButton(R.string.enable, (dialog, which) ->
+            hDialog.setPositiveButton(R.string.disable, (dialog, which) ->
             {
                 String szEnableRedirectStorage = BanNotificationProvider.getString(getActivity(),"disableAdaptApp");
                 if(szEnableRedirectStorage!=null)
@@ -822,6 +823,47 @@ public class SettingAct extends AppCompatPreferenceActivity
                 {
                     BanNotificationProvider.remove(getActivity(),"enablePackageScan");
                 }
+                getActivity().finish();
+            })
+                    .setCancelable(false);
+            hDialog.create().show();
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item)
+        {
+            int id = item.getItemId();
+            if (id == android.R.id.home)
+            {
+                startActivity(new Intent(getActivity(), SettingAct.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class SKUseNewDesktop extends PreferenceFragment
+    {
+        @Override
+        public void onCreate(Bundle savedInstanceState)
+        {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_appset);
+            setHasOptionsMenu(true);
+            AlertDialog.Builder hDialog = new AlertDialog.Builder(getActivity());
+            hDialog.setMessage(R.string.sk_use_desktop_tips);
+            hDialog.setTitle(R.string.sk_use_desktop).setNegativeButton(R.string.disable,
+                    (dialog, which) ->
+                    {
+                        if(Once.beenDone("useNewDesktop"))
+                            Once.clearDone("useNewDesktop");
+                        getActivity().finish();
+                    });
+            hDialog.setPositiveButton(R.string.enable, (dialog, which) ->
+            {
+                if(!Once.beenDone("useNewDesktop"))
+                    Once.markDone("useNewDesktop");
                 getActivity().finish();
             })
                     .setCancelable(false);

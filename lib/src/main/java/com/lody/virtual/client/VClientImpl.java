@@ -488,15 +488,22 @@ public final class VClientImpl extends IVClient.Stub {
 
     @SuppressLint("SdCardPath")
     private HashSet<String> getMountPoints() {
-        HashSet<String> mountPoints = new HashSet<>(3);
+        HashSet<String> mountPoints = new HashSet<>();
         mountPoints.add("/mnt/sdcard/");
         mountPoints.add("/sdcard/");
+        try
+        {
+            mountPoints.add(Environment.getExternalStorageDirectory()
+                    .getAbsolutePath());
+        }catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
         String[] points = StorageManagerCompat.getAllPoints(VirtualCore.get().getContext());
         if (points != null) {
             Collections.addAll(mountPoints, points);
         }
         return mountPoints;
-
     }
 
     private Context createPackageContext(String packageName) {

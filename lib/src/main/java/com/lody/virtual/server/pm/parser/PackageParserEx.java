@@ -19,7 +19,6 @@ import android.text.TextUtils;
 
 import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.fixer.ComponentFixer;
-import com.lody.virtual.client.ipc.VPackageManager;
 import com.lody.virtual.helper.collection.ArrayMap;
 import com.lody.virtual.helper.compat.PackageParserCompat;
 import com.lody.virtual.helper.utils.FileUtils;
@@ -51,14 +50,22 @@ public class PackageParserEx {
     public static VPackage parsePackage(File packageFile) throws Throwable {
         PackageParser parser = PackageParserCompat.createParser(packageFile);
         PackageParser.Package p = PackageParserCompat.parsePackage(parser, packageFile, 0);
-        if (p.requestedPermissions.contains("android.permission.FAKE_PACKAGE_SIGNATURE")
-                && p.mAppMetaData != null
-                && p.mAppMetaData.containsKey("fake-signature")) {
-            String sig = p.mAppMetaData.getString("fake-signature");
-            p.mSignatures = new Signature[]{new Signature(sig)};
-            VLog.d(TAG, "Using fake-signature feature on : " + p.packageName);
-        } else {
-            PackageParserCompat.collectCertificates(parser, p, PackageParser.PARSE_IS_SYSTEM, true);
+        try
+        {
+            if (p.requestedPermissions.contains("android.permission.FAKE_PACKAGE_SIGNATURE")
+                    && p.mAppMetaData != null
+                    && p.mAppMetaData.containsKey("fake-signature"))
+            {
+                String sig = p.mAppMetaData.getString("fake-signature");
+                p.mSignatures = new Signature[]{new Signature(sig)};
+                VLog.d(TAG, "Using fake-signature feature on : " + p.packageName);
+            } else
+            {
+                PackageParserCompat.collectCertificates(parser, p, PackageParser.PARSE_IS_SYSTEM, true);
+            }
+        }catch (Throwable e)
+        {
+            e.printStackTrace();
         }
         return buildPackageCache(p);
     }

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.WindowManager;
 
 import com.lody.virtual.client.core.VirtualCore;
+import com.sk.desktop.SKDesktop;
 import com.sk.verify.msVerify;
 import com.tencent.stat.StatConfig;
 import com.tencent.stat.StatService;
@@ -22,6 +23,18 @@ public class SplashActivity extends VActivity {
 
     static private boolean is_initialized = false;
 
+    private void toDesktop()
+    {
+        if(Once.beenDone("useNewDesktop"))
+        {
+            HomeActivity.goHome(this);
+        }
+        else
+        {
+            SKDesktop.initDesktop(this);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +48,7 @@ public class SplashActivity extends VActivity {
 
         if(is_initialized)
         {
-            HomeActivity.goHome(this);
+            toDesktop();
             finish();
             return;
         }
@@ -58,7 +71,7 @@ public class SplashActivity extends VActivity {
                 VUiKit.sleep(delta);
             }
         }).done((res) -> {
-            HomeActivity.goHome(this);
+            toDesktop();
             // 腾讯用户统计
             // [可选]设置是否打开debug输出，上线时请关闭，Logcat标签为"MtaSDK"
             StatConfig.setDebugEnable(false);

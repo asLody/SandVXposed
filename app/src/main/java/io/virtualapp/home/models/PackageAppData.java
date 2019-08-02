@@ -14,7 +14,7 @@ import com.lody.virtual.server.pm.parser.VPackage;
 public class PackageAppData implements AppData {
 
     public String packageName;
-    public String name;
+    public String name = "Unknown";
     public String versionName;
     public Drawable icon;
     public boolean fastOpen;

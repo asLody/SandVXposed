@@ -10,6 +10,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
 
+import com.lody.virtual.helper.compat.SystemPropertiesCompat;
+
 /**
  * Created by 247321453 on 2016/7/17.
  */
@@ -23,7 +25,6 @@ public class OSUtils {
 	private boolean emui;
 	private boolean miui;
 	private boolean flyme;
-	private boolean androidQ = false;
 	private String miuiVersion;
 	private OSUtils() {
 		Properties properties;
@@ -40,13 +41,6 @@ public class OSUtils {
 					|| !TextUtils.isEmpty(properties.getProperty(KEY_MIUI_INTERNAL_STORAGE));
 		}
 		flyme = hasFlyme();
-
-
-		try {
-			Class.forName("android.app.IActivityTaskManager");
-			androidQ = true;
-		} catch (ClassNotFoundException e) {
-		}
 	}
 
 	public static OSUtils getInstance() {
@@ -58,19 +52,41 @@ public class OSUtils {
 	}
 
 	public boolean isEmui() {
-		return emui;
+		if (Build.DISPLAY.toUpperCase().startsWith("EMUI")) {
+			return true;
+		}
+		String property = SystemPropertiesCompat.get("ro.build.version.emui");
+		return property != null;
 	}
 
 	public boolean isMiui() {
-		return miui;
+		return SystemPropertiesCompat.getInt("ro.miui.ui.version.code", 0) > 0;
 	}
 
 	public boolean isFlyme() {
-		return flyme;
+		return Build.DISPLAY.toLowerCase().contains("flyme");
+	}
+
+	public static boolean isColorOS() {
+		return SystemPropertiesCompat.isExist("ro.build.version.opporom")
+				|| SystemPropertiesCompat.isExist("ro.rom.different.version");
+	}
+
+	public static boolean is360UI() {
+		String property = SystemPropertiesCompat.get("ro.build.uiversion");
+		return property != null && property.toUpperCase().contains("360UI");
+	}
+
+	public static boolean isLetv() {
+		return Build.MANUFACTURER.equalsIgnoreCase("Letv");
+	}
+
+	public static boolean isVivo() {
+		return SystemPropertiesCompat.isExist("ro.vivo.os.build.display.id");
 	}
 
 	public boolean isAndroidQ() {
-		return androidQ;
+		return Build.VERSION.SDK_INT>=29;
 	}
 
 	private boolean hasFlyme() {
