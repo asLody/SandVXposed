@@ -3,10 +3,6 @@ package io.virtualapp.home;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.OrientationHelper;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +10,11 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.OrientationHelper;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -188,7 +189,7 @@ public class ListAppFragment extends VFragment<ListAppContract.ListAppPresenter>
             {
                 AppChooseAct.pActParent = this;
                 Intent hIntent = new Intent(getActivity(), AppChooseAct.class);
-                getActivity().startActivity(hIntent);
+                getActivity().startActivityForResult(hIntent, AppChooseAct.resultCore);
             });
             hSearch = view.findViewById(R.id.search_box_vi);
             hSearchButton.setOnClickListener(v ->

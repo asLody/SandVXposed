@@ -1,5 +1,6 @@
 package com.lody.virtual.client.hook.proxies.am;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -102,6 +103,7 @@ public class ActivityManagerStub extends MethodInvocationProxy<MethodInvocationS
                 }
             });
             addMethodProxy(new StaticMethodProxy("getRecentTasks") {
+                @TargetApi(Build.VERSION_CODES.Q)
                 @Override
                 public Object call(Object who, Method method, Object... args) throws Throwable {
                     Object _infos = method.invoke(who, args);

@@ -1,6 +1,7 @@
 package io.virtualapp.home;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +27,7 @@ import com.lody.virtual.client.ipc.VActivityManager;
 import com.sk.app.SettingUtils;
 import com.sk.app.UpdateExistApp;
 import com.sk.fwindow.skFloattingWin;
+import com.sk.installapp.ManualInstallAct;
 import com.sk.listapp.AppDataManager;
 import com.sk.listapp.XAppManager;
 
@@ -203,6 +205,7 @@ public class SettingAct extends AppCompatPreferenceActivity
                 || SKUpdateAppApps.class.getName().equals(fragmentName)
                 || SKDisableAppAdapt.class.getName().equals(fragmentName)
                 || SKUseNewDesktop.class.getName().equals(fragmentName)
+                || SKInstallAppByPath.class.getName().equals(fragmentName)
                 || SKEnableAppSearch.class.getName().equals(fragmentName);
     }
 
@@ -868,6 +871,39 @@ public class SettingAct extends AppCompatPreferenceActivity
             })
                     .setCancelable(false);
             hDialog.create().show();
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item)
+        {
+            int id = item.getItemId();
+            if (id == android.R.id.home)
+            {
+                startActivity(new Intent(getActivity(), SettingAct.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class SKInstallAppByPath extends PreferenceFragment
+    {
+        @Override
+        public void onCreate(Bundle savedInstanceState)
+        {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_appset);
+            setHasOptionsMenu(true);
+            Activity act = getActivity();
+            if(act==null)return;
+            act.startActivity(
+                    new Intent(
+                            act,
+                            ManualInstallAct.class
+                    )
+            );
+            act.finish();
         }
 
         @Override

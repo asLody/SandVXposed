@@ -1,7 +1,12 @@
 package io.virtualapp.splash;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.WindowManager;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.lody.virtual.client.core.VirtualCore;
 import com.sk.desktop.SKDesktop;
@@ -35,6 +40,13 @@ public class SplashActivity extends VActivity {
         }
     }
 
+    private void bindAndInit()
+    {
+        toDesktop();
+        bindMTA();
+        finish();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,8 +60,13 @@ public class SplashActivity extends VActivity {
 
         if(is_initialized)
         {
-            toDesktop();
-            finish();
+            try
+            {
+                initMTA();
+            }catch (Throwable e)
+            {
+                e.printStackTrace();
+            }
             return;
         }
         @SuppressWarnings("unused")
@@ -71,15 +88,83 @@ public class SplashActivity extends VActivity {
                 VUiKit.sleep(delta);
             }
         }).done((res) -> {
-            toDesktop();
-            // 腾讯用户统计
+            try{
+                is_initialized = true;
+                initMTA();
+            }
+            catch (Throwable e)
+            {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void initMTA()
+    {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this,
+                Manifest.permission.KILL_BACKGROUND_PROCESSES)
+                != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_PHONE_STATE)||
+                    !ActivityCompat.shouldShowRequestPermissionRationale(this,
+                            Manifest.permission.KILL_BACKGROUND_PROCESSES)||
+                    !ActivityCompat.shouldShowRequestPermissionRationale(this,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE))
+            {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{
+                                Manifest.permission.KILL_BACKGROUND_PROCESSES,
+                                Manifest.permission.READ_PHONE_STATE,
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        },
+                        ResultGen);
+            }
+        }
+        else
+        {
+            bindAndInit();
+        }
+    }
+
+    private void bindMTA()
+    {
+        try
+        {
             // [可选]设置是否打开debug输出，上线时请关闭，Logcat标签为"MtaSDK"
             StatConfig.setDebugEnable(false);
             // 基础统计API
             StatService.registerActivityLifecycleCallbacks(this.getApplication());
-            is_initialized = true;
-            finish();
-        });
+        }catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    static final public int ResultGen = 0x80;
+
+    @Override
+    public void onRequestPermissionsResult(int ret,
+                                           String permissions[], int[] grantResults)
+    {
+        if (ret == ResultGen)
+        {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                bindAndInit();
+            }
+            else
+            {
+                finish();
+            }
+        }
     }
 
 

@@ -3,18 +3,17 @@ package io.virtualapp.home.adapters;
 import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-
 
 import com.lody.virtual.client.core.RomChecker;
 import com.lody.virtual.client.core.VirtualCore;
@@ -23,7 +22,6 @@ import com.sk.installapp.InstallPkgAct;
 import java.util.Objects;
 
 import io.virtualapp.R;
-import io.virtualapp.home.HomeActivity;
 import io.virtualapp.home.ListAppFragment;
 import jonathanfinerty.once.Once;
 
@@ -280,24 +278,29 @@ public class AppChooseAct extends AppCompatActivity
                 Intent lpInstaller = new Intent(VirtualCore.get().getContext(), InstallPkgAct.class);
                 lpInstaller.setData(Uri.parse(path));
                 startActivity(lpInstaller);
+                setResult(0x0);
             } catch (Throwable e)
             {
                 e.printStackTrace();
             }
+
+            if(pActParent.getActivity()!=null)
+                pActParent.getActivity().finish();
         }
         else
         {
             try
             {
-                if (HomeActivity.hHomeAct != null)
-                    HomeActivity.hHomeAct.InstallAppByPath(path);
+                //if (HomeActivity.hHomeAct != null)
+                //    HomeActivity.hHomeAct.InstallAppByPath(path);
+                Intent hIntent = new Intent();
+                hIntent.putExtra("path",path);
+                setResult(resultCode,hIntent);
             }catch (Throwable e)
             {
                 e.printStackTrace();
             }
         }
-        if(pActParent.getActivity()!=null)
-            pActParent.getActivity().finish();
         finish();
     }
 
@@ -312,4 +315,6 @@ public class AppChooseAct extends AppCompatActivity
     {
         super.onStop();
     }
+
+    public static final int resultCore = 0x2e;
 }
