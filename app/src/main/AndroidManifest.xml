@@ -104,7 +104,8 @@
         <activity
             android:name="com.sk.listapp.XAppManager"
             android:label="@string/title_activity_xapp_manager"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".home.ShortcutAppActivity"
             android:exported="true"

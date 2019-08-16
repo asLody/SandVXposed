@@ -2,7 +2,11 @@ package com.lody.virtual.sandxposed;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Process;
+import android.util.Log;
+import android.util.Pair;
+import android.widget.Toast;
 
 import com.lody.virtual.helper.utils.VLog;
 import com.swift.sandhook.xposedcompat.utils.FileUtils;
@@ -13,6 +17,7 @@ import java.util.LinkedList;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
+import sk.vpkg.fasthook.ClassUtil;
 import sk.vpkg.provider.BanNotificationProvider;
 import sk.vpkg.sign.SKPackageGuard;
 
@@ -52,7 +57,7 @@ public class EnvironmentSetup {
         return false;
     }
 
-    private static void initForSpecialApps(Context context, String packageName) {
+    private static void initForSpecialApps(final Context context, final String packageName) {
         if (!is_HookCrash(packageName))
             return;
         if(packageName.startsWith("com.tencent.mm"))

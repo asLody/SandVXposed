@@ -11,7 +11,7 @@
         android:id="@+id/toolbar_normalManage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
+        android:background="#999"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -28,6 +28,7 @@
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:text="@string/title_home"
+            android:textColor="#FFF"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.appcompat.widget.Toolbar>
@@ -36,7 +37,7 @@
         android:id="@+id/nav_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="?android:attr/windowBackground"
+        android:background="#AAA"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -75,7 +76,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/clearAllNotify"
-        android:src="@android:drawable/ic_delete"
+        android:src="@drawable/ic_crash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="52dp"
