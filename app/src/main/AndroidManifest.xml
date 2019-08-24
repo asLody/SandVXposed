@@ -17,10 +17,12 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="com.sk.desktop.SKDesktop"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance"
+            android:excludeFromRecents="true"/>
         <activity
             android:name="com.sk.installapp.ManualInstallAct"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance"
+            android:excludeFromRecents="true"/>
         <activity
             android:name="com.sk.listapp.AppPwdSetting"
             android:launchMode="singleInstance" />
@@ -129,7 +131,8 @@
 
         <activity
             android:name=".splash.SplashActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:excludeFromRecents="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
