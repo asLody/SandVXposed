@@ -44,4 +44,5 @@ https://github.com/asLody/VirtualApp
 
 # License
 
-注意！此项目由于使用了 VirtualApp 开源版，License 与 VirtualApp 相同，切勿用作商业用途，否则自负法律风险。
+注意！此项目由于使用了 VirtualApp 开源版，License 与 VirtualApp 相同，切勿用作商业用途，否则自负法律风险。  
+如需取得授权并使用更加稳定的商业版源码，请联系 QQ939543405
