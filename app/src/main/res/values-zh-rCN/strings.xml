@@ -65,7 +65,7 @@
     <string name="safe_mode_tips">警告，禁用安全模式，可能会让您的数据或者隐私受到威胁，并且可能导致手机沦陷为肉鸡！如果您不是专业的开发人员，请务必不要选择禁用。选择禁用代表您知晓已知风险，并关闭这个应用的安全检测功能。</string>
     <string name="safe_mode_enforcing">检测到安全模式正在运行，请在主页-右上菜单-设置，关闭安全模式以继续（不推荐）。</string>
     <string name="sk_failed">失败</string>
-    <string name="unknown_package">正在安全模式当中，该应用未被识别，安装器已经阻止这一危险应用。如果您非常信任此应用，请在应用设置（右上菜单-设置）里禁用安全模式，安装以后请重新开启安全模式！</string>
+    <string name="unknown_package">正在安全模式当中，该应用未被识别，安装器已经阻止这一危险应用。如果您非常信任此应用，请在应用设置（设置图标 - 更多设置）里禁用安全模式，安装以后请重新开启安全模式！</string>
     <string name="still_safe">保持开启（推荐）</string>
     <string name="non_stop">防止进程结束，点击确认会打开手机耗电设置。</string>
     <string name="title_activity_xapp_manager">SK应用管理器</string>
@@ -111,7 +111,7 @@
     <string name="sk_upgrade_localapp">默认会更新所有克隆的应用（会被更新到与本机安装版本相同），如果需要取消更新，请点击列表里面的项目。点击以后可以取消该应用的更新同步。</string>
     <string name="clear_data">删除数据</string>
     <string name="title_activity_app_data_manager">应用数据管理</string>
-    <string name="update_tips">更新日志：修复了桌面在部分情况下崩溃的问题。</string>
+    <string name="update_tips">更新日志：升级内核，修复手动路径安装的问题。</string>
     <string name="enable_wakeup">应用唤醒设置</string>
     <string name="wake_up_setting">启用或者禁用程序唤醒（切断唤醒）</string>
     <string name="shared_to_inner_app">分享到SVXP内部的应用</string>
