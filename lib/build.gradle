@@ -37,8 +37,8 @@ dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
     //    compile project(':hooklib')
     //    compile project(':xposedcompat')
-    api 'com.swift.sandhook:hooklib:4.0.2'
-    api 'com.swift.sandhook:xposedcompat:4.0.2'
+    api 'com.swift.sandhook:hooklib:4.1.0'
+    api 'com.swift.sandhook:xposedcompat:4.1.0'
     api 'com.trend.lazyinject:lib:3.4.0-beta'
     annotationProcessor 'com.trend.lazyinject:compiler:3.4.0-beta'
 }

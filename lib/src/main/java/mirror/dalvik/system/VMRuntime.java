@@ -16,4 +16,7 @@ public class VMRuntime {
         public static RefMethod<Void> setTargetSdkVersion;
         public static RefMethod<Boolean> is64Bit;
         public static RefStaticMethod<String> getCurrentInstructionSet;
+
+        public static RefMethod<Boolean> isJavaDebuggable;
+
 }
