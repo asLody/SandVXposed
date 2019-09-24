@@ -7,6 +7,10 @@
         android:title="@string/about" />
 
     <header
+        android:fragment="io.virtualapp.home.SettingAct$SKPrivacyPolicy"
+        android:title="@string/user_privacy_policy" />
+
+    <header
         android:fragment="io.virtualapp.home.SettingAct$NotificationPreferenceFragment"
         android:title="@string/enable_search_app" />
 

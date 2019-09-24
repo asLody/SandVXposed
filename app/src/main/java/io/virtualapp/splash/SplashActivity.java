@@ -1,6 +1,7 @@
 package io.virtualapp.splash;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.WindowManager;
@@ -99,7 +100,7 @@ public class SplashActivity extends VActivity {
         });
     }
 
-    private void initMTA()
+    private void appLikeOnCreate()
     {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_PHONE_STATE)
@@ -130,6 +131,28 @@ public class SplashActivity extends VActivity {
         else
         {
             bindAndInit();
+        }
+    }
+
+    private void initMTA()
+    {
+        if(!Once.beenDone("user_privacy"))
+        {
+            AlertDialog.Builder hBuilder = new AlertDialog.Builder(this);
+            hBuilder.setTitle(R.string.user_privacy_policy);
+            hBuilder.setMessage(R.string.user_privacy_policy_detail);
+            hBuilder.setCancelable(false);
+            hBuilder.setNegativeButton(R.string.back, (dialogInterface, i) -> finish());
+            hBuilder.setPositiveButton(R.string.accept, (dialogInterface, i) ->
+            {
+                Once.markDone("user_privacy");
+                appLikeOnCreate();
+            });
+            hBuilder.create().show();
+        }
+        else
+        {
+            appLikeOnCreate();
         }
     }
 

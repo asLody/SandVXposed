@@ -206,6 +206,7 @@ public class SettingAct extends AppCompatPreferenceActivity
                 || SKDisableAppAdapt.class.getName().equals(fragmentName)
                 || SKUseNewDesktop.class.getName().equals(fragmentName)
                 || SKInstallAppByPath.class.getName().equals(fragmentName)
+                || SKPrivacyPolicy.class.getName().equals(fragmentName)
                 || SKEnableAppSearch.class.getName().equals(fragmentName);
     }
 
@@ -215,6 +216,36 @@ public class SettingAct extends AppCompatPreferenceActivity
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class GeneralPreferenceFragment extends PreferenceFragment
+    {
+        @Override
+        public void onCreate(Bundle savedInstanceState)
+        {
+            super.onCreate(savedInstanceState);
+            AlertDialog.Builder hDialog = new AlertDialog.Builder(getActivity());
+            hDialog.setTitle(R.string.user_privacy_policy);
+            hDialog.setMessage(getResources().getString(R.string.user_privacy_policy_detail));
+            hDialog.setPositiveButton(R.string.desktop, (dialog, which) ->
+                    getActivity().finish());
+            hDialog.setNegativeButton(R.string.back, (dialog, which) ->
+                    dialog.dismiss())
+                    .setCancelable(true).create().show();
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item)
+        {
+            int id = item.getItemId();
+            if (id == android.R.id.home)
+            {
+                startActivity(new Intent(getActivity(), SettingAct.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class SKPrivacyPolicy extends PreferenceFragment
     {
         @Override
         public void onCreate(Bundle savedInstanceState)

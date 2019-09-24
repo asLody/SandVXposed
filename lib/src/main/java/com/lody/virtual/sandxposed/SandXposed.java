@@ -7,9 +7,13 @@ import android.util.Log;
 
 import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.helper.utils.OSUtils;
+import com.lody.virtual.helper.utils.VLog;
 import com.lody.virtual.remote.InstalledAppInfo;
+import com.swift.sandhook.HookLog;
+import com.swift.sandhook.PendingHookHandler;
 import com.swift.sandhook.SandHook;
 import com.swift.sandhook.SandHookConfig;
+import com.swift.sandhook.utils.ReflectionUtils;
 import com.swift.sandhook.xposedcompat.XposedCompat;
 
 import java.io.File;
@@ -22,10 +26,21 @@ import static com.swift.sandhook.xposedcompat.utils.DexMakerUtils.MD5;
 public class SandXposed {
 
     public static void init() {
-        SandHookConfig.DEBUG = true;
-        SandHookConfig.SDK_INT = OSUtils.getInstance().isAndroidQ() ? 29 : Build.VERSION.SDK_INT;
+        SandHookConfig.DEBUG = false;
+        SandHookConfig.SDK_INT = Build.VERSION.SDK_INT;
         SandHookConfig.compiler = SandHookConfig.SDK_INT < Build.VERSION_CODES.O;
-        SandHook.passApiCheck();
+        HookLog.DEBUG = SandHookConfig.DEBUG;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            ReflectionUtils.passApiCheck();
+        }
+        try{
+            if (PendingHookHandler.canWork()) {
+                VLog.i("SandHook", "Pending Hook Mode!");
+            }
+        }catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public static void injectXposedModule(Context context, String packageName, String processName) {
