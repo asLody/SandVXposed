@@ -3,15 +3,12 @@ package com.lody.virtual.sandxposed;
 import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.lody.virtual.client.core.VirtualCore;
-import com.lody.virtual.helper.utils.OSUtils;
 import com.lody.virtual.helper.utils.VLog;
 import com.lody.virtual.remote.InstalledAppInfo;
 import com.swift.sandhook.HookLog;
 import com.swift.sandhook.PendingHookHandler;
-import com.swift.sandhook.SandHook;
 import com.swift.sandhook.SandHookConfig;
 import com.swift.sandhook.utils.ReflectionUtils;
 import com.swift.sandhook.xposedcompat.XposedCompat;
@@ -20,6 +17,9 @@ import java.io.File;
 import java.util.List;
 
 import de.robv.android.xposed.XposedBridge;
+import sk.vpkg.fasthook.HookMode;
+import sk.vpkg.fasthook.SKFastHook;
+import sk.vpkg.fasthook.SKFastHookManager;
 
 import static com.swift.sandhook.xposedcompat.utils.DexMakerUtils.MD5;
 
@@ -51,18 +51,51 @@ public class SandXposed {
         List<InstalledAppInfo> appInfos = VirtualCore.get().getInstalledApps(InstalledAppInfo.FLAG_XPOSED_MODULE | InstalledAppInfo.FLAG_ENABLED_XPOSED_MODULE);
         ClassLoader classLoader = context.getClassLoader();
 
+        try{
+            SKFastHookManager.setHookMode(HookMode.getHookMode(context));
+        }catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
+
         for (InstalledAppInfo module:appInfos) {
             if (TextUtils.equals(packageName, module.packageName)) {
-                Log.d("injectXposedModule", "injectSelf : " + processName);
+                VLog.d("injectXposedModule", "injectSelf : " + processName);
             }
             try
             {
-                XposedCompat.loadModule(module.apkPath, module.getOdexFile().getParent(), module.libPath, XposedBridge.class.getClassLoader());
+                if(SKFastHookManager.isSandHook())
+                    XposedCompat.loadModule(module.apkPath, module.getOdexFile().getParent(), module.libPath, XposedBridge.class.getClassLoader());
+                else if(SKFastHookManager.isEpicBusiness())
+                {
+                    XposedCompat.loadModule(module.apkPath, module.getOdexFile().getParent(), module.libPath, XposedBridge.class.getClassLoader());
+                    // Setup HookMode
+                }
+                else if(SKFastHookManager.isSHook())
+                {
+                    SKFastHook.loadModule(module.apkPath,module.getOdexFile().getParent(),
+                            module.libPath,module.getApplicationInfo(0),SKFastHook.class.getClassLoader());
+                }
+                else if(SKFastHookManager.isWhale())
+                {
+                    // Bugs: May crash on Android Q devices.
+                    // So this method may not be published.
+                    continue;
+                }
+                else if(SKFastHookManager.isYahfa())
+                {
+                    // TODO: fix yahfa crash on Android Q+
+                    // SK团队 专业 - 专精
+                }
+                else
+                {
+                    continue;
+                }
             }
             catch (Throwable e)
             {
                 e.printStackTrace();
-                Log.e("injectXposedModule","Inject failed...");
+                VLog.e("injectXposedModule","Inject failed...");
                 break;
             }
         }

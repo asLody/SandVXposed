@@ -136,7 +136,7 @@ public class SplashActivity extends VActivity {
 
     private void initMTA()
     {
-        if(!Once.beenDone("user_privacy"))
+        if(!Once.beenDone("user_privacy_1"))
         {
             AlertDialog.Builder hBuilder = new AlertDialog.Builder(this);
             hBuilder.setTitle(R.string.user_privacy_policy);
@@ -145,7 +145,7 @@ public class SplashActivity extends VActivity {
             hBuilder.setNegativeButton(R.string.back, (dialogInterface, i) -> finish());
             hBuilder.setPositiveButton(R.string.accept, (dialogInterface, i) ->
             {
-                Once.markDone("user_privacy");
+                Once.markDone("user_privacy_1");
                 appLikeOnCreate();
             });
             hBuilder.create().show();

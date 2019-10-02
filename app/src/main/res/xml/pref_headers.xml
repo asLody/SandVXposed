@@ -70,4 +70,8 @@
         android:fragment="io.virtualapp.home.SettingAct$SKInstallAppByPath"
         android:title="@string/sk_install_app_by_path" />
 
+    <header
+        android:fragment="io.virtualapp.home.SettingAct$SKKernelSwitch"
+        android:title="@string/switch_kernel" />
+
 </preference-headers>

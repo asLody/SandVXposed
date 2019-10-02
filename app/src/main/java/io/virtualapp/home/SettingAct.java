@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.ipc.VActivityManager;
+import com.sk.act.HookModeDlg;
 import com.sk.app.SettingUtils;
 import com.sk.app.UpdateExistApp;
 import com.sk.fwindow.skFloattingWin;
@@ -207,7 +208,8 @@ public class SettingAct extends AppCompatPreferenceActivity
                 || SKUseNewDesktop.class.getName().equals(fragmentName)
                 || SKInstallAppByPath.class.getName().equals(fragmentName)
                 || SKPrivacyPolicy.class.getName().equals(fragmentName)
-                || SKEnableAppSearch.class.getName().equals(fragmentName);
+                || SKEnableAppSearch.class.getName().equals(fragmentName)
+                || SKKernelSwitch.class.getName().equals(fragmentName);
     }
 
     /**
@@ -215,7 +217,7 @@ public class SettingAct extends AppCompatPreferenceActivity
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class GeneralPreferenceFragment extends PreferenceFragment
+    public static class SKPrivacyPolicy extends PreferenceFragment
     {
         @Override
         public void onCreate(Bundle savedInstanceState)
@@ -245,7 +247,7 @@ public class SettingAct extends AppCompatPreferenceActivity
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class SKPrivacyPolicy extends PreferenceFragment
+    public static class GeneralPreferenceFragment extends PreferenceFragment
     {
         @Override
         public void onCreate(Bundle savedInstanceState)
@@ -935,6 +937,29 @@ public class SettingAct extends AppCompatPreferenceActivity
                     )
             );
             act.finish();
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item)
+        {
+            int id = item.getItemId();
+            if (id == android.R.id.home)
+            {
+                startActivity(new Intent(getActivity(), SettingAct.class));
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class SKKernelSwitch extends PreferenceFragment
+    {
+        @Override
+        public void onCreate(Bundle savedInstanceState)
+        {
+            super.onCreate(savedInstanceState);
+            HookModeDlg.buildDlgHookMode(getActivity());
         }
 
         @Override

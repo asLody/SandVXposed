@@ -82,7 +82,7 @@ public final class SpecialComponentList {
                     }
                 }
             } catch (Throwable e) {
-                e.printStackTrace();
+                // e.printStackTrace();
             }
         }
     }

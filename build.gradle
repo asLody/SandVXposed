@@ -10,6 +10,9 @@ buildscript {
         maven {
             url "https://dl.bintray.com/ganyao114/maven/"
         }
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
         jcenter()
         google()
     }
