@@ -1,6 +1,7 @@
 package com.lody.virtual.client;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.app.Application;
 import android.app.Instrumentation;
 import android.content.BroadcastReceiver;
@@ -40,7 +41,6 @@ import com.lody.virtual.client.hook.secondary.ProxyServiceFactory;
 import com.lody.virtual.client.ipc.VActivityManager;
 import com.lody.virtual.client.ipc.VDeviceManager;
 import com.lody.virtual.client.ipc.VPackageManager;
-import com.lody.virtual.client.ipc.VirtualStorageManager;
 import com.lody.virtual.client.stub.VASettings;
 import com.lody.virtual.helper.compat.BuildCompat;
 import com.lody.virtual.helper.compat.StorageManagerCompat;
@@ -54,6 +54,7 @@ import com.lody.virtual.sandxposed.SandXposed;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -335,11 +336,24 @@ public final class VClientImpl extends IVClient.Stub {
             lock.open();
             mTempLock = null;
         }
+
+
         VirtualCore.get().getComponentDelegate().beforeApplicationCreate(mInitialApplication);
 
+        if(BuildCompat.isQ())
+        {
+            oO00oO00oO0o0ooo0(packageName);
+
+            oo0o0o0o0o0o0();
+        }
 
         try {
+
             mInstrumentation.callApplicationOnCreate(mInitialApplication);
+
+            if(BuildCompat.isQ())
+                oo0o0o0o0000();
+
             InvocationStubManager.getInstance().checkEnv(HCallbackStub.class);
             if (conflict) {
                 InvocationStubManager.getInstance().checkEnv(AppInstrumentation.class);
@@ -358,6 +372,102 @@ public final class VClientImpl extends IVClient.Stub {
 
         VActivityManager.get().appDoneExecuting();
         VirtualCore.get().getComponentDelegate().afterApplicationCreate(mInitialApplication);
+    }
+
+    public List<ProviderInfo> o0ooo0o0o0 = null;
+    private void oo0o0o0o0o0o0()
+    {
+        try{
+            Object currentActivityThread = oo0o0o0o0o00o0o00o.invokeStaticMethod("android.app.ActivityThread", "currentActivityThread",
+                    new Class[]{}, new Object[]{});
+            Class<?> clazz = Class.forName("android.app.ActivityThread");
+            Class<?> clazz2 = Class.forName("android.app.ContentProviderHolder");
+            Method m0 = clazz.getDeclaredMethod("installProvider",Context.class,
+                    clazz2, ProviderInfo.class,
+                    boolean.class, boolean.class, boolean.class);
+            m0.setAccessible(true);
+            List<Object> fList = new ArrayList<>();
+            for(ProviderInfo pi : o0ooo0o0o0)
+            {
+                try
+                {
+                    Object o0 = m0.invoke(currentActivityThread, this.mInitialApplication, null, pi, false,
+                            true, true);
+                    if (o0 != null)
+                    {
+                        fList.add(o0);
+                    }
+                } catch (Throwable e)
+                {
+                    // e.printStackTrace();
+                }
+            }
+
+            try{
+                Object o2 = ActivityManager.class.getDeclaredMethod("getService").invoke(null);
+                Field f2 = currentActivityThread.getClass()
+                        .getDeclaredField("mAppThread");
+                f2.setAccessible(true);
+                Method m2 = o2.getClass().getDeclaredMethod("publishContentProviders",Object.class,List.class);
+                m2.invoke(o2,f2.get(currentActivityThread),fList);
+            }catch (Throwable e)
+            {
+                e.printStackTrace();
+            }
+        }catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
+    }
+    private void oo0o0o0o0000()
+    {
+        try{
+            Object currentActivityThread = oo0o0o0o0o00o0o00o.invokeStaticMethod("android.app.ActivityThread", "currentActivityThread", new Class[]{}, new Object[]{});
+            Object mBoundApp = oo0o0o0o0o00o0o00o.getFieldOjbect(currentActivityThread.getClass().getName(),
+                    currentActivityThread, "mBoundApplication");
+            oo0o0o0o0o00o0o00o.setFieldOjbect(mBoundApp.getClass().getName(),
+                    "providers",mBoundApp, o0ooo0o0o0);
+            o0ooo0o0o0 = null;
+        }catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
+    }
+    private void oO00oO00oO0o0ooo0(String sClass)
+    {
+        try{
+            Object oo0o0o0o0o0o0 = oo0o0o0o0o00o0o00o.invokeStaticMethod(
+                    "android.app.ActivityThread", "currentActivityThread", new Class[]{}, new Object[]{});
+
+            Object mBoundApp = oo0o0o0o0o00o0o00o.getFieldOjbect(oo0o0o0o0o0o0.getClass().getName(),
+                    oo0o0o0o0o0o0,"mBoundApplication");
+            o0ooo0o0o0 = (List<ProviderInfo>) oo0o0o0o0o00o0o00o.
+                    getFieldOjbect(mBoundApp.getClass().getName(),mBoundApp,
+                    "providers");
+            if(o0ooo0o0o0!=null)
+            {
+                try
+                {
+                    String szAppClazz = sClass;
+                    for(ProviderInfo pi : o0ooo0o0o0)
+                    {
+                        pi.applicationInfo.className = szAppClazz;
+                    }
+                }catch (Throwable e)
+                {
+                    e.printStackTrace();
+                }
+            }
+
+            oo0o0o0o0o00o0o00o.setFieldOjbect(mBoundApp.getClass().getName(),"providers",mBoundApp,null);
+            Object mH = oo0o0o0o0o00o0o00o.getFieldOjbect(oo0o0o0o0o0o0.getClass().getName(), oo0o0o0o0o0o0,
+                    "mH");
+            int what = (int) oo0o0o0o0o00o0o00o.getFieldOjbect(mH.getClass().getName(),mH,"ENABLE_JIT");
+            ((Handler)mH).sendEmptyMessageAtTime(what,10*1000);
+        }catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void fixWeChatRecovery(Application app) {
