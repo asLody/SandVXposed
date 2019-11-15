@@ -5,6 +5,7 @@
       "sdkFolder": "D:\\DroidSDK",
       "isNativeCompilerSettingsCacheEnabled": false,
       "isBuildOnlyTargetAbiEnabled": true,
+      "ideBuildTargetAbi": "arm64-v8a,armeabi-v7a,armeabi",
       "splitsAbiFilterSet": [],
       "intermediatesFolder": "E:\\Project_Conntainer\\VMProject\\sxp\\lib\\build\\intermediates",
       "gradleModulePathName": ":lib",
@@ -39,8 +40,8 @@
     "gradleBuildOutputFolder": "E:\\Project_Conntainer\\VMProject\\sxp\\lib\\.cxx\\cxx\\debug",
     "isDebuggableEnabled": true,
     "validAbiList": [
-      "ARMEABI_V7A",
-      "ARM64_V8A"
+      "ARM64_V8A",
+      "ARMEABI_V7A"
     ],
     "buildTargetSet": []
   },
