@@ -91,6 +91,19 @@ import static com.lody.virtual.client.stub.VASettings.INTERCEPT_BACK_HOME;
 class MethodProxies {
 
 
+    static class BindIsolatedService extends BindService {
+        @Override
+        public String getMethodName() {
+            return "bindIsolatedService";
+        }
+
+        @Override
+        public boolean beforeCall(Object who, Method method, Object... args) {
+            MethodParameterUtils.replaceLastAppPkg(args);
+            return super.beforeCall(who, method, args);
+        }
+    }
+
     static class ForceStopPackage extends MethodProxy {
 
         @Override

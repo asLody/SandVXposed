@@ -39,7 +39,63 @@ import static com.lody.virtual.client.stub.VASettings.INTERCEPT_BACK_HOME;
 //
 // Created by Swift Gan on 2019/3/18.
 //
+
+// Add Q Support by Saurik on 2019/11/27
 public class MethodProxies {
+    static class activityDestroyed extends MethodProxy
+    {
+
+        @Override
+        public String getMethodName()
+        {
+            return "activityDestroyed";
+        }
+
+        @Override
+        public Object call(Object who, Method method, Object... args) throws Throwable
+        {
+            IBinder token = (IBinder) args[0];
+            VActivityManager.get().onActivityDestroy(token);
+            return super.call(who, method, args);
+        }
+    }
+
+    static class activityResumed extends MethodProxy
+    {
+
+        @Override
+        public String getMethodName()
+        {
+            return "activityResumed";
+        }
+
+        @Override
+        public Object call(Object who, Method method, Object... args) throws Throwable
+        {
+            IBinder token = (IBinder) args[0];
+            VActivityManager.get().onActivityResumed(token);
+            return super.call(who, method, args);
+        }
+    }
+
+    static class finishActivity extends MethodProxy
+    {
+
+        @Override
+        public String getMethodName()
+        {
+            return "finishActivity";
+        }
+
+        @Override
+        public Object call(Object who, Method method, Object... args) throws Throwable
+        {
+            IBinder token = (IBinder) args[0];
+            VActivityManager.get().finishActivity(token);
+            return super.call(who, method, args);
+        }
+    }
+
     static class StartActivity extends MethodProxy {
 
         private static final String SCHEME_FILE = "file";

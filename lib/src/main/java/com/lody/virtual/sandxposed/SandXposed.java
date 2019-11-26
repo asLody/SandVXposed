@@ -33,6 +33,7 @@ public class SandXposed {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             ReflectionUtils.passApiCheck();
         }
+        /*
         try{
             if (PendingHookHandler.canWork()) {
                 VLog.i("SandHook", "Pending Hook Mode!");
@@ -41,6 +42,7 @@ public class SandXposed {
         {
             e.printStackTrace();
         }
+         */
     }
 
     public static void injectXposedModule(Context context, String packageName, String processName) {

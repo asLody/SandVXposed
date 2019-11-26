@@ -508,4 +508,14 @@ public class VActivityManager {
             VirtualRuntime.crash(e);
         }
     }
+
+    public void onActivityResumed(IBinder token)
+    {
+        try {
+            getService().onActivityResumed(VUserHandle.myUserId(), token);
+        } catch (RemoteException e)
+        {
+            e.printStackTrace();
+        }
+    }
 }

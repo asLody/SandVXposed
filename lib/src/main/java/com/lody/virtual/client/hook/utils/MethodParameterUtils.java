@@ -76,4 +76,14 @@ public class MethodParameterUtils {
 	}
 
 
+    public static void replaceLastUid(Object[] args)
+    {
+		int index = ArrayUtils.indexOfLast(args, Integer.class);
+		if (index != -1) {
+			int uid = (int) args[index];
+			if (uid == android.os.Process.myUid()) {
+				args[index] = VirtualCore.get().myUid();
+			}
+		}
+    }
 }

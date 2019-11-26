@@ -15,6 +15,8 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.IInterface;
 
+import com.lody.virtual.client.hook.providers.ProviderHook;
+
 import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +49,7 @@ public class ActivityThread {
     @MethodParams({IBinder.class, String.class, int.class, int.class, Intent.class})
     public static RefMethod<Void> sendActivityResult;
     public static RefMethod<Binder> getApplicationThread;
+    public static RefMethod<Void> handleNewIntent;
 
     public static Object installProvider(Object mainThread, Context context, ProviderInfo providerInfo, Object holder) {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {

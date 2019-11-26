@@ -40,7 +40,7 @@ android {
 
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
-    api 'com.swift.sandhook:hooklib:4.1.2'
+    api 'com.swift.sandhook:hooklib:4.1.5'
     // api 'com.swift.sandhook:xposedcompat:4.1.0'
     api 'com.trend.lazyinject:lib:3.4.0-beta'
     implementation "me.weishu:free_reflection:2.1.0"
