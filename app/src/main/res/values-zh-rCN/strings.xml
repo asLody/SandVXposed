@@ -48,7 +48,7 @@
     <string name="ensurerestart">真的要重启吗？请确保已经保存好数据。</string>
     <string name="manualpath">手动选择路径安装</string>
     <string name="appInstallTip">正在安装应用，稍后请下拉桌面以刷新应用列表。</string>
-    <string name="about_info">"特别感谢甘！##SandVXP是一个应用程序，可以让用户在非Root和非引导加载程序解锁设备上使用Xposed模块。##将应用程序和模块添加或克隆到这个应用程序中，然后在菜单的“Xposed管理器”中启用它，应用和模块就可以工作了。##QQ 384550791##邮箱: king@fou.ink##网址https://www.fou.ink/ "</string>
+    <string name="about_info">"特别感谢甘！##SandVXP是一个应用程序，可以让用户在非Root和非引导加载程序解锁设备上使用Xposed模块。##将应用程序和模块添加或克隆到这个应用程序中，然后在菜单的“Xposed管理器”中启用它，应用和模块就可以工作了。##QQ 384550791##邮箱: king@fou.ink##网址https://www.die.lu/ "</string>
     <string name="launch_failed">抱歉，启动失败。</string>
     <string name="sys_crash">应用程序发生异常，已被捕捉，请留意。</string>
     <string name="rom_shortcut_tips">检测到您的机型必须手动允许快捷方式的创建，请到系统设置->应用->权限管理，找到本应用，开启快捷方式权限。</string>
@@ -111,7 +111,7 @@
     <string name="sk_upgrade_localapp">默认会更新所有克隆的应用（会被更新到与本机安装版本相同），如果需要取消更新，请点击列表里面的项目。点击以后可以取消该应用的更新同步。</string>
     <string name="clear_data">删除数据</string>
     <string name="title_activity_app_data_manager">应用数据管理</string>
-    <string name="update_tips">更新日志：修复部分BUG，支持安卓10.</string>
+    <string name="update_tips">更新日志：修复部分BUG，加入新桌面。</string>
     <string name="enable_wakeup">应用唤醒设置</string>
     <string name="wake_up_setting">启用或者禁用程序唤醒（切断唤醒）</string>
     <string name="shared_to_inner_app">分享到SVXP内部的应用</string>

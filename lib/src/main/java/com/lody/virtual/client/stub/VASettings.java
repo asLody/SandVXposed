@@ -9,6 +9,7 @@ import java.util.Locale;
 public class VASettings {
     public static final String STUB_DEF_AUTHORITY = "virtual_stub_";
     public static final String ACTION_BADGER_CHANGE = "com.lody.virtual.BADGER_CHANGE";
+    public static String PACKAGE_NAME = null;
     public static String STUB_ACTIVITY = StubActivity.class.getName();
     public static String STUB_DIALOG = StubDialog.class.getName();
     public static String STUB_CP = StubContentProvider.class.getName();

@@ -1,14 +1,20 @@
 [
   {
     "level": "INFO",
-    "message": "Start JSON generation. Platform version: 19 min SDK version: armeabi-v7a"
+    "message": "Start JSON generation. Platform version: 19 min SDK version: armeabi-v7a",
+    "file": "E:\\Project_Conntainer\\VMProject\\sxp\\lib\\src\\main\\jni\\Android.mk",
+    "tag": "debug|armeabi-v7a"
   },
   {
     "level": "INFO",
-    "message": "JSON \u0027E:\\Project_Conntainer\\VMProject\\sxp\\lib\\.cxx\\ndkBuild\\debug\\armeabi-v7a\\android_gradle_build.json\u0027 was up-to-date"
+    "message": "JSON \u0027E:\\Project_Conntainer\\VMProject\\sxp\\lib\\.cxx\\ndkBuild\\debug\\armeabi-v7a\\android_gradle_build.json\u0027 was up-to-date",
+    "file": "E:\\Project_Conntainer\\VMProject\\sxp\\lib\\src\\main\\jni\\Android.mk",
+    "tag": "debug|armeabi-v7a"
   },
   {
     "level": "INFO",
-    "message": "JSON generation completed without problems"
+    "message": "JSON generation completed without problems",
+    "file": "E:\\Project_Conntainer\\VMProject\\sxp\\lib\\src\\main\\jni\\Android.mk",
+    "tag": "debug|armeabi-v7a"
   }
 ]

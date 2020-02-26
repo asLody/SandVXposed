@@ -36,11 +36,24 @@ android {
         warning 'NewApi','OnClick'
     }
 }
+gradle.startParameter.getTaskNames().each { task ->
+    println("task: " + task)
+    //library里 BuildConfig.DEBUG默认一直是flase;所以需要自定义
+    if(task.contains("Debug")){
+        android{
+            defaultPublishConfig "debug"
+        }
 
+    }else if(task.contains("Release")){
+        android{
+            defaultPublishConfig "release"
+        }
+    }
+}
 
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
-    api 'com.swift.sandhook:hooklib:4.1.5'
+    api 'com.swift.sandhook:hooklib:4.1.6'
     // api 'com.swift.sandhook:xposedcompat:4.1.0'
     api 'com.trend.lazyinject:lib:3.4.0-beta'
     implementation "me.weishu:free_reflection:2.1.0"

@@ -416,6 +416,7 @@ __always_inline int find_name(pid_t pid, const char *name, const char *libn,
         return -1;
     }
     *addr += libcaddr;
+    ALOGD("Find function OK -> %s",name);
     return 0;
 }
 

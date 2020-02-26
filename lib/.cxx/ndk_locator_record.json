@@ -19,6 +19,10 @@
     },
     {
       "level": "INFO",
+      "message": "NDK side-by-side folder from sdkFolder D:\\DroidSDK\\ndk does not exist"
+    },
+    {
+      "level": "INFO",
       "message": "Considering D:\\DroidSDK\\ndk-bundle by ndk.dir"
     },
     {

@@ -15,3 +15,4 @@ LOCAL_SHORT_COMMANDS=false
 -n
 jvmArgs : 
 
+Build command args:

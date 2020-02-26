@@ -47,6 +47,7 @@ public class NotificationManagerStub extends MethodInvocationProxy<MethodInvocat
             addMethodProxy(new ReplaceCallingPkgMethodProxy("getNotificationChannelGroups"));
             addMethodProxy(new ReplaceCallingPkgMethodProxy("deleteNotificationChannelGroup"));
             addMethodProxy(new ReplaceCallingPkgMethodProxy("createNotificationChannels"));
+            /*
             addMethodProxy(new ReplaceCallingPkgMethodProxy("getNotificationChannels") {
                 @Override
                 public boolean beforeCall(Object who, Method method, Object... args) {
@@ -63,6 +64,7 @@ public class NotificationManagerStub extends MethodInvocationProxy<MethodInvocat
                     return super.beforeCall(who, method, args);
                 }
             });
+            */
             addMethodProxy(new ReplaceCallingPkgMethodProxy("deleteNotificationChannel"));
         }
         if ("samsung".equalsIgnoreCase(Build.BRAND) || "samsung".equalsIgnoreCase(Build.MANUFACTURER)) {

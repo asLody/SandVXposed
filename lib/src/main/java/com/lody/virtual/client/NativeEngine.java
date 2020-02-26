@@ -125,7 +125,10 @@ public class NativeEngine {
         }
     }
 
-    public static void forbid(String path) {
+    public static void forbid(String path, boolean isF) {
+        if (!isF && !path.endsWith("/")) {
+            path = path + "/";
+        }
         if (!path.endsWith("/")) {
             path = path + "/";
         }

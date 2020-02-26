@@ -89,7 +89,26 @@ import static com.lody.virtual.client.stub.VASettings.INTERCEPT_BACK_HOME;
  */
 @SuppressWarnings("unused")
 class MethodProxies {
+    static class AvoidOverridePendingTransition extends MethodProxy
+    {
+        @Override
+        public String getMethodName()
+        {
+            return "overridePendingTransition";
+        }
 
+        @Override
+        public Object call(Object who, Method method, Object... args) throws Throwable
+        {
+            if("com.tencent.mm".equals(args[1]))
+            {
+                return null;
+            }
+            args[2] = android.R.anim.fade_in;
+            args[3] = android.R.anim.fade_out;
+            return method.invoke(who,args);
+        }
+    }
 
     static class BindIsolatedService extends BindService {
         @Override

@@ -2,8 +2,14 @@ package com.lody.virtual.sandxposed;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.os.Looper;
 import android.os.Process;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.lody.virtual.BuildConfig;
+import com.lody.virtual.client.NativeEngine;
 import com.lody.virtual.helper.utils.VLog;
 import com.swift.sandhook.xposedcompat.utils.FileUtils;
 
@@ -23,6 +29,10 @@ public class EnvironmentSetup {
         VLog.d("SandHook","Process attach: "+processName+" in package "+packageName);
         initSystemProp(context);
         initForSpecialApps(context, packageName);
+        if(BuildConfig.DEBUG)
+        {
+            initForDebug(context);
+        }
     }
 
     @SuppressLint("SdCardPath")
@@ -50,6 +60,56 @@ public class EnvironmentSetup {
                 return true;
         }
         return false;
+    }
+
+    private static void initForDebug(final Context context)
+    {
+        Log.d("SKAppCompat","Debug check.");
+        // Forbid Gameguardian or other game hack tool
+        boolean ggclassExist = false;
+        try{
+            context.getClassLoader().loadClass("org.luaj.vm2.Lua");
+            ggclassExist = true;
+        }catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
+        try{
+            context.getClassLoader().loadClass("luaj.Lua");
+            ggclassExist = true;
+        }catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
+
+        if(ggclassExist)
+        {
+            new Thread()
+            {
+                @Override
+                public void run()
+                {
+                    Looper.prepare();
+                    Toast.makeText(context,"Sorry, this software does not support.",Toast.LENGTH_LONG)
+                            .show();
+                    Looper.loop();
+                }
+            }.start();
+            new Thread()
+            {
+                @Override
+                public void run()
+                {
+                    try{
+                        Thread.sleep(5000);
+                    }catch (InterruptedException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    System.exit(3081);
+                }
+            }.start();
+        }
     }
 
     private static void initForSpecialApps(final Context context, final String packageName) {
@@ -98,6 +158,7 @@ public class EnvironmentSetup {
                 */
             }
         };
+
         try
         {
             XposedHelpers.findAndHookMethod(Process.class, "killProcess", int.class, g_Hook);

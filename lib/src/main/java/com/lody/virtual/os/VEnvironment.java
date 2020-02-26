@@ -159,4 +159,9 @@ public class VEnvironment {
     public static File getPackageInstallerStageDir() {
         return ensureCreated(new File(DATA_DIRECTORY, ".session_dir"));
     }
+
+    public static File getProcDirectory()
+    {
+        return ensureCreated(new File(ROOT, "proc"));
+    }
 }

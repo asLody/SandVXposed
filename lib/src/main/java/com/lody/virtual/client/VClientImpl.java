@@ -344,19 +344,23 @@ public final class VClientImpl extends IVClient.Stub {
 
         VirtualCore.get().getComponentDelegate().beforeApplicationCreate(mInitialApplication);
 
+        /*
         if(BuildCompat.isQ())
         {
             oO00oO00oO0o0ooo0(packageName);
 
             oo0o0o0o0o0o0();
         }
+        */
 
         try {
 
             mInstrumentation.callApplicationOnCreate(mInitialApplication);
 
+            /*
             if(BuildCompat.isQ())
                 oo0o0o0o0000();
+                */
 
             InvocationStubManager.getInstance().checkEnv(HCallbackStub.class);
             if (conflict) {
@@ -532,6 +536,8 @@ public final class VClientImpl extends IVClient.Stub {
         NativeEngine.redirectDirectory("/sys/class/net/wlan0/address", wifiMacAddressFile);
         NativeEngine.redirectDirectory("/sys/class/net/eth0/address", wifiMacAddressFile);
         NativeEngine.redirectDirectory("/sys/class/net/wifi/address", wifiMacAddressFile);
+
+        LinuxCompat.forgeProcDriver(false);
 
         NativeEngine.redirectDirectory("/data/data/" + info.packageName, info.dataDir);
         NativeEngine.redirectDirectory("/data/user/0/" + info.packageName, info.dataDir);

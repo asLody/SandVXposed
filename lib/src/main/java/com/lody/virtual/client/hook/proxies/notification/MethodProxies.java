@@ -515,7 +515,8 @@ class MethodProxies {
 
         @Override
         public Object call(Object who, Method method, Object... args) throws Throwable {
-            args[0] = VirtualCore.get().getHostPkg();
+            //args[0] = VirtualCore.get().getHostPkg();
+            MethodParameterUtils.replaceLastUid(args);
             return method.invoke(who,args);
         }
     }
@@ -529,8 +530,22 @@ class MethodProxies {
 
         @Override
         public Object call(Object who, Method method, Object... args) throws Throwable {
+
+            MethodParameterUtils.replaceLastUid(args);
+            int sequence = Build.VERSION.SDK_INT >= 29 ? 2 : 1;
+            MethodParameterUtils.replaceSequenceAppPkg(args, sequence);
+            return method.invoke(who, args);
+            /*
             args[0] = VirtualCore.get().getHostPkg();
-            return method.invoke(who,args);
+            try
+            {
+                return method.invoke(who, args);
+            }catch (Throwable e)
+            {
+                e.printStackTrace();
+                return null;
+            }
+            */
         }
     }
 

@@ -16,13 +16,18 @@
         android:networkSecurityConfig="@xml/sknetsec"
         android:theme="@style/AppTheme">
         <activity
+            android:name="com.zhongcheng.openva.zchome.ZCHome"
+            android:label="@string/title_activity_zchome"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
+        </activity>
+        <activity
             android:name="com.sk.desktop.SKDesktop"
-            android:launchMode="singleInstance"
-            android:excludeFromRecents="true"/>
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance" />
         <activity
             android:name="com.sk.installapp.ManualInstallAct"
-            android:launchMode="singleInstance"
-            android:excludeFromRecents="true"/>
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance" />
         <activity
             android:name="com.sk.listapp.AppPwdSetting"
             android:launchMode="singleInstance" />
@@ -107,7 +112,7 @@
             android:name="com.sk.listapp.XAppManager"
             android:label="@string/title_activity_xapp_manager"
             android:launchMode="singleInstance"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".home.ShortcutAppActivity"
             android:exported="true"
@@ -131,14 +136,15 @@
 
         <activity
             android:name=".splash.SplashActivity"
-            android:theme="@style/AppTheme"
-            android:excludeFromRecents="true">
+            android:excludeFromRecents="true"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.MONKEY"/>
+                <category android:name="android.intent.category.MONKEY" />
             </intent-filter>
         </activity>
         <activity
