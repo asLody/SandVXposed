@@ -10,7 +10,6 @@ import android.content.pm.PermissionInfo;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
-import android.os.Build;
 import android.os.RemoteException;
 
 import com.lody.virtual.client.env.VirtualRuntime;
@@ -173,7 +172,7 @@ public class VPackageManager {
             }
             final int P = 28;
             final String APACHE_LEGACY = "/system/framework/org.apache.http.legacy.boot.jar";
-            if (android.os.Build.VERSION.SDK_INT >= P && info.targetSdkVersion < P) {
+            if (android.os.Build.VERSION.SDK_INT >= P && info.targetSdkVersion <= P) {
                 String[] newSharedLibraryFiles;
                 if (info.sharedLibraryFiles == null) {
                     newSharedLibraryFiles = new String[]{APACHE_LEGACY};
