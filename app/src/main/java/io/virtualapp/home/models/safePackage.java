@@ -6,6 +6,7 @@ public class safePackage
 {
     static public String safe_Package[] =
             {
+                    "com.tencent.tim", // TIM OfficeQQ
                     "com.qiyi.video",//爱奇艺
                     "com.changba",//唱吧
                     "com.dianping.v1",//大众点评

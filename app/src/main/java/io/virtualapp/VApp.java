@@ -6,6 +6,7 @@ import androidx.multidex.MultiDexApplication;
 
 import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.stub.VASettings;
+import com.lody.virtual.helper.utils.VLog;
 import com.lody.virtual.sandxposed.SandXposed;
 // import com.trend.lazyinject.buildmap.Auto_ComponentBuildMap;
 // import com.trend.lazyinject.lib.LazyInject;
@@ -32,6 +33,7 @@ public class VApp extends MultiDexApplication {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         SandXposed.init();
+        VLog.OPEN_LOG = BuildConfig.DEBUG;
         mPreferences = base.getSharedPreferences("va", Context.MODE_MULTI_PROCESS);
         VASettings.ENABLE_IO_REDIRECT = true;
         VASettings.ENABLE_INNER_SHORTCUT = false;

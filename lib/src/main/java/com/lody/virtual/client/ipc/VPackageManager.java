@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.RemoteException;
 
 import com.lody.virtual.client.env.VirtualRuntime;
+import com.lody.virtual.helper.compat.BuildCompat;
 import com.lody.virtual.helper.ipcbus.IPCSingleton;
 import com.lody.virtual.server.IPackageInstaller;
 import com.lody.virtual.server.interfaces.IPackageManager;
@@ -171,19 +172,35 @@ public class VPackageManager {
             if (info == null) {
                 return null;
             }
-            final int P = 28;
-            final String APACHE_LEGACY = "/system/framework/org.apache.http.legacy.boot.jar";
-            if (android.os.Build.VERSION.SDK_INT >= P && info.targetSdkVersion < P) {
+            if(BuildCompat.isQ())
+            {
+                final String HTTP_LIB_Q = "/system/framework/org.apache.http.legacy.jar";
                 String[] newSharedLibraryFiles;
                 if (info.sharedLibraryFiles == null) {
-                    newSharedLibraryFiles = new String[]{APACHE_LEGACY};
+                    newSharedLibraryFiles = new String[]{HTTP_LIB_Q};
                 } else {
                     int newLength = info.sharedLibraryFiles.length + 1;
                     newSharedLibraryFiles = new String[newLength];
                     System.arraycopy(info.sharedLibraryFiles, 0, newSharedLibraryFiles, 0, newLength - 1);
-                    newSharedLibraryFiles[newLength - 1] = APACHE_LEGACY;
+                    newSharedLibraryFiles[newLength - 1] = HTTP_LIB_Q;
                 }
                 info.sharedLibraryFiles = newSharedLibraryFiles;
+            }
+            else
+            {
+                final String APACHE_LEGACY = "/system/framework/org.apache.http.legacy.boot.jar";
+                if (BuildCompat.isP()) {
+                    String[] newSharedLibraryFiles;
+                    if (info.sharedLibraryFiles == null) {
+                        newSharedLibraryFiles = new String[]{APACHE_LEGACY};
+                    } else {
+                        int newLength = info.sharedLibraryFiles.length + 1;
+                        newSharedLibraryFiles = new String[newLength];
+                        System.arraycopy(info.sharedLibraryFiles, 0, newSharedLibraryFiles, 0, newLength - 1);
+                        newSharedLibraryFiles[newLength - 1] = APACHE_LEGACY;
+                    }
+                    info.sharedLibraryFiles = newSharedLibraryFiles;
+                }
             }
             return info;
         } catch (RemoteException e) {
