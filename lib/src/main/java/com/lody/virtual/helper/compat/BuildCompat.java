@@ -19,6 +19,11 @@ public class BuildCompat {
         return 0;
     }
 
+    public static boolean isNougat()
+    {
+        return Build.VERSION.SDK_INT>=Build.VERSION_CODES.N;
+    }
+
     public static boolean isOreo() {
 
         return (Build.VERSION.SDK_INT == 25 && getPreviewSDKInt() > 0)

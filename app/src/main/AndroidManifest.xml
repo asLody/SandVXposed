@@ -23,7 +23,17 @@
         <activity
             android:name="com.sk.desktop.SKDesktop"
             android:excludeFromRecents="true"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance"
+            android:theme="@style/ShowWallpaper">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.MONKEY" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.sk.installapp.ManualInstallAct"
             android:excludeFromRecents="true"
@@ -100,9 +110,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.INSTALL_PACKAGE" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:scheme="content" />
                 <data android:scheme="file" />
                 <data android:mimeType="application/vnd.android.package-archive" />
@@ -138,14 +146,6 @@
             android:name=".splash.SplashActivity"
             android:excludeFromRecents="true"
             android:theme="@style/AppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.HOME" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.MONKEY" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".home.HomeActivity"

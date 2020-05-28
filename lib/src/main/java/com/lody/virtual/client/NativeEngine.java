@@ -57,6 +57,11 @@ public class NativeEngine {
         NativeMethods.init();
     }
 
+    static public void injectNativeEngine()
+    {
+        // nothing
+    }
+
 
     public static void startDexOverride() {
         List<InstalledAppInfo> installedAppInfos = VirtualCore.get().getInstalledApps(0);

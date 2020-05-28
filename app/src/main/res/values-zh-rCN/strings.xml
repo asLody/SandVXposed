@@ -79,7 +79,7 @@
     <string name="notify_disabled">应用通知已经禁止。</string>
     <string name="title_activity_install_pkg">SK程序安装器</string>
     <string name="package_installer">正在安装</string>
-    <string name="ensure_install">您真的要安装这个应用吗？这个未知来源的应用可能带来未知风险！请谨慎选择是否继续！如未来需要卸载本机已安装的App，请选择无依赖安装。</string>
+    <string name="ensure_install">您真的要安装%s吗？这个未知来源的应用可能带来未知风险！请谨慎选择是否继续！如未来需要卸载本机已安装的App，请选择无依赖安装。</string>
     <string name="install_success">安装%s成功！</string>
     <string name="upgrade_success">更新应用%s成功！</string>
     <string name="install_no_depend">无依赖安装</string>
@@ -111,7 +111,7 @@
     <string name="sk_upgrade_localapp">默认会更新所有克隆的应用（会被更新到与本机安装版本相同），如果需要取消更新，请点击列表里面的项目。点击以后可以取消该应用的更新同步。</string>
     <string name="clear_data">删除数据</string>
     <string name="title_activity_app_data_manager">应用数据管理</string>
-    <string name="update_tips">更新日志：修复安卓10下的BUG</string>
+    <string name="update_tips">更新日志：加入脱壳功能，修复部分问题。</string>
     <string name="enable_wakeup">应用唤醒设置</string>
     <string name="wake_up_setting">启用或者禁用程序唤醒（切断唤醒）</string>
     <string name="shared_to_inner_app">分享到SVXP内部的应用</string>

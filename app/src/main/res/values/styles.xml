@@ -17,6 +17,11 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <style name="Translucent_NoTitle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:background">#00000000</item> <!-- 设置自定义布局的背景透明 -->
+        <item name="android:windowBackground">@android:color/transparent</item>  <!-- 设置window背景透明，也就是去边框 -->
+    </style>
+
     <style name="XposedManager" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@color/background_material_light</item>
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -68,6 +73,13 @@
         <item name="android:layout_marginBottom">5dp</item>
         <item name="android:layout_marginLeft">10dp</item>
         <item name="android:background">@null</item>
+    </style>
+
+    <style name="ShowWallpaper" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowShowWallpaper">true</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Activity</item>
     </style>
 
 </resources>

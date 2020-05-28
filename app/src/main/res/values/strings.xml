@@ -137,7 +137,7 @@
     <string name="notify_disabled">Notification is already disabled.</string>
     <string name="title_activity_install_pkg">SK Package Installer</string>
     <string name="package_installer">Installing Package</string>
-    <string name="ensure_install">Do you wanna install this application? Click Without dependence to avoid crash after sysapp uninstall.</string>
+    <string name="ensure_install">Do you wanna install %s? Click Without dependence to avoid crash after sysapp uninstall.</string>
     <string name="install_success">Install %s Success!!!</string>
     <string name="upgrade_success">Update %s Success!!!</string>
     <string name="install_no_depend">Install Without Dependence</string>
@@ -169,7 +169,7 @@
     <string name="sk_upgrade_localapp">All applications were added to list when page was loaded. You can click item in list for cancel item form syncing.</string>
     <string name="title_activity_app_data_manager">Application Data Manager</string>
     <string name="clear_data">Delete Data</string>
-    <string name="update_tips">Update Logs: Fix bugs within Android Q</string>
+    <string name="update_tips">Update Logs: Add unpack option, bugs fixed.</string>
     <string name="enable_wakeup">Application Wake Up</string>
     <string name="wake_up_setting">Enable or disable application wake up</string>
     <string name="shared_to_inner_app">Shared to SVXP\'s applications.</string>

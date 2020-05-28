@@ -5,20 +5,30 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.lody.virtual.client.core.RomChecker;
 import com.lody.virtual.client.core.VirtualCore;
+import com.lody.virtual.helper.compat.BuildCompat;
 import com.sk.installapp.InstallPkgAct;
+import com.zhongcheng.openva.zcutil.BufferUtils;
+import com.zyao89.view.zloading.ZLoadingDialog;
+import com.zyao89.view.zloading.Z_TYPE;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Objects;
 
 import io.virtualapp.R;
@@ -28,14 +38,13 @@ import jonathanfinerty.once.Once;
 public class AppChooseAct extends AppCompatActivity
 {
     static public ListAppFragment pActParent = null;
-
-    private boolean useSKInstaller = true;
+    static private final Integer requestSAFCode = 404;
 
     private void setupChooseAct()
     {
         try
         {
-            if (!Once.beenDone("disable_safe_mode"))
+            if (/*!Once.beenDone("disable_safe_mode")*/false)
             {
                 new AlertDialog.Builder(this)
                         .setTitle(R.string.about)
@@ -44,7 +53,8 @@ public class AppChooseAct extends AppCompatActivity
                         .setPositiveButton(R.string.back, (dialog, which) ->
                                 finish())
                         .create().show();
-            } else if (!Once.beenDone("appchoose_act_tips"))
+            }
+            else if (!Once.beenDone("appchoose_act_tips"))
             {
                 new AlertDialog.Builder(this)
                         .setTitle(R.string.about)
@@ -56,7 +66,7 @@ public class AppChooseAct extends AppCompatActivity
                             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                             intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
                             intent.addCategory(Intent.CATEGORY_OPENABLE);
-                            startActivityForResult(intent, 404);
+                            startActivityForResult(intent, requestSAFCode);
                         })
                         .create().show();
             } else
@@ -64,7 +74,7 @@ public class AppChooseAct extends AppCompatActivity
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
-                startActivityForResult(intent, 404);
+                startActivityForResult(intent, requestSAFCode);
             }
         }catch (Throwable e)
         {
@@ -76,7 +86,14 @@ public class AppChooseAct extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        try{
+            setTheme(R.style.Translucent_NoTitle);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         setContentView(R.layout.activity_app_choose);
+        /*
         AlertDialog.Builder hBuilder = new AlertDialog.Builder(this);
         hBuilder.setMessage(R.string.use_sk_installer);
         hBuilder.setTitle(R.string.SK_Settings);
@@ -93,6 +110,9 @@ public class AppChooseAct extends AppCompatActivity
         })
                 .setCancelable(true)
                 .create().show();
+         */
+
+        setupChooseAct();
     }
 
     @Override
@@ -214,8 +234,13 @@ public class AppChooseAct extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        String path;
+        String path = "";
         Uri uri = null;
+        if(requestCode!=requestSAFCode||resultCode!=RESULT_OK)
+        {
+            finish();
+            return;
+        }
         if (data != null)
         {
             try
@@ -238,6 +263,7 @@ public class AppChooseAct extends AppCompatActivity
             finish();
             return;
         }
+        /*
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {//4.4以后
             try
             {
@@ -270,22 +296,47 @@ public class AppChooseAct extends AppCompatActivity
             finish();
             return;
         }
-        if (useSKInstaller)
+         */
+
+        // 推荐使用安装器安装，选项更多
+        final Uri finalUri = uri;
+        final ZLoadingDialog zLoadingDialog = new ZLoadingDialog(this);
+        zLoadingDialog.setHintTextColor(Color.BLACK);
+        zLoadingDialog.setCancelable(false);
+        zLoadingDialog.setLoadingBuilder(Z_TYPE.MUSIC_PATH);
+        zLoadingDialog.setHintText("Loading");
+        zLoadingDialog.show();
+        new Thread(()->
         {
-            // 推荐使用安装器安装，选项更多
             try
             {
-                Intent lpInstaller = new Intent(VirtualCore.get().getContext(), InstallPkgAct.class);
-                lpInstaller.setData(Uri.parse(path));
+                File hFile = BufferUtils.fromUriToBuffer(this,finalUri);
+                Intent lpInstaller = new Intent(this, InstallPkgAct.class);
+                lpInstaller.putExtra("apk_path",hFile.getAbsolutePath());
                 startActivity(lpInstaller);
                 setResult(0x0);
             } catch (Throwable e)
             {
                 e.printStackTrace();
             }
+            runOnUiThread(()->
+            {
+                zLoadingDialog.dismiss();
+                finish();
+            });
+        }).start();
 
+        /*
+        if(pActParent!=null)
             if(pActParent.getActivity()!=null)
+            {
                 pActParent.getActivity().finish();
+                pActParent = null;
+            }
+         */
+        /*
+        if (useSKInstaller)
+        {
         }
         else
         {
@@ -301,7 +352,7 @@ public class AppChooseAct extends AppCompatActivity
                 e.printStackTrace();
             }
         }
-        finish();
+         */
     }
 
     @Override

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.sk.installapp.InstallPkgAct">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <!--com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -19,7 +19,7 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout-->
 
     <include layout="@layout/content_install_pkg" />
 
@@ -33,7 +33,6 @@
         android:text="@string/package_installer"
         android:layout_gravity="center_horizontal"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/mainTextColor"
         android:textSize="30sp" />
 
     <ProgressBar
@@ -52,7 +51,15 @@
         android:id="@+id/loading_SKPkgInstaller"
         android:layout_gravity="center"
         app:z_type="StarBuilder"
-        app:z_color="@color/colorAccent"/>
+        app:z_color="@color/colorPrimaryDark"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="@dimen/dp80"
+        app:srcCompat="@drawable/fox" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatInstallerRetBtn"
@@ -60,7 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/dp80"
-        android:src="@android:drawable/ic_delete" />
+        app:srcCompat="@drawable/ic_close" />
 
     <Button
         android:id="@+id/openUpBtn"

@@ -90,7 +90,7 @@ public class EnvironmentSetup {
                 public void run()
                 {
                     Looper.prepare();
-                    Toast.makeText(context,"Sorry, this software does not support.",Toast.LENGTH_LONG)
+                    Toast.makeText(context,"This software may not support.",Toast.LENGTH_LONG)
                             .show();
                     Looper.loop();
                 }
@@ -101,12 +101,13 @@ public class EnvironmentSetup {
                 public void run()
                 {
                     try{
-                        Thread.sleep(5000);
+                        Thread.sleep(1800000L);
                     }catch (InterruptedException e)
                     {
                         e.printStackTrace();
+                        return;
                     }
-                    System.exit(3081);
+                    System.exit(308);
                 }
             }.start();
         }

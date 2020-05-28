@@ -11,6 +11,10 @@ public class BlackList {
     static {
         //ANR to login error
         processList.add("com.tencent.mm:push");
+        processList.add("com.tencent.mobileqq:mini");
+        processList.add("com.tencent.mobileqq:peak");
+        processList.add("com.tencent.mobileqq:qzone");
+        processList.add("com.tencent.mobileqq:picture");
     }
 
     public static boolean canNotInject(String packageName, String processName) {

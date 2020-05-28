@@ -8,6 +8,7 @@ import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.stub.VASettings;
 import com.lody.virtual.helper.utils.VLog;
 import com.lody.virtual.sandxposed.SandXposed;
+import com.sk.dexdumper.DumpDexV2;
 // import com.trend.lazyinject.buildmap.Auto_ComponentBuildMap;
 // import com.trend.lazyinject.lib.LazyInject;
 
@@ -37,6 +38,16 @@ public class VApp extends MultiDexApplication {
         mPreferences = base.getSharedPreferences("va", Context.MODE_MULTI_PROCESS);
         VASettings.ENABLE_IO_REDIRECT = true;
         VASettings.ENABLE_INNER_SHORTCUT = false;
+        try{
+            if(DumpDexV2.isDumpEnabled(base))
+            {
+                DumpDexV2.dumpDexDirectly(DumpDexV2.buildAndCleanUpDir(base).
+                        getAbsolutePath());
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         try {
             VirtualCore.get().startup(base);
         } catch (Throwable e) {

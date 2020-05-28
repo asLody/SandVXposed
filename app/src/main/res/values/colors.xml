@@ -35,5 +35,4 @@
     <color name="warning">@color/red_500</color>
     <color name="list_download_item_color">#fff</color>
     <color name="background_white">#F6F6F6</color>
-
 </resources>
