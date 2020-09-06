@@ -33,7 +33,7 @@ public class VApp extends MultiDexApplication {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        SandXposed.init();
+        SandXposed.init(BuildConfig.DEBUG);
         VLog.OPEN_LOG = BuildConfig.DEBUG;
         mPreferences = base.getSharedPreferences("va", Context.MODE_MULTI_PROCESS);
         VASettings.ENABLE_IO_REDIRECT = true;

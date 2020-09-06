@@ -267,6 +267,8 @@ public class NativeEngine {
 
     private static native void nativeEnableIORedirect(String selfSoPath, int apiLevel, int previewApiLevel);
 
+    public static native boolean nativeGetIsX86();
+
     public static int onGetUid(int uid) {
         return VClientImpl.get().getBaseVUid();
     }

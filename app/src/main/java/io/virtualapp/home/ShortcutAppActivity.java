@@ -1,42 +1,54 @@
 package io.virtualapp.home;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
 
-import io.virtualapp.R;
-import io.virtualapp.home.repo.XAppDataInstalled;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.lody.virtual.client.core.VirtualCore;
+import com.lody.virtual.client.ipc.VActivityManager;
 
 public class ShortcutAppActivity extends AppCompatActivity
 {
+    private static void launchActivity(String szPackageName, Integer nUserId)
+    {
+        try {
+            Intent intent = VirtualCore.get().getLaunchIntent(szPackageName, nUserId);
+            intent.setSelector(null);
+            VActivityManager.get().startActivity(intent, nUserId);
+        } catch (Throwable ignored) {
+            ignored.printStackTrace();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shortcut_app);
+        finish();
         Bundle lpBundle = getIntent().getExtras();
-        while(lpBundle!=null)
+        if(lpBundle!=null)
         {
             try
             {
                 // Fix android O shortcut by Saurik QQ 384550791
-                String pIntentInvoke = lpBundle.getString("pArgsToLaunch");
-                getIntent().removeExtra("pArgsToLaunch");
-                if (pIntentInvoke == null)
+                String szPackage = lpBundle.getString("pArgsToLaunch");
+                if (szPackage == null)
                 {
-                    break;
+                    throw new ClassNotFoundException("Can not found args");
                 }
                 int dwUserID = lpBundle.getInt("dwUserID");
-                XAppDataInstalled lpAppInfo = new XAppDataInstalled();
-                lpAppInfo.pkgName = pIntentInvoke;
-                LoadingActivity.launch(ShortcutAppActivity.this,pIntentInvoke,dwUserID);
+                //XAppDataInstalled lpAppInfo = new XAppDataInstalled();
+                //lpAppInfo.pkgName = pIntentInvoke;
+                // LoadingActivity.launch(ShortcutAppActivity.this,pIntentInvoke,dwUserID);
+                launchActivity(szPackage,dwUserID);
+                return;
             }
             catch(Throwable e)
             {
                 e.printStackTrace();
             }
-            break;
         }
-        finish();
+        launchActivity("com.tencent.mm",0);
     }
 }

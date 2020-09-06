@@ -25,6 +25,7 @@
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:theme="@style/ShowWallpaper">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -124,13 +125,24 @@
         <activity
             android:name=".home.ShortcutAppActivity"
             android:exported="true"
-            android:launchMode="singleInstance">
+            android:launchMode="singleInstance"
+            android:icon="@drawable/weixin"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="com.sk.vxpmain" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <!--activity-alias
+            android:targetActivity=".home.ShortcutAppActivity"
+            android:name="微信"
+            android:label="微信"
+            android:icon="@drawable/weixin">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias-->
         <activity
             android:name=".home.adapters.AppChooseAct"
             android:launchMode="singleInstance" />

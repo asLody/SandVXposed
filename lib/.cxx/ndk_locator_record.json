@@ -19,10 +19,6 @@
     },
     {
       "level": "INFO",
-      "message": "NDK side-by-side folder from sdkFolder D:\\DroidSDK\\ndk does not exist"
-    },
-    {
-      "level": "INFO",
       "message": "Considering D:\\DroidSDK\\ndk-bundle by ndk.dir"
     },
     {
@@ -31,7 +27,7 @@
     },
     {
       "level": "INFO",
-      "message": "Found requested ndk.dir (D:\\DroidSDK\\ndk-bundle) which has version 20.0.5594570"
+      "message": "Found requested ndk.dir (D:\\DroidSDK\\ndk-bundle) which has version 21.3.6528147"
     }
   ]
 }

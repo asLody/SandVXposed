@@ -7,7 +7,79 @@
   },
   {
     "level": "INFO",
-    "message": "JSON \u0027E:\\Project_Conntainer\\VMProject\\sxp\\lib\\.cxx\\ndkBuild\\debug\\arm64-v8a\\android_gradle_build.json\u0027 was up-to-date",
+    "message": "rebuilding JSON E:\\Project_Conntainer\\VMProject\\sxp\\lib\\.cxx\\ndkBuild\\debug\\arm64-v8a\\android_gradle_build.json due to:",
+    "file": "E:\\Project_Conntainer\\VMProject\\sxp\\lib\\src\\main\\jni\\Android.mk",
+    "tag": "debug|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "- force flag, will remove stale json folder",
+    "file": "E:\\Project_Conntainer\\VMProject\\sxp\\lib\\src\\main\\jni\\Android.mk",
+    "tag": "debug|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "- a dependent build file changed",
+    "file": "E:\\Project_Conntainer\\VMProject\\sxp\\lib\\src\\main\\jni\\Android.mk",
+    "tag": "debug|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "  - E:\\Project_Conntainer\\VMProject\\sxp\\lib\\src\\main\\jni\\Android.mk",
+    "file": "E:\\Project_Conntainer\\VMProject\\sxp\\lib\\src\\main\\jni\\Android.mk",
+    "tag": "debug|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "removing stale contents from \u0027E:\\Project_Conntainer\\VMProject\\sxp\\lib\\.cxx\\ndkBuild\\debug\\arm64-v8a\u0027",
+    "file": "E:\\Project_Conntainer\\VMProject\\sxp\\lib\\src\\main\\jni\\Android.mk",
+    "tag": "debug|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "created folder \u0027E:\\Project_Conntainer\\VMProject\\sxp\\lib\\.cxx\\ndkBuild\\debug\\arm64-v8a\u0027",
+    "file": "E:\\Project_Conntainer\\VMProject\\sxp\\lib\\src\\main\\jni\\Android.mk",
+    "tag": "debug|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "executing ndkBuild Executable : D:\\DroidSDK\\ndk-bundle\\ndk-build.cmd\narguments : \nNDK_PROJECT_PATH\u003dnull\nAPP_BUILD_SCRIPT\u003dE:\\Project_Conntainer\\VMProject\\sxp\\lib\\src\\main\\jni\\Android.mk\nNDK_APPLICATION_MK\u003dE:\\Project_Conntainer\\VMProject\\sxp\\lib\\src\\main\\jni\\Application.mk\nAPP_ABI\u003darm64-v8a\nNDK_ALL_ABIS\u003darm64-v8a\nNDK_DEBUG\u003d1\nAPP_PLATFORM\u003dandroid-19\nNDK_OUT\u003dE:/Project_Conntainer/VMProject/sxp/lib/build/intermediates/ndkBuild/debug/obj\nNDK_LIBS_OUT\u003dE:\\Project_Conntainer\\VMProject\\sxp\\lib\\build\\intermediates\\ndkBuild\\debug\\lib\nAPP_SHORT_COMMANDS\u003dfalse\nLOCAL_SHORT_COMMANDS\u003dfalse\n-B\n-n\njvmArgs : \n\n",
+    "file": "E:\\Project_Conntainer\\VMProject\\sxp\\lib\\src\\main\\jni\\Android.mk",
+    "tag": "debug|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "Executable : D:\\DroidSDK\\ndk-bundle\\ndk-build.cmd\narguments : \nNDK_PROJECT_PATH\u003dnull\nAPP_BUILD_SCRIPT\u003dE:\\Project_Conntainer\\VMProject\\sxp\\lib\\src\\main\\jni\\Android.mk\nNDK_APPLICATION_MK\u003dE:\\Project_Conntainer\\VMProject\\sxp\\lib\\src\\main\\jni\\Application.mk\nAPP_ABI\u003darm64-v8a\nNDK_ALL_ABIS\u003darm64-v8a\nNDK_DEBUG\u003d1\nAPP_PLATFORM\u003dandroid-19\nNDK_OUT\u003dE:/Project_Conntainer/VMProject/sxp/lib/build/intermediates/ndkBuild/debug/obj\nNDK_LIBS_OUT\u003dE:\\Project_Conntainer\\VMProject\\sxp\\lib\\build\\intermediates\\ndkBuild\\debug\\lib\nAPP_SHORT_COMMANDS\u003dfalse\nLOCAL_SHORT_COMMANDS\u003dfalse\n-B\n-n\njvmArgs : \n\n",
+    "file": "E:\\Project_Conntainer\\VMProject\\sxp\\lib\\src\\main\\jni\\Android.mk",
+    "tag": "debug|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "done executing ndkBuild",
+    "file": "E:\\Project_Conntainer\\VMProject\\sxp\\lib\\src\\main\\jni\\Android.mk",
+    "tag": "debug|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "write build output E:\\Project_Conntainer\\VMProject\\sxp\\lib\\.cxx\\ndkBuild\\debug\\arm64-v8a\\build_output.txt",
+    "file": "E:\\Project_Conntainer\\VMProject\\sxp\\lib\\src\\main\\jni\\Android.mk",
+    "tag": "debug|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "parse and convert ndk-build output to build configuration JSON",
+    "file": "E:\\Project_Conntainer\\VMProject\\sxp\\lib\\src\\main\\jni\\Android.mk",
+    "tag": "debug|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "found application make file E:\\Project_Conntainer\\VMProject\\sxp\\lib\\src\\main\\jni\\Application.mk",
+    "file": "E:\\Project_Conntainer\\VMProject\\sxp\\lib\\src\\main\\jni\\Android.mk",
+    "tag": "debug|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "write command file E:\\Project_Conntainer\\VMProject\\sxp\\lib\\.cxx\\ndkBuild\\debug\\arm64-v8a\\build_command.txt",
     "file": "E:\\Project_Conntainer\\VMProject\\sxp\\lib\\src\\main\\jni\\Android.mk",
     "tag": "debug|arm64-v8a"
   },

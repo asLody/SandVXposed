@@ -322,8 +322,13 @@ public final class VClientImpl extends IVClient.Stub {
             InvocationStubManager.getInstance().checkEnv(AppInstrumentation.class);
         }
 
-        if(XposedUtils.isEnabledXposed(packageName))
-            SandXposed.injectXposedModule(context, packageName, processName);
+        if(!NativeEngine.nativeGetIsX86())
+        {
+            if(XposedUtils.isEnabledXposed(packageName))
+            {
+                SandXposed.injectXposedModule(context, packageName, processName);
+            }
+        }
 
         mInitialApplication = LoadedApk.makeApplication.call(data.info, false, null);
 

@@ -42,9 +42,44 @@ import static com.lody.virtual.client.stub.VASettings.INTERCEPT_BACK_HOME;
 
 // Add Q Support by Saurik on 2019/11/27
 public class MethodProxies {
+    static class AvoidOverridePendingTransition extends MethodProxy
+    {
+        @Override
+        public String getMethodName()
+        {
+            return "overridePendingTransition";
+        }
+
+        @Override
+        public Object call(Object who, Method method, Object... args) throws Throwable
+        {
+            args[2] = android.R.anim.fade_in;
+            args[3] = android.R.anim.fade_out;
+            return method.invoke(who,args);
+        }
+    }
+
+    static class GetCallingPackage extends MethodProxy {
+
+        @Override
+        public String getMethodName() {
+            return "getCallingPackage";
+        }
+
+        @Override
+        public Object call(Object who, Method method, Object... args) throws Throwable {
+            IBinder token = (IBinder) args[0];
+            return VActivityManager.get().getCallingPackage(token);
+        }
+
+        @Override
+        public boolean isEnable() {
+            return isAppProcess();
+        }
+    }
+
     static class activityDestroyed extends MethodProxy
     {
-
         @Override
         public String getMethodName()
         {
@@ -215,7 +250,7 @@ public class MethodProxies {
                                             android.R.attr.activityOpenExitAnimation
                                     });
 
-                            r.activity.overridePendingTransition(array.getResourceId(0, 0), array.getResourceId(1, 0));
+                            r.activity.overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                             array.recycle();
                         }
                     } catch (Throwable e) {

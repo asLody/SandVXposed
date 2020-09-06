@@ -824,7 +824,7 @@ __always_inline void hook_dlopen(int api_level) {
 }
 
 
-void IOUniformer::startUniformer(const char *so_path, int api_level, int preview_api_level) {
+void IOUniformer::startUniformer(const char *so_path, int api_level, int preview_api_level){
 
     g_api_level = api_level;
     g_preview_api_level = preview_api_level;
@@ -888,9 +888,9 @@ void IOUniformer::startUniformer(const char *so_path, int api_level, int preview
         }
         dlclose(handle);
     }
-    if (api_level >= 28 && preview_api_level > 0) {
-        ALOGE("Android Q, Skip hook dlopen");
-    } else {
+    if (api_level < 28) {
+#ifdef __arm__
         hook_dlopen(api_level);
+#endif
     }
 }

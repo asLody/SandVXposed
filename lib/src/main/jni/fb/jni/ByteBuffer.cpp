@@ -34,7 +34,7 @@ local_ref<JByteBuffer> JByteBuffer::wrapBytes(uint8_t* data, size_t size) {
   auto res = adopt_local(static_cast<javaobject>(Environment::current()->NewDirectByteBuffer(data, size)));
   FACEBOOK_JNI_THROW_PENDING_EXCEPTION();
   if (!res) {
-    throw std::runtime_error("Direct byte buffers are unsupported.");
+    return nullptr;
   }
   return res;
 }
@@ -46,10 +46,7 @@ uint8_t* JByteBuffer::getDirectBytes() const {
   void* bytes = Environment::current()->GetDirectBufferAddress(self());
   FACEBOOK_JNI_THROW_PENDING_EXCEPTION();
   if (!bytes) {
-    throw std::runtime_error(
-        isDirect() ?
-          "Attempt to get direct bytes of non-direct byte buffer." :
-          "Error getting direct bytes of byte buffer.");
+    return nullptr;
   }
   return static_cast<uint8_t*>(bytes);
 }
@@ -61,10 +58,7 @@ size_t JByteBuffer::getDirectSize() const {
   int size = Environment::current()->GetDirectBufferCapacity(self());
   FACEBOOK_JNI_THROW_PENDING_EXCEPTION();
   if (size < 0) {
-    throw std::runtime_error(
-        isDirect() ?
-          "Attempt to get direct size of non-direct byte buffer." :
-          "Error getting direct size of byte buffer.");
+    return 0;
   }
   return static_cast<size_t>(size);
 }

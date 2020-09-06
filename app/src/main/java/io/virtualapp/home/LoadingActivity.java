@@ -14,7 +14,6 @@ import android.os.RemoteException;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,7 +44,6 @@ import io.virtualapp.abs.ui.VActivity;
 import io.virtualapp.abs.ui.VUiKit;
 import io.virtualapp.home.models.PackageAppData;
 import io.virtualapp.home.repo.PackageAppDataStorage;
-import jonathanfinerty.once.Once;
 import sk.vpkg.provider.BanNotificationProvider;
 
 /**
@@ -111,7 +109,6 @@ public class LoadingActivity extends VActivity {
         super.onCreate(savedInstanceState);
         try {
             start = SystemClock.elapsedRealtime();
-
             if(!(new msVerify().chkSign(getResources().getString(R.string.about_info))))
             {finish();return;}
             setContentView(R.layout.activity_loading);
@@ -261,6 +258,7 @@ public class LoadingActivity extends VActivity {
 
     private void launchActivity(Intent intent, int userId) {
         try {
+            //VLog.d("LoadingActivity","launchActivity uid "+userId);
             VActivityManager.get().startActivity(intent, userId);
         } catch (Throwable e) {
             e.printStackTrace();

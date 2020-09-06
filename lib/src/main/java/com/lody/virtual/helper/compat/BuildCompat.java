@@ -40,4 +40,9 @@ public class BuildCompat {
     {
         return Build.VERSION_CODES.P<=Build.VERSION.SDK_INT;
     }
+
+    public static boolean isR()
+    {
+        return Build.VERSION.SDK_INT>=Build.VERSION_CODES.R;
+    }
 }

@@ -1,7 +1,3 @@
-//
-// VirtualApp Native Project
-//
-
 #ifndef NDK_LOG_H
 #define NDK_LOG_H
 

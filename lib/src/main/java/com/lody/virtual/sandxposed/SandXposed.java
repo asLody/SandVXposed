@@ -5,6 +5,7 @@ import android.os.Build;
 import android.text.TextUtils;
 
 import com.lody.virtual.client.core.VirtualCore;
+import com.lody.virtual.helper.compat.BuildCompat;
 import com.lody.virtual.helper.utils.VLog;
 import com.lody.virtual.remote.InstalledAppInfo;
 import com.swift.sandhook.HookLog;
@@ -25,8 +26,8 @@ import static com.swift.sandhook.xposedcompat.utils.DexMakerUtils.MD5;
 
 public class SandXposed {
 
-    public static void init() {
-        SandHookConfig.DEBUG = false;
+    public static void init(Boolean debugEnabled) {
+        SandHookConfig.DEBUG = debugEnabled;
         SandHookConfig.SDK_INT = Build.VERSION.SDK_INT;
         SandHookConfig.compiler = SandHookConfig.SDK_INT < Build.VERSION_CODES.O;
         HookLog.DEBUG = SandHookConfig.DEBUG;
@@ -35,9 +36,12 @@ public class SandXposed {
         }
 
         try{
-            if (PendingHookHandler.canWork()) {
-                VLog.i("SandHook", "Pending Hook Mode!");
+            if(BuildCompat.isQ())
+            {
+                VLog.w("SandVXposed","Android Q! Just skip NativeHook.");
+                XposedCompat.class.getName();
             }
+            SandHookConfig.delayHook = false;
         }catch (Throwable e)
         {
             e.printStackTrace();
@@ -51,6 +55,15 @@ public class SandXposed {
 
         List<InstalledAppInfo> appInfos = VirtualCore.get().getInstalledApps(InstalledAppInfo.FLAG_XPOSED_MODULE | InstalledAppInfo.FLAG_ENABLED_XPOSED_MODULE);
         ClassLoader classLoader = context.getClassLoader();
+
+        XposedCompat.context = context;
+        XposedCompat.packageName = packageName;
+        XposedCompat.processName = processName;
+        XposedCompat.cacheDir = new File(context.getCacheDir(), MD5(processName));
+        XposedCompat.classLoader = XposedCompat.getSandHookXposedClassLoader(classLoader, XposedBridge.class.getClassLoader());
+        XposedCompat.isFirstApplication = true;
+
+        SandHookHelper.initHookPolicy();
 
         try{
             SKFastHookManager.setHookMode(HookMode.getHookMode(context));
@@ -100,15 +113,6 @@ public class SandXposed {
                 break;
             }
         }
-
-        XposedCompat.context = context;
-        XposedCompat.packageName = packageName;
-        XposedCompat.processName = processName;
-        XposedCompat.cacheDir = new File(context.getCacheDir(), MD5(processName));
-        XposedCompat.classLoader = XposedCompat.getSandHookXposedClassLoader(classLoader, XposedBridge.class.getClassLoader());
-        XposedCompat.isFirstApplication = true;
-
-        SandHookHelper.initHookPolicy();
         EnvironmentSetup.init(context, packageName, processName);
 
         try {

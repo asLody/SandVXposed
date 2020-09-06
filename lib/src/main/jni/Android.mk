@@ -4,7 +4,8 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := va++
 
 LOCAL_CFLAGS := -Wno-error=format-security -fpermissive -DLOG_TAG=\"VA++\"
-LOCAL_CFLAGS += -fno-rtti -fno-exceptions
+LOCAL_CFLAGS += -fno-rtti -fno-exceptions -O3
+LOCAL_CFLAGS += -mllvm -sub -mllvm -fla -mllvm -sobf -mllvm -split
 
 LOCAL_C_INCLUDES += $(MAIN_LOCAL_PATH)
 LOCAL_C_INCLUDES += $(MAIN_LOCAL_PATH)/Foundation

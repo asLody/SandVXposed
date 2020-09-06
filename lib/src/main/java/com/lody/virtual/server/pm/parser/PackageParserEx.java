@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.fixer.ComponentFixer;
 import com.lody.virtual.helper.collection.ArrayMap;
+import com.lody.virtual.helper.compat.BuildCompat;
 import com.lody.virtual.helper.compat.PackageParserCompat;
 import com.lody.virtual.helper.utils.FileUtils;
 import com.lody.virtual.helper.utils.VLog;
@@ -64,6 +65,33 @@ public class PackageParserEx {
                 PackageParserCompat.collectCertificates(parser, p, PackageParser.PARSE_IS_SYSTEM, true);
             }
         }catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
+        try{
+            if(BuildCompat.isP())
+            {
+                if(p.mSigningDetails == null)
+                {
+                    // Call with SKSignature -> My signature API28
+                    PackageInfo mPkgInfo =
+                            VirtualCore.get().getContext().getPackageManager()
+                                    .getPackageInfo(VirtualCore.get().getContext().getPackageName(),
+                                            PackageManager.GET_SIGNING_CERTIFICATES);
+                    p.mSigningDetails = new PackageParser.SigningDetails(mPkgInfo.signingInfo.getApkContentsSigners());
+                    p.mSignatures = mPkgInfo.signingInfo.getApkContentsSigners();
+                }
+            }
+            else if(p.mSignatures == null)
+            {
+                // Call with SKSignature -> My signature
+                PackageInfo mPkgInfo =
+                        VirtualCore.get().getContext().getPackageManager()
+                                .getPackageInfo(VirtualCore.get().getContext().getPackageName(),
+                                        PackageManager.GET_SIGNATURES);
+                p.mSignatures = mPkgInfo.signatures;
+            }
+        }catch (Exception e)
         {
             e.printStackTrace();
         }

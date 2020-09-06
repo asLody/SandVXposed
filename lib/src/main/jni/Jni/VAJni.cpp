@@ -2,9 +2,6 @@
 // VirtualApp Native Project
 //
 #include <Foundation/IOUniformer.h>
-#include <fb/include/fb/Build.h>
-#include <fb/include/fb/ALog.h>
-#include <fb/include/fb/fbjni.h>
 #include "VAJni.h"
 
 using namespace facebook::jni;
@@ -55,9 +52,21 @@ static jstring jni_nativeReverseRedirectedPath(alias_ref<jclass> jclazz, jstring
     return Environment::current()->NewStringUTF(orig_path);
 }
 
-
 alias_ref<jclass> nativeEngineClass;
 
+
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_com_lody_virtual_client_NativeEngine_nativeGetIsX86(JNIEnv *env, jclass clazz)
+{
+#if defined(__arm64__) || defined(__aarch64__)
+    return false;
+#endif
+#if defined(i386) || defined(_x86_64)
+    return true;
+#endif
+    return false;
+}
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *) {
     return initialize(vm, [] {
@@ -85,5 +94,3 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *) {
 extern "C" __attribute__((constructor)) void _init(void) {
     IOUniformer::init_env_before_all();
 }
-
-
