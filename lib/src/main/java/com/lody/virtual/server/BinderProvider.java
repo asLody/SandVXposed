@@ -37,19 +37,18 @@ import com.lody.virtual.server.pm.VPackageManagerService;
 import com.lody.virtual.server.pm.VUserManagerService;
 import com.lody.virtual.server.vs.VirtualStorageService;
 
-import mirror.android.app.job.IJobScheduler;
-
 /**
  * @author Lody
  */
-public final class BinderProvider extends ContentProvider {
+public class BinderProvider extends ContentProvider {
 
     private final ServiceFetcher mServiceFetcher = new ServiceFetcher();
 
     @Override
     public boolean onCreate() {
         Context context = getContext();
-        DaemonService.startup(context);
+        if(context!=null)
+            DaemonService.startup(context);
         if (!VirtualCore.get().isStartup()) {
             return true;
         }
@@ -121,7 +120,10 @@ public final class BinderProvider extends ContentProvider {
             return bundle;
         }
         if ("register".equals(method)) {
-
+        }
+        if("ensure_created".equals(method))
+        {
+            return new Bundle();
         }
         return null;
     }

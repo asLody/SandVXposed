@@ -2,6 +2,8 @@ package io.virtualapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
+
 import androidx.multidex.MultiDexApplication;
 
 import com.lody.virtual.client.core.VirtualCore;
@@ -33,6 +35,9 @@ public class VApp extends MultiDexApplication {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            SandXposed.freeReflection(base);
+        }
         SandXposed.init(BuildConfig.DEBUG);
         VLog.OPEN_LOG = BuildConfig.DEBUG;
         mPreferences = base.getSharedPreferences("va", Context.MODE_MULTI_PROCESS);

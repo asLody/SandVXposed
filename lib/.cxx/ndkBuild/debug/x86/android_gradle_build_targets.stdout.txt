@@ -5,14 +5,4 @@ Android NDK:     This is likely to result in incorrect builds. Try using LOCAL_S
 Android NDK:     or LOCAL_SHARED_LIBRARIES instead to list the library dependencies of the    
 Android NDK:     current module    
 make: Nothing to be done for 'skpkg'.
-[x86] Compile++      : va++ <= VAJni.cpp
-[x86] Compile++      : va++ <= IOUniformer.cpp
-[x86] Compile++      : va++ <= VMPatch.cpp
-[x86] Compile++      : va++ <= SymbolFinder.cpp
-[x86] Compile++      : va++ <= Path.cpp
-[x86] Compile++      : va++ <= SandboxFs.cpp
-[x86] Compile        : va++ <= hde64.c
-[x86] Compile++      : va++ <= SubstrateDebug.cpp
-[x86] Compile++      : va++ <= SubstrateHook.cpp
-[x86] Compile++      : va++ <= SubstratePosixMemory.cpp
-[x86] SharedLibrary  : libva++.so
+make: Nothing to be done for 'va++'.

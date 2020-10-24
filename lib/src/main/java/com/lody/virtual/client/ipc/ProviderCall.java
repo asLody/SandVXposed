@@ -75,6 +75,35 @@ public class ProviderCall {
 			return ProviderCall.call(auth, context, method, arg, bundle);
 		}
 
+		public Bundle callSafe()
+		{
+			try{
+				return call();
+			}catch (Throwable throwable)
+			{
+				throwable.printStackTrace();
+			}
+			return null;
+		}
+
+		public Bundle callSafe(int retry)
+		{
+			try{
+				int fox = 0;
+				while(fox < retry)
+				{
+					Bundle ob = callSafe();
+					if(ob!=null)return ob;
+					fox++;
+				}
+				return null;
+			}catch (Throwable e)
+			{
+				e.printStackTrace();
+			}
+			return null;
+		}
+
 	}
 
 }

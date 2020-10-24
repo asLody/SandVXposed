@@ -53,6 +53,20 @@ public class MethodProxies {
         @Override
         public Object call(Object who, Method method, Object... args) throws Throwable
         {
+            if("com.tencent.mm".equals(args[1]))
+            {
+                try
+                {
+                    args[2] = android.R.anim.slide_in_left;
+                    args[3] = android.R.anim.slide_out_right;
+                    return method.invoke(who, args);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
             args[2] = android.R.anim.fade_in;
             args[3] = android.R.anim.fade_out;
             return method.invoke(who,args);

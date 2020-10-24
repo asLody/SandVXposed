@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
-import android.util.Log;
 
 import com.lody.virtual.client.core.InstallStrategy;
 import com.lody.virtual.client.core.VirtualCore;
@@ -178,13 +177,7 @@ public class VAppManagerService implements IAppManager {
                 return res;
             }
             if (!canUpdate(existOne, pkg, flags)) {
-                try
-                {
-                    Log.w(TAG,"Update as same ver as installed package.");
-                }catch (Throwable e)
-                {
-                    e.printStackTrace();
-                }
+                VLog.w(TAG,"Update as same ver as installed package.");
             }
             res.isUpdate = true;
         }
@@ -198,7 +191,7 @@ public class VAppManagerService implements IAppManager {
         if (!libDir.exists() && !libDir.mkdirs()) {
             return InstallResult.makeFailure("无法创建库目录！");
         }
-        boolean dependSystem = (flags & InstallStrategy.DEPEND_SYSTEM_IF_EXIST) != 0
+        boolean dependSystem = ((flags & InstallStrategy.DEPEND_SYSTEM_IF_EXIST) != 0)
                 && VirtualCore.get().isOutsideInstalled(pkg.packageName);
 
         //for sanvxposed disable inline
@@ -257,12 +250,10 @@ public class VAppManagerService implements IAppManager {
             boolean runDexOpt = false;
             if (VirtualRuntime.isArt()) {
                 try {
-                    Log.e("ArtDexOptimizer", "run dex2oat");
                     ArtDexOptimizer.interpretDex2Oat(ps.apkPath, VEnvironment.getOdexFile(ps.packageName).getPath());
                 } catch (IOException e) {
                     e.printStackTrace();
                     runDexOpt = true;
-                    Log.e("ArtDexOptimizer", "dex2oat error");
                 }
             } else {
                 runDexOpt = true;

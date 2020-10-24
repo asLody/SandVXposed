@@ -2,7 +2,9 @@ package com.lody.virtual.helper;
 
 import android.os.Build;
 
+import com.lody.virtual.helper.compat.BuildCompat;
 import com.lody.virtual.helper.utils.OSUtils;
+import com.lody.virtual.helper.utils.VLog;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +20,7 @@ import mirror.dalvik.system.VMRuntime;
  * @author Lody
  */
 public class ArtDexOptimizer {
+    private static final String TAG = ArtDexOptimizer.class.getSimpleName();
 
     /**
      * Optimize the dex in interpret mode.
@@ -27,6 +30,12 @@ public class ArtDexOptimizer {
      * @throws IOException
      */
     public static void interpretDex2Oat(String dexFilePath, String oatFilePath) throws IOException {
+        // Android 8.x Skip Dex2Oat
+        if(BuildCompat.isOreo()){
+            VLog.d(TAG,"Android 8+ Skip dex2oat");
+            return;
+        }
+
         final File oatFile = new File(oatFilePath);
         if (!oatFile.exists()) {
             oatFile.getParentFile().mkdirs();

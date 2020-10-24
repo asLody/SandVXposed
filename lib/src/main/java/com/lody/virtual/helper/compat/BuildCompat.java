@@ -43,6 +43,6 @@ public class BuildCompat {
 
     public static boolean isR()
     {
-        return Build.VERSION.SDK_INT>=Build.VERSION_CODES.R;
+        return Build.VERSION.SDK_INT>=30;
     }
 }

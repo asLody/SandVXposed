@@ -9,15 +9,14 @@ import com.lody.virtual.helper.compat.BuildCompat;
 import com.lody.virtual.helper.utils.VLog;
 import com.lody.virtual.remote.InstalledAppInfo;
 import com.swift.sandhook.HookLog;
-import com.swift.sandhook.PendingHookHandler;
 import com.swift.sandhook.SandHookConfig;
-import com.swift.sandhook.utils.ReflectionUtils;
 import com.swift.sandhook.xposedcompat.XposedCompat;
 
 import java.io.File;
 import java.util.List;
 
 import de.robv.android.xposed.XposedBridge;
+import me.weishu.reflection.Reflection;
 import sk.vpkg.fasthook.HookMode;
 import sk.vpkg.fasthook.SKFastHook;
 import sk.vpkg.fasthook.SKFastHookManager;
@@ -25,15 +24,16 @@ import sk.vpkg.fasthook.SKFastHookManager;
 import static com.swift.sandhook.xposedcompat.utils.DexMakerUtils.MD5;
 
 public class SandXposed {
+    public static void freeReflection(Context base)
+    {
+        Reflection.unseal(base);
+    }
 
     public static void init(Boolean debugEnabled) {
         SandHookConfig.DEBUG = debugEnabled;
         SandHookConfig.SDK_INT = Build.VERSION.SDK_INT;
         SandHookConfig.compiler = SandHookConfig.SDK_INT < Build.VERSION_CODES.O;
         HookLog.DEBUG = SandHookConfig.DEBUG;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            ReflectionUtils.passApiCheck();
-        }
 
         try{
             if(BuildCompat.isQ())

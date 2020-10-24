@@ -49,7 +49,9 @@ public class ServiceManagerNative {
     }
 
     public static void ensureServerStarted() {
-        new ProviderCall.Builder(VirtualCore.get().getContext(), SERVICE_CP_AUTH).methodName("ensure_created").call();
+        Bundle bundle = new  ProviderCall.Builder(VirtualCore.get().getContext(), SERVICE_CP_AUTH).
+                methodName("ensure_created").callSafe(5);
+        if(bundle==null) VLog.e(TAG,"Binder Provider can not work in this scope.");
     }
 
     public static void clearServerFetcher() {

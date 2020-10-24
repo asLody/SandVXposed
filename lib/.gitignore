@@ -8,3 +8,4 @@ libs/
 src/main/jniLibs/arm64-v8a/libepic.so
 src/main/jniLibs/armeabi/libdexposed.so
 src/main/jniLibs/armeabi-v7a/libepic.so
+.cxx/

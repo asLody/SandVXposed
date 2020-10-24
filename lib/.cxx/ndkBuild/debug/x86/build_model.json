@@ -15,6 +15,7 @@
   "variant": {
     "buildSystemArgumentList": [],
     "buildTargetSet": [],
+    "implicitBuildTargetSet": [],
     "cFlagsList": [],
     "cmakeSettingsConfiguration": "android-gradle-plugin-predetermined-name",
     "cppFlagsList": [],

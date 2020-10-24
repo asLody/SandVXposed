@@ -1,4 +1,4 @@
-Executable : D:\DroidSDK\ndk-bundle\ndk-build.cmd
+                Executable : D:\DroidSDK\ndk-bundle\ndk-build.cmd
 arguments : 
 NDK_PROJECT_PATH=null
 APP_BUILD_SCRIPT=E:\Project_Conntainer\VMProject\sxp\lib\src\main\jni\Android.mk

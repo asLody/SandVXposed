@@ -70,16 +70,14 @@ public class EnvironmentSetup {
         try{
             context.getClassLoader().loadClass("org.luaj.vm2.Lua");
             ggclassExist = true;
-        }catch (Throwable e)
+        }catch (Throwable ignored)
         {
-            e.printStackTrace();
         }
         try{
             context.getClassLoader().loadClass("luaj.Lua");
             ggclassExist = true;
-        }catch (Throwable e)
+        }catch (Throwable ignored)
         {
-            e.printStackTrace();
         }
 
         if(ggclassExist)
