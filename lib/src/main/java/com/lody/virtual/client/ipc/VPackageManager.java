@@ -10,7 +10,6 @@ import android.content.pm.PermissionInfo;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
-import android.os.Build;
 import android.os.RemoteException;
 
 import com.lody.virtual.client.env.VirtualRuntime;
@@ -19,6 +18,9 @@ import com.lody.virtual.helper.ipcbus.IPCSingleton;
 import com.lody.virtual.server.IPackageInstaller;
 import com.lody.virtual.server.interfaces.IPackageManager;
 
+import java.io.File;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -175,16 +177,20 @@ public class VPackageManager {
             if(BuildCompat.isQ())
             {
                 final String HTTP_LIB_Q = "/system/framework/org.apache.http.legacy.jar";
-                String[] newSharedLibraryFiles;
-                if (info.sharedLibraryFiles == null) {
-                    newSharedLibraryFiles = new String[]{HTTP_LIB_Q};
-                } else {
-                    int newLength = info.sharedLibraryFiles.length + 1;
-                    newSharedLibraryFiles = new String[newLength];
-                    System.arraycopy(info.sharedLibraryFiles, 0, newSharedLibraryFiles, 0, newLength - 1);
-                    newSharedLibraryFiles[newLength - 1] = HTTP_LIB_Q;
+                if(new File(HTTP_LIB_Q).exists())
+                {
+                    String[] newSharedLibraryFiles = info.sharedLibraryFiles;
+                    if (info.sharedLibraryFiles == null) {
+                        newSharedLibraryFiles = new String[]{HTTP_LIB_Q};
+                    } else if(!new LinkedList<>(Arrays.asList(info.sharedLibraryFiles)).
+                            contains("/system/framework/org.apache.http.legacy.jar")) {
+                        int newLength = info.sharedLibraryFiles.length + 1;
+                        newSharedLibraryFiles = new String[newLength];
+                        System.arraycopy(info.sharedLibraryFiles, 0, newSharedLibraryFiles, 0, newLength - 1);
+                        newSharedLibraryFiles[newLength - 1] = HTTP_LIB_Q;
+                    }
+                    info.sharedLibraryFiles = newSharedLibraryFiles;
                 }
-                info.sharedLibraryFiles = newSharedLibraryFiles;
             }
             else
             {

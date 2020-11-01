@@ -272,4 +272,6 @@ public class NativeEngine {
     public static int onGetUid(int uid) {
         return VClientImpl.get().getBaseVUid();
     }
+
+    public static native String[] nativeDetectEmulatorAndPass(String[] args, int windowedEmulator);
 }

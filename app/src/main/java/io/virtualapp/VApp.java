@@ -38,6 +38,10 @@ public class VApp extends MultiDexApplication {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             SandXposed.freeReflection(base);
         }
+        if(Build.VERSION.SDK_INT >= 30)
+        {
+            com.sk.SKAppLoad.InitApp.bindApplicationPassCheck();
+        }
         SandXposed.init(BuildConfig.DEBUG);
         VLog.OPEN_LOG = BuildConfig.DEBUG;
         mPreferences = base.getSharedPreferences("va", Context.MODE_MULTI_PROCESS);

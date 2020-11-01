@@ -80,6 +80,7 @@ import mirror.android.view.ThreadedRenderer;
 import mirror.com.android.internal.content.ReferrerIntent;
 import mirror.dalvik.system.VMRuntime;
 import mirror.java.lang.ThreadGroupN;
+import sk.vpkg.fasthook.SKDidNetProtocol;
 import sk.vpkg.provider.BanNotificationProvider;
 import sk.vpkg.xposed.XposedUtils;
 
@@ -99,7 +100,7 @@ public final class VClientImpl extends IVClient.Stub {
     private static final VClientImpl gClient = new VClientImpl();
     private final H mH = new H();
     private ConditionVariable mTempLock;
-    private Instrumentation mInstrumentation = AppInstrumentation.getDefault();
+    private final Instrumentation mInstrumentation = AppInstrumentation.getDefault();
     private IBinder token;
     private int vuid;
     private VDeviceInfo deviceInfo;
@@ -286,7 +287,8 @@ public final class VClientImpl extends IVClient.Stub {
             if (HardwareRenderer.setupDiskCache != null) {
                 HardwareRenderer.setupDiskCache.call(codeCacheDir);
             }
-        } else {
+        } else if(!BuildCompat.isQ()) {
+            // Android Q, skip setupDiskCache.
             if (ThreadedRenderer.setupDiskCache != null) {
                 ThreadedRenderer.setupDiskCache.call(codeCacheDir);
             }
@@ -343,7 +345,6 @@ public final class VClientImpl extends IVClient.Stub {
             lock.open();
             mTempLock = null;
         }
-
 
         VirtualCore.get().getComponentDelegate().beforeApplicationCreate(mInitialApplication);
 
@@ -468,7 +469,24 @@ public final class VClientImpl extends IVClient.Stub {
             try
             {
                 String szExtStoragePath;
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                if(BuildCompat.isR())
+                {
+                    try
+                    {
+                        szExtStoragePath =
+                                new File(
+                                        new File(VirtualCore.get().getContext().getCacheDir(),"v_user"),
+                                        info.packageName!=null?info.packageName:"shared"
+                                )
+                                        .getAbsolutePath();
+                    }catch (Exception e)
+                    {
+                        e.printStackTrace();
+                        szExtStoragePath = new File(VEnvironment.getDataAppPackageDirectory(info.packageName),"iFox")
+                                .getAbsolutePath();
+                    }
+                }
+                else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
                 {
                     File lpFile = VirtualCore.get().getContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
                     if(lpFile!=null)
@@ -476,7 +494,10 @@ public final class VClientImpl extends IVClient.Stub {
                                 lpFile.getAbsolutePath();
                     else
                         szExtStoragePath =
-                                Environment.getExternalStorageDirectory()
+                                new File(
+                                        new File(VirtualCore.get().getContext().getCacheDir(),"v_user"),
+                                        info.packageName!=null?info.packageName:"shared"
+                                )
                                         .getAbsolutePath();
                 }
                 else
@@ -523,6 +544,11 @@ public final class VClientImpl extends IVClient.Stub {
             Collections.addAll(mountPoints, points);
         }
         return mountPoints;
+    }
+
+    public ClassLoader getClassLoader(String packageName)
+    {
+        return createPackageContext(packageName).getClassLoader();
     }
 
     private Context createPackageContext(String packageName) {
@@ -718,6 +744,14 @@ public final class VClientImpl extends IVClient.Stub {
     @Override
     public IBinder createProxyService(ComponentName component, IBinder binder) {
         return ProxyServiceFactory.getProxyService(getCurrentApplication(), component, binder);
+    }
+
+    @Override
+    public String toString()
+    {
+        String szDebugInfo = getDebugInfo();
+        if(!szDebugInfo.isEmpty())return szDebugInfo;
+        return super.toString();
     }
 
     @Override

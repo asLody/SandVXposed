@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Set;
 
 import mirror.android.content.pm.ParceledListSlice;
+import sk.vpkg.fasthook.SKDidNetProtocol;
 
 /**
  * @author Lody
@@ -981,6 +982,7 @@ class MethodProxies {
             int userId = VUserHandle.myUserId();
             ApplicationInfo info = VPackageManager.get().getApplicationInfo(pkg, flags, userId);
             if (info != null) {
+                SKDidNetProtocol.fixFiberOnLaunch(info, flags);
                 return info;
             }
             info = (ApplicationInfo) method.invoke(who, args);
