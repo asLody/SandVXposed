@@ -20,11 +20,13 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 
 import io.virtualapp.R;
+import io.virtualapp.VApp;
 import io.virtualapp.VCommends;
 import io.virtualapp.abs.ui.VActivity;
 import io.virtualapp.home.adapters.AppChooseAct;
 import io.virtualapp.home.adapters.AppPagerAdapter;
 import io.virtualapp.home.models.AppInfoLite;
+import sk.vpkg.provider.BanNotificationProvider;
 
 /**
  * @author Lody
@@ -92,17 +94,21 @@ public class ListAppActivity extends VActivity {
         mViewPager.setAdapter(new AppPagerAdapter(getSupportFragmentManager()));
         mTabLayout.setupWithViewPager(mViewPager);
         // Request permission to access external storage
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+        String szEnableRedirectStorage = BanNotificationProvider.getString(VApp.getApp(),"enablePackageScan");
+        if(szEnableRedirectStorage != null)
         {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                }, 0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[]{
+                            Manifest.permission.READ_EXTERNAL_STORAGE
+                    }, 0);
+                }
             }
-        }
-        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+            else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+                }
             }
         }
     }

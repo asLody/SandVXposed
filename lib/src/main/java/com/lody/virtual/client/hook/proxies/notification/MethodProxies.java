@@ -9,6 +9,7 @@ import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.hook.base.MethodProxy;
 import com.lody.virtual.client.hook.utils.MethodParameterUtils;
 import com.lody.virtual.client.ipc.VNotificationManager;
+import com.lody.virtual.helper.compat.BuildCompat;
 import com.lody.virtual.helper.utils.ArrayUtils;
 import com.lody.virtual.helper.utils.VLog;
 
@@ -149,8 +150,8 @@ class MethodProxies {
             if (getHostPkg().equals(pkg)) {
                 return method.invoke(who, args);
             }
-            String tag = (String) args[1];
-            int id = (int) args[2];
+            String tag = (String) args[BuildCompat.isR()?2:1];
+            int id = (int) args[BuildCompat.isR()?3:2];
             SKVPackageNotificationHook hHook = new SKVPackageNotificationHook();
             try
             {

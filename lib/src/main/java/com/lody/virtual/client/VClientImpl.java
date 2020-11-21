@@ -486,7 +486,7 @@ public final class VClientImpl extends IVClient.Stub {
                                 .getAbsolutePath();
                     }
                 }
-                else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                else if(BuildCompat.isQ())
                 {
                     File lpFile = VirtualCore.get().getContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
                     if(lpFile!=null)
@@ -503,7 +503,7 @@ public final class VClientImpl extends IVClient.Stub {
                 else
                     szExtStoragePath = Environment.getExternalStorageDirectory().getAbsolutePath();
                 //新建一个File，传入文件夹目录
-                File file = new File(szExtStoragePath + "/skdir");
+                File file = new File(szExtStoragePath, "skdir");
 //判断文件夹是否存在，如果不存在就创建，否则不创建
                 if (!file.exists())
                 {
@@ -513,13 +513,33 @@ public final class VClientImpl extends IVClient.Stub {
                         VLog.d(TAG,"Make directory failed.");
                     }
                 }
-                NativeEngine.redirectDirectory(Environment.
-                        getExternalStorageDirectory().
-                        getAbsolutePath(), szExtStoragePath + "/skdir");
+                HashSet<String> mps = getMountPoints();
+                for(String srtMp : mps)
+                {
+                    NativeEngine.redirectDirectory(srtMp, file.getAbsolutePath());
+                }
             }catch (Throwable e)
             {
                 // ignored.
                 e.printStackTrace();
+            }
+        }
+        else if(BuildCompat.isR())
+        {
+            HashSet<String> mps = getMountPoints();
+            File cacheDir =
+                    new File(
+                            new File(VirtualCore.get().getContext().getCacheDir(),"v_user"),
+                            info.packageName!=null?info.packageName:"shared"
+                    );
+            if(!cacheDir.exists())cacheDir.mkdirs();
+            for(String theMountPoint : mps)
+            {
+                File ksFile = new File(theMountPoint, "Android");
+                String newPath =
+                        cacheDir.getAbsolutePath();
+                String oldPath = ksFile.getAbsolutePath();
+                NativeEngine.redirectDirectory(oldPath, newPath);
             }
         }
 

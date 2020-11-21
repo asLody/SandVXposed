@@ -54,6 +54,7 @@ import com.lody.virtual.server.interfaces.IAppRequestListener;
 import com.lody.virtual.server.interfaces.IPackageObserver;
 import com.lody.virtual.server.interfaces.IUiCallback;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -658,6 +659,17 @@ public final class VirtualCore {
             hHook.CleanPackage(pkgName);
         }
         catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
+        try{
+            File ext = new File(context.getCacheDir(),"v_user");
+            ext = new File(ext, pkgName);
+            if(ext.exists())
+            {
+                if(!ext.delete())ext.deleteOnExit();
+            }
+        }catch (Exception e)
         {
             e.printStackTrace();
         }

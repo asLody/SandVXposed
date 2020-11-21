@@ -9,11 +9,10 @@ import android.view.WindowManager;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.baidu.mobstat.StatService;
 import com.lody.virtual.client.core.VirtualCore;
 import com.sk.desktop.SKDesktop;
 import com.sk.verify.msVerify;
-import com.tencent.stat.StatConfig;
-import com.tencent.stat.StatService;
 
 import io.virtualapp.R;
 import io.virtualapp.VCommends;
@@ -158,13 +157,10 @@ public class SplashActivity extends VActivity {
 
     private void bindMTA()
     {
-        try
-        {
-            // [可选]设置是否打开debug输出，上线时请关闭，Logcat标签为"MtaSDK"
-            StatConfig.setDebugEnable(false);
-            // 基础统计API
-            StatService.registerActivityLifecycleCallbacks(this.getApplication());
-        }catch (Throwable e)
+        try{
+            StatService.setAuthorizedState(this, true);
+            StatService.start(this);
+        }catch (Exception e)
         {
             e.printStackTrace();
         }

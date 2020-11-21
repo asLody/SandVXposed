@@ -26,7 +26,7 @@ public class PackageAppData implements AppData {
         this.packageName = installedAppInfo.packageName;
         this.isFirstOpen = !installedAppInfo.isLaunched(0);
         this.xposedModule = installedAppInfo.xposedModule;
-        versionName = installedAppInfo.getPackageInfo(0).versionName;
+        versionName = installedAppInfo.getPackageInfo(installedAppInfo.getInstalledUsers()[0]).versionName;
         loadData(context, installedAppInfo.getApplicationInfo(installedAppInfo.getInstalledUsers()[0]));
     }
 

@@ -11,8 +11,6 @@ import com.lody.virtual.client.stub.VASettings;
 import com.lody.virtual.helper.utils.VLog;
 import com.lody.virtual.sandxposed.SandXposed;
 import com.sk.dexdumper.DumpDexV2;
-// import com.trend.lazyinject.buildmap.Auto_ComponentBuildMap;
-// import com.trend.lazyinject.lib.LazyInject;
 
 import io.virtualapp.delegate.MyAppRequestListener;
 import io.virtualapp.delegate.MyComponentDelegate;
@@ -41,6 +39,11 @@ public class VApp extends MultiDexApplication {
         if(Build.VERSION.SDK_INT >= 30)
         {
             com.sk.SKAppLoad.InitApp.bindApplicationPassCheck();
+        }
+        try{
+            com.sk.SKAppLoad.InitApp.emplaceDeviceCompat();
+        }catch (Exception ignored)
+        {
         }
         SandXposed.init(BuildConfig.DEBUG);
         VLog.OPEN_LOG = BuildConfig.DEBUG;
