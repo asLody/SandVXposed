@@ -186,7 +186,13 @@
         <activity
             android:name=".home.HomeActivity"
             android:launchMode="singleInstance"
-            android:theme="@style/UITheme" />
+            android:label="@string/old_launcher"
+            android:theme="@style/UITheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".home.ListAppActivity"
             android:theme="@style/UITheme" />

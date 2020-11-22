@@ -29,6 +29,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.mobstat.StatService;
 import com.lody.virtual.GmsSupport;
 import com.lody.virtual.client.core.RomChecker;
 import com.lody.virtual.client.core.VirtualCore;
@@ -51,6 +52,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import io.virtualapp.BuildConfig;
 import io.virtualapp.R;
 import io.virtualapp.VCommends;
 import io.virtualapp.abs.nestedadapter.SmartRecyclerAdapter;
@@ -146,7 +148,15 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                     .setPositiveButton(R.string.accept, (dialog, which) ->
                             Once.markDone("user_license"))
                     .create().show();
+            StatService.setAuthorizedState(this, false);
         }
+        else
+        {
+            StatService.setAuthorizedState(this, true);
+        }
+        StatService.autoTrace(this);
+        StatService.setDebugOn(BuildConfig.DEBUG);
+        StatService.start(this);
     }
 
     private void initMenu() {

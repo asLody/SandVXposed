@@ -15,13 +15,11 @@
         android:adjustViewBounds="true"
         android:maxHeight="60dp"
         android:contentDescription="@string/app_name" />
-    <TextView
+    <com.sk.desktop.vui.SKTextView
         android:layout_margin="5dp"
         android:id="@+id/tv"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:maxLines="1"
-        android:ellipsize="end"
         android:text="@string/app_name"/>
 </LinearLayout>
