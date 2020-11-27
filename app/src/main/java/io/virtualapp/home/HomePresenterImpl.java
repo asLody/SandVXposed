@@ -449,7 +449,13 @@ class HomePresenterImpl implements HomeContract.HomePresenter {
             public String getNameEx(String packageName, String origName, int uid)
             {
                 if(origName==null||packageName==null)return null;
-                return (RenameAppUtils.getRenamedApp(packageName,uid,origName) + "(SVX)");
+                String customSuffix = "";
+                String customName = RenameAppUtils.getRenamedApp(packageName,uid,origName);
+                if(customName.equals(origName))
+                {
+                    customSuffix += "("+ uid +")";
+                }
+                return (customName + customSuffix);
             }
         };
         if (data instanceof PackageAppData) {

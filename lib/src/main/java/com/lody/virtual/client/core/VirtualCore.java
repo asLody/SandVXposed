@@ -461,11 +461,12 @@ public final class VirtualCore {
         }
         ApplicationInfo appInfo = setting.getApplicationInfo(userId);
         PackageManager pm = context.getPackageManager();
-        String name;
+        String name = "";
         Bitmap icon;
         try {
             CharSequence sequence = appInfo.loadLabel(pm);
-            name = sequence.toString();
+            if(sequence != null)
+                name = sequence.toString();
             icon = BitmapUtils.drawableToBitmap(appInfo.loadIcon(pm));
         } catch (Throwable e) {
             return false;
