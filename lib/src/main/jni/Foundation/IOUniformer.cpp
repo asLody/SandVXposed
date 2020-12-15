@@ -890,7 +890,7 @@ void IOUniformer::startUniformer(const char *so_path, int api_level, int preview
     }
     if (api_level < 28) {
 #ifdef __arm__
-        hook_dlopen(api_level);
+        //hook_dlopen(api_level);
 #endif
     }
 }
