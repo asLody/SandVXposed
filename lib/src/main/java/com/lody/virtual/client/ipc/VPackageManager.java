@@ -177,6 +177,7 @@ public class VPackageManager {
             if(BuildCompat.isQ())
             {
                 final String HTTP_LIB_Q = "/system/framework/org.apache.http.legacy.jar";
+                final String HTTP_LIB_Q_2 = "/system/framework/org.apache.http.legacy.boot.jar";
                 if(new File(HTTP_LIB_Q).exists())
                 {
                     String[] newSharedLibraryFiles = info.sharedLibraryFiles;
@@ -188,6 +189,20 @@ public class VPackageManager {
                         newSharedLibraryFiles = new String[newLength];
                         System.arraycopy(info.sharedLibraryFiles, 0, newSharedLibraryFiles, 0, newLength - 1);
                         newSharedLibraryFiles[newLength - 1] = HTTP_LIB_Q;
+                    }
+                    info.sharedLibraryFiles = newSharedLibraryFiles;
+                }
+                else if(new File(HTTP_LIB_Q_2).exists())
+                {
+                    String[] newSharedLibraryFiles = info.sharedLibraryFiles;
+                    if (info.sharedLibraryFiles == null) {
+                        newSharedLibraryFiles = new String[]{HTTP_LIB_Q_2};
+                    } else if(!new LinkedList<>(Arrays.asList(info.sharedLibraryFiles)).
+                            contains("/system/framework/org.apache.http.legacy.jar")) {
+                        int newLength = info.sharedLibraryFiles.length + 1;
+                        newSharedLibraryFiles = new String[newLength];
+                        System.arraycopy(info.sharedLibraryFiles, 0, newSharedLibraryFiles, 0, newLength - 1);
+                        newSharedLibraryFiles[newLength - 1] = HTTP_LIB_Q_2;
                     }
                     info.sharedLibraryFiles = newSharedLibraryFiles;
                 }
