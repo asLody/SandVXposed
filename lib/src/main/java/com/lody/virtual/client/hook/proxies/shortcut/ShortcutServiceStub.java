@@ -41,5 +41,7 @@ public class ShortcutServiceStub extends BinderInvocationProxy {
         //ignore pin shortcut
         addMethodProxy(new ResultStaticMethodProxy("requestPinShortcut", false));
         addMethodProxy(new ReplaceCallingPkgMethodProxy("getPinnedShortcuts"));
+        // 修复 Shortcut
+        addMethodProxy(new ResultStaticMethodProxy("removeAllDynamicShortcuts", null));
     }
 }
