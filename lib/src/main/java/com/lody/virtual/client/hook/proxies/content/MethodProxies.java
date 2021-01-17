@@ -71,7 +71,7 @@ class MethodProxies {
                 if (se.getCause() instanceof SecurityException && OSUtils.getInstance().isAndroidQ()) {
                     // ignored
                 } else {
-                    throw se;
+                    se.printStackTrace();
                 }
             }
             return null;
