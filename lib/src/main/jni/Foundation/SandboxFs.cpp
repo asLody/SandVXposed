@@ -18,6 +18,7 @@ int replace_item_count;
  */
 
 int add_keep_item(const char *path) {
+    if(!path)return -1;
     char keep_env_name[25];
     sprintf(keep_env_name, "V_KEEP_ITEM_%d", (int)keep_items.size());
     setenv(keep_env_name, path, 1);
@@ -34,6 +35,7 @@ int add_keep_item(const char *path) {
 }
 
 int add_forbidden_item(const char *path) {
+    if(!path)return -1;
     char forbidden_env_name[25];
     sprintf(forbidden_env_name, "V_FORBID_ITEM_%d", (int)forbidden_items.size());
     setenv(forbidden_env_name, path, 1);
@@ -53,6 +55,7 @@ int add_forbidden_item(const char *path) {
 }
 
 int add_replace_item(const char *orig_path, const char *new_path) {
+    if(!orig_path || !new_path)return  -1;
     char src_env_name[25];
     char dst_env_name[25];
     sprintf(src_env_name, "V_REPLACE_ITEM_SRC_%d", (int)replace_items.size());
@@ -111,7 +114,7 @@ inline bool match_path(bool is_folder, size_t size, const char *item_path, const
 
 
 const char *relocate_path(const char *path, int *result) {
-    if (path == NULL) {
+    if (!path) {
         *result = NOT_MATCH;
         return NULL;
     }
@@ -167,8 +170,8 @@ int relocate_path_inplace(char *_path, size_t size, int *result) {
 
 
 const char *reverse_relocate_path(const char *_path) {
-    if (_path == NULL) {
-        return NULL;
+    if (!_path) {
+        return nullptr;
     }
     char *path = canonicalize_filename(_path);
     for (auto &item : keep_items)
