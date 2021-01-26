@@ -7,8 +7,8 @@ android {
         applicationId "io.virtualapp.sandvxposed"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 94
-        versionName "1.2.5.1.3.1.7.9-3"
+        versionCode 95
+        versionName "1.2.5.1.3.1.7.9-4"
         multiDexEnabled true
         android {
             defaultConfig {
