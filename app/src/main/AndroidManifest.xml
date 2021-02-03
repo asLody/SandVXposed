@@ -46,7 +46,6 @@
         </activity>
         <activity
             android:name="com.sk.desktop.SKDesktop"
-            android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:theme="@style/ShowWallpaper">
 
