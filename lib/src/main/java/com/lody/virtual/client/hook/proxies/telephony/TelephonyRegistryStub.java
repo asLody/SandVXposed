@@ -3,6 +3,7 @@ package com.lody.virtual.client.hook.proxies.telephony;
 import android.telephony.PhoneStateListener;
 
 import com.lody.virtual.client.hook.base.BinderInvocationProxy;
+import com.lody.virtual.client.hook.base.Inject;
 import com.lody.virtual.client.hook.base.ReplaceCallingPkgMethodProxy;
 import com.lody.virtual.client.hook.base.ReplaceSequencePkgMethodProxy;
 
@@ -10,6 +11,7 @@ import java.lang.reflect.Method;
 
 import mirror.com.android.internal.telephony.ITelephonyRegistry;
 
+@Inject(RegistryMethodProxies.class)
 public class TelephonyRegistryStub extends BinderInvocationProxy {
 
 	public TelephonyRegistryStub() {
