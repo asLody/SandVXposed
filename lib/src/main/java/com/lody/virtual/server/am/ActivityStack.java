@@ -16,6 +16,7 @@ import android.util.SparseArray;
 import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.env.VirtualRuntime;
 import com.lody.virtual.client.stub.VASettings;
+import com.lody.virtual.helper.compat.BuildCompat;
 import com.lody.virtual.helper.utils.ArrayUtils;
 import com.lody.virtual.helper.utils.ClassUtils;
 import com.lody.virtual.helper.utils.ComponentUtils;
@@ -380,10 +381,14 @@ import static android.content.pm.ActivityInfo.LAUNCH_SINGLE_TOP;
                     topRecord.marked = true;
                 }
                 // Target activity is on top
-                if (topRecord != null && !topRecord.marked && topRecord.component.equals(intent.getComponent())) {
+                // Available in business edition for Android 12
+                // QQ 3068083845
+                if (!BuildCompat.isS() && topRecord != null &&
+                        !topRecord.marked && topRecord.component.equals(intent.getComponent())) {
                     deliverNewIntentLocked(sourceRecord, topRecord, intent);
                     delivered = true;
                 }
+                else if(BuildCompat.isS())startTaskToFront = false;
             }
             if (taskMarked) {
                 synchronized (mHistory) {

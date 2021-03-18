@@ -106,7 +106,7 @@
     <string name="ensurerestart">Wanna restart this application? Your changes must be saved or lost.</string>
     <string name="manualpath">Install By Path Manually</string>
     <string name="appInstallTip">Application is installing, take a while and swipe desktop for refresh.</string>
-    <string name="about_info">Special thanks for Gan!##SandVXP is a application that can let user use Xposed module on non-root and non-bootloader-unlock devices. Clone application into this app and xposed modules, then validate it in menu\'s xposed manager, and they will work.##QQ 2737996094##E-Mail king@fou.ink##Website https://www.die.lu/</string>
+    <string name="about_info">Special thanks for Gan!##SandVXP is a application that can let user use Xposed module on non-root and non-bootloader-unlock devices. Clone application into this app and xposed modules, then validate it in menu\'s xposed manager, and they will work.##QQ 3068083845##E-Mail king@fou.ink##Website https://www.die.lu/</string>
     <string name="launch_failed">Launch app failed...</string>
     <string name="sys_crash">Application may crash but catch by SKActivity.</string>
     <string name="rom_shortcut_tips">We detected your device must accept permission manual. Please allow shortcut ceration permission in system settings. Allow this in Settings -> App Management -> Permission Management -> this application -> allow shortcut permission.</string>

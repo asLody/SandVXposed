@@ -5,6 +5,7 @@ import android.os.Build;
 
 import com.lody.virtual.client.VClientImpl;
 import com.lody.virtual.client.hook.base.MethodProxy;
+import com.lody.virtual.client.hook.base.ReplaceLastUidMethodProxy;
 import com.lody.virtual.helper.utils.OSUtils;
 
 import java.lang.reflect.Method;
@@ -84,7 +85,11 @@ class MethodProxies {
     }
 
 
-    static class RegisterContentObserver extends MethodProxy {
+    static class RegisterContentObserver extends ReplaceLastUidMethodProxy {
+
+        public RegisterContentObserver() {
+            super("registerContentObserver");
+        }
 
         @Override
         public String getMethodName() {

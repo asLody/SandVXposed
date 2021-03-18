@@ -48,7 +48,7 @@
     <string name="ensurerestart">真的要重启吗？</string>
     <string name="manualpath">手动通过路径选择</string>
     <string name="appInstallTip">正在安装应用，稍后请下拉桌面以刷新应用列表。</string>
-    <string name="about_info">"特别感谢甘！##SandVXP是一个应用程序，可以让用户在非Root和非引导加载程序解锁设备上使用Xposed模块。##将应用程序和模块添加或克隆到这个应用程序中，然后在菜单的“Xposed管理器”中启用它，应用和模块就可以工作了。##QQ 2737996094##邮箱: king@fou.ink##网址https://www.die.lu/ "</string>
+    <string name="about_info">"特别感谢甘！##SandVXP是一个应用程序，可以让用户在非Root和非引导加载程序解锁设备上使用Xposed模块。##将应用程序和模块添加或克隆到这个应用程序中，然后在菜单的“Xposed管理器”中启用它，应用和模块就可以工作了。##QQ 3068083845##邮箱: king@fou.ink##网址https://www.die.lu/ "</string>
     <string name="launch_failed">Sorry，App无法启动。</string>
     <string name="sys_crash">应用程序异常，已经捕捉。</string>
     <string name="rom_shortcut_tips">检测到您的机型必须手动允许快捷方式的创建，请到系统设置->应用->权限管理，找到本应用，开启快捷方式权限。</string>

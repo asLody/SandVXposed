@@ -197,7 +197,9 @@ public final class VClientImpl extends IVClient.Stub {
                     Collections.singletonList(intent)
             );
         } else {
-            if (BuildCompat.isQ()) {
+            // Available in business edition for Android 12
+            // QQ 3068083845
+            if (BuildCompat.isQ() && !BuildCompat.isS()) {
                 ActivityThread.handleNewIntent.call(VirtualCore.mainThread(), data.token, Collections.singletonList(intent));
             } else {
                 ActivityThreadNMR1.performNewIntents.call(

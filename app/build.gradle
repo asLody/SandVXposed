@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion "android-S"
     buildToolsVersion '30.0.2'
     defaultConfig {
         applicationId "io.virtualapp.sandvxposed"
