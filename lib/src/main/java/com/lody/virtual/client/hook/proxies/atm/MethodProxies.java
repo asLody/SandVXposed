@@ -16,10 +16,12 @@ import android.util.TypedValue;
 import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.env.Constants;
 import com.lody.virtual.client.hook.base.MethodProxy;
+import com.lody.virtual.client.hook.utils.MethodParameterUtils;
 import com.lody.virtual.client.ipc.ActivityClientRecord;
 import com.lody.virtual.client.ipc.VActivityManager;
 import com.lody.virtual.client.stub.ChooserActivity;
 import com.lody.virtual.helper.compat.ActivityManagerCompat;
+import com.lody.virtual.helper.compat.BuildCompat;
 import com.lody.virtual.helper.utils.ArrayUtils;
 import com.lody.virtual.helper.utils.ComponentUtils;
 import com.lody.virtual.helper.utils.FileUtils;
@@ -237,6 +239,11 @@ public class MethodProxies {
                         && resultTo != null) {
                     VActivityManager.get().finishActivity(resultTo);
                     return 0;
+                }
+
+                if(BuildCompat.isS())
+                {
+                    MethodParameterUtils.replaceFirstAppPkg(args);
                 }
 
                 return method.invoke(who, args);

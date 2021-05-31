@@ -14,6 +14,8 @@ import com.lody.virtual.helper.compat.SystemPropertiesCompat;
 
 /**
  * Created by 247321453 on 2016/7/17.
+ * @author ganyao
+ * @author QQ 647564826
  */
 public class OSUtils {
 	private static final String KEY_EMUI_VERSION_CODE = "ro.build.version.emui";
@@ -87,6 +89,15 @@ public class OSUtils {
 
 	public boolean isAndroidQ() {
 		return Build.VERSION.SDK_INT>=29;
+	}
+
+	public boolean isAndroidS() {
+		try {
+			return Build.VERSION.SDK_INT >= 31 || (Build.VERSION.SDK_INT >= 30 && Build.VERSION.PREVIEW_SDK_INT > 0);
+		}catch (Throwable t)
+		{
+			return false;
+		}
 	}
 
 	private boolean hasFlyme() {
