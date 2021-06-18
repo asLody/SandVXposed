@@ -1,15 +1,11 @@
 package com.lody.virtual.sandxposed;
 
 import android.content.Context;
-import android.os.Build;
 import android.text.TextUtils;
 
 import com.lody.virtual.client.core.VirtualCore;
-import com.lody.virtual.helper.compat.BuildCompat;
 import com.lody.virtual.helper.utils.VLog;
 import com.lody.virtual.remote.InstalledAppInfo;
-import com.swift.sandhook.HookLog;
-import com.swift.sandhook.SandHookConfig;
 import com.swift.sandhook.xposedcompat.XposedCompat;
 
 import java.io.File;
@@ -30,22 +26,6 @@ public class SandXposed {
     }
 
     public static void init(Boolean debugEnabled) {
-        SandHookConfig.DEBUG = debugEnabled;
-        SandHookConfig.SDK_INT = Build.VERSION.SDK_INT;
-        SandHookConfig.compiler = SandHookConfig.SDK_INT < Build.VERSION_CODES.O;
-        HookLog.DEBUG = SandHookConfig.DEBUG;
-
-        try{
-            if(BuildCompat.isQ())
-            {
-                VLog.w("SandVXposed","Android Q! Just skip NativeHook.");
-                XposedCompat.class.getName();
-            }
-            SandHookConfig.delayHook = false;
-        }catch (Throwable e)
-        {
-            e.printStackTrace();
-        }
     }
 
     public static void injectXposedModule(Context context, String packageName, String processName) {

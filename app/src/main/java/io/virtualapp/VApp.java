@@ -10,6 +10,7 @@ import com.lody.virtual.client.core.VirtualCore;
 import com.lody.virtual.client.stub.VASettings;
 import com.lody.virtual.helper.utils.VLog;
 import com.lody.virtual.sandxposed.SandXposed;
+import com.sk.ace.ability.SlimXposed;
 import com.sk.dexdumper.DumpDexV2;
 
 import io.virtualapp.delegate.MyAppRequestListener;
@@ -45,7 +46,7 @@ public class VApp extends MultiDexApplication {
         }catch (Exception ignored)
         {
         }
-        SandXposed.init(BuildConfig.DEBUG);
+        SlimXposed.init(base);
         VLog.OPEN_LOG = BuildConfig.DEBUG;
         mPreferences = base.getSharedPreferences("va", Context.MODE_MULTI_PROCESS);
         VASettings.ENABLE_IO_REDIRECT = true;

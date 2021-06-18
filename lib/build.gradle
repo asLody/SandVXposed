@@ -52,9 +52,6 @@ gradle.startParameter.getTaskNames().each { task ->
 
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.swift.sandhook:hooklib:4.2.1'
-    implementation 'com.swift.sandhook:nativehook:4.2.1'
-    // api 'com.swift.sandhook:xposedcompat:4.1.0'
     api 'com.trend.lazyinject:lib:3.4.0-beta'
     implementation 'me.weishu:free_reflection:3.0.1'
     annotationProcessor 'com.trend.lazyinject:compiler:3.4.0-beta'
