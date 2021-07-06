@@ -7,6 +7,7 @@ import com.lody.virtual.client.VClientImpl;
 import com.lody.virtual.client.hook.base.MethodProxy;
 import com.lody.virtual.client.hook.base.ReplaceLastUidMethodProxy;
 import com.lody.virtual.helper.utils.OSUtils;
+import com.lody.virtual.helper.utils.VLog;
 
 import java.lang.reflect.Method;
 
@@ -86,6 +87,7 @@ class MethodProxies {
 
 
     static class RegisterContentObserver extends ReplaceLastUidMethodProxy {
+        private static final String TAG = RegisterContentObserver.class.getSimpleName();
 
         public RegisterContentObserver() {
             super("registerContentObserver");
@@ -101,13 +103,9 @@ class MethodProxies {
             try {
                 return super.call(who, method, args);
             } catch (Throwable se) {
-                if (se.getCause() instanceof SecurityException) {
-                    se.printStackTrace();
-                } else {
-                    throw se;
-                }
+                VLog.e(TAG,"Fuck! registerContentObserver with fatal exception "+se.getMessage());
             }
-            return null;
+            return 0;
         }
 
         @Override

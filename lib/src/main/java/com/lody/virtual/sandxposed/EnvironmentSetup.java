@@ -3,6 +3,8 @@ package com.lody.virtual.sandxposed;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.os.Binder;
+import android.os.IBinder;
 import android.os.Looper;
 import android.os.Process;
 import android.util.Log;
@@ -112,8 +114,6 @@ public class EnvironmentSetup {
     }
 
     private static void initForSpecialApps(final Context context, final String packageName) {
-        if (!is_HookCrash(packageName))
-            return;
         if(packageName.startsWith("com.tencent.mm"))
         {
             //delete tinker patches
@@ -157,6 +157,24 @@ public class EnvironmentSetup {
                 */
             }
         };
+        if(packageName.startsWith("com.baidu.netdisk"))
+        {
+            try{
+                XposedHelpers.findAndHookMethod("com.baidu.pyramid.runtime.multiprocess.IPCServiceManager$IPCServiceManagerAidlImpl",
+                        context.getClassLoader(),
+                        "addService",
+                        String.class, IBinder.class, boolean.class,
+                        g_Hook);
+                XposedHelpers.findAndHookMethod("com.baidu.pyramid.runtime.multiprocess.IPCServiceManager$IPCServiceManagerAidlImpl",
+                        context.getClassLoader(),
+                        "removeService",
+                        String.class,
+                        g_Hook);
+            }catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
 
         try
         {

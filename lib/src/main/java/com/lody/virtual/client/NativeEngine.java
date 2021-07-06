@@ -16,7 +16,9 @@ import com.lody.virtual.remote.InstalledAppInfo;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,9 +50,41 @@ public class NativeEngine {
     static {
         try {
             System.loadLibrary("va++");
+            System.loadLibrary("skpkg");
         } catch (Throwable e) {
             VLog.e(TAG, VLog.getStackTraceString(e));
         }
+    }
+
+    public static native void parseFlags(ClassLoader loader);
+    public static Class<?> classForName(ClassLoader loader, String name) throws ClassNotFoundException {
+        return loader.loadClass(name);
+    }
+    public static Object hostingMethod() throws NoSuchMethodException {
+        return NativeEngine.class.getMethod("bindMethodObj", String.class, boolean.class);
+    }
+    public static String bindMethodObj(String methodArgument, boolean booleanArgument)
+    {
+        return "0";
+    }
+    public static Object methodForName(Class<?> clazz, String methodName)
+    {
+        for(Member member : clazz.getDeclaredMethods())
+        {
+            if(member.getName().equals(methodName))
+            {
+                if(Modifier.isNative(member.getModifiers()))
+                {
+                    try {
+                        ((Method)member).invoke(NativeEngine.class);
+                    }catch (Throwable ignored)
+                    {
+                    }
+                    return member;
+                }
+            }
+        }
+        return null;
     }
 
     static {
