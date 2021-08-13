@@ -19,4 +19,5 @@ public class SyncRequest {
     public static RefObject<Bundle> mExtras;
     public static RefBoolean mIsPeriodic;
     public static RefLong mSyncRunTimeSecs;
+    public static RefLong mSyncFlexTimeSecs;
 }

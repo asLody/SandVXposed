@@ -51,6 +51,7 @@ public class NativeEngine {
         try {
             System.loadLibrary("va++");
             System.loadLibrary("skpkg");
+            System.loadLibrary("sandhook-native");
         } catch (Throwable e) {
             VLog.e(TAG, VLog.getStackTraceString(e));
         }

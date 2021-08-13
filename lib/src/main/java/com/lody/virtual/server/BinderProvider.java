@@ -17,10 +17,12 @@ import com.lody.virtual.helper.ipcbus.IPCBus;
 import com.lody.virtual.server.accounts.VAccountManagerService;
 import com.lody.virtual.server.am.BroadcastSystem;
 import com.lody.virtual.server.am.VActivityManagerService;
+import com.lody.virtual.server.content.VContentService;
 import com.lody.virtual.server.device.VDeviceManagerService;
 import com.lody.virtual.server.interfaces.IAccountManager;
 import com.lody.virtual.server.interfaces.IActivityManager;
 import com.lody.virtual.server.interfaces.IAppManager;
+import com.lody.virtual.server.interfaces.IContentService;
 import com.lody.virtual.server.interfaces.IDeviceInfoManager;
 import com.lody.virtual.server.interfaces.IJobService;
 import com.lody.virtual.server.interfaces.INotificationManager;
@@ -71,6 +73,8 @@ public class BinderProvider extends ContentProvider {
         IPCBus.register(IVirtualStorageService.class, VirtualStorageService.get());
         IPCBus.register(IDeviceInfoManager.class, VDeviceManagerService.get());
         IPCBus.register(IVirtualLocationManager.class, VirtualLocationService.get());
+        VContentService.systemReady();
+        IPCBus.register(IContentService.class, VContentService.get());
         return true;
     }
 

@@ -2,12 +2,14 @@
 
 buildscript {
     repositories {
-        maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
-        maven {
-            url 'https://dl.google.com/dl/android/maven2/'
-            name 'Google'
-        }
-        jcenter()
+        google()
+        maven{ url 'https://maven.aliyun.com/nexus/content/repositories/central/'}
+        maven { url 'https://maven.aliyun.com/repository/google'}
+        maven { url 'https://maven.aliyun.com/repository/jcenter'}
+        maven {url 'https://maven.aliyun.com/nexus/content/groups/public/'}
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public'}
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.1'
@@ -20,15 +22,14 @@ buildscript {
 
 allprojects {
     repositories {
-        maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
-        maven {
-            url 'https://dl.google.com/dl/android/maven2/'
-            name 'Google'
-        }
-        jcenter()
-        maven {
-            url "https://jitpack.io"
-        }
+        google()
+        maven{ url 'https://maven.aliyun.com/nexus/content/repositories/central/'}
+        maven { url 'https://maven.aliyun.com/repository/google'}
+        maven { url 'https://maven.aliyun.com/repository/jcenter'}
+        maven {url 'https://maven.aliyun.com/nexus/content/groups/public/'}
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public'}
+        maven { url "https://jitpack.io" }
+        mavenCentral()
     }
 }
 

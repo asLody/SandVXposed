@@ -2,16 +2,11 @@ package com.lody.virtual.sandxposed;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.os.Binder;
-import android.os.IBinder;
 import android.os.Looper;
-import android.os.Process;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.lody.virtual.BuildConfig;
-import com.lody.virtual.client.NativeEngine;
 import com.lody.virtual.helper.utils.VLog;
 import com.swift.sandhook.xposedcompat.utils.FileUtils;
 
@@ -20,7 +15,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedHelpers;
 import sk.vpkg.provider.BanNotificationProvider;
 import sk.vpkg.sign.SKPackageGuard;
 
@@ -157,24 +151,6 @@ public class EnvironmentSetup {
                 */
             }
         };
-        if(packageName.startsWith("com.baidu.netdisk"))
-        {
-            try{
-                XposedHelpers.findAndHookMethod("com.baidu.pyramid.runtime.multiprocess.IPCServiceManager$IPCServiceManagerAidlImpl",
-                        context.getClassLoader(),
-                        "addService",
-                        String.class, IBinder.class, boolean.class,
-                        g_Hook);
-                XposedHelpers.findAndHookMethod("com.baidu.pyramid.runtime.multiprocess.IPCServiceManager$IPCServiceManagerAidlImpl",
-                        context.getClassLoader(),
-                        "removeService",
-                        String.class,
-                        g_Hook);
-            }catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
 
         try
         {

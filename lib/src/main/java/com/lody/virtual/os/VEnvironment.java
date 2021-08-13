@@ -164,4 +164,8 @@ public class VEnvironment {
     {
         return ensureCreated(new File(ROOT, "proc"));
     }
+
+    public static File getSyncDirectory() {
+        return ensureCreated(new File(getSystemSecureDirectory(), "sync"));
+    }
 }

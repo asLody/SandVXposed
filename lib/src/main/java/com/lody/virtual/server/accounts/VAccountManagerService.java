@@ -1013,6 +1013,17 @@ public class VAccountManagerService implements IAccountManager {
         }
     }
 
+    public AccountAndUser[] getAllAccounts() {
+        List<AccountAndUser> list = new ArrayList<>();
+        for (int i = 0; i < accountsByUserId.size(); i++) {
+            List<VAccount> accounts = accountsByUserId.valueAt(i);
+            for (VAccount account : accounts) {
+                list.add(new AccountAndUser(new Account(account.name, account.type), account.userId));
+            }
+        }
+        return list.toArray(new AccountAndUser[0]);
+    }
+
     final static class AuthTokenRecord {
         public int userId;
         public Account account;

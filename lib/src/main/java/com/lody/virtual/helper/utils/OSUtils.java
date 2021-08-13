@@ -91,6 +91,15 @@ public class OSUtils {
 		return Build.VERSION.SDK_INT>=29;
 	}
 
+	public boolean isAndroidR() {
+		try {
+			return Build.VERSION.SDK_INT >= 30;
+		}catch (Throwable t)
+		{
+			return false;
+		}
+	}
+
 	public boolean isAndroidS() {
 		try {
 			return Build.VERSION.SDK_INT >= 31 || (Build.VERSION.SDK_INT >= 30 && Build.VERSION.PREVIEW_SDK_INT > 0);

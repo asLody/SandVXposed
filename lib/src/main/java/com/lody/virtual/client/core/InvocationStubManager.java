@@ -60,6 +60,7 @@ import com.lody.virtual.helper.utils.OSUtils;
 import java.util.HashMap;
 import java.util.Map;
 
+import sk.vpkg.fox.DeviceIdentifiersPolicyStub;
 import sk.vpkg.fox.FoxConnectivityStub;
 
 import static android.os.Build.VERSION_CODES.JELLY_BEAN_MR1;
@@ -193,6 +194,7 @@ public final class InvocationStubManager {
 			}
 			if (OSUtils.getInstance().isAndroidQ()) {
 				addInjector(new ActivityTaskManagerStub());
+				addInjector(new DeviceIdentifiersPolicyStub());
 			}
 			if(OSUtils.getInstance().isAndroidS())
 			{

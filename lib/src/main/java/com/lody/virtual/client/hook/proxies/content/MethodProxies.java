@@ -1,17 +1,24 @@
 package com.lody.virtual.client.hook.proxies.content;
 
 import android.content.pm.ApplicationInfo;
+import android.database.IContentObserver;
+import android.net.Uri;
 import android.os.Build;
 
 import com.lody.virtual.client.VClientImpl;
 import com.lody.virtual.client.hook.base.MethodProxy;
 import com.lody.virtual.client.hook.base.ReplaceLastUidMethodProxy;
+import com.lody.virtual.client.ipc.VPackageManager;
 import com.lody.virtual.helper.utils.OSUtils;
-import com.lody.virtual.helper.utils.VLog;
+import com.lody.virtual.os.VUserHandle;
+import com.lody.virtual.server.content.VContentService;
 
 import java.lang.reflect.Method;
 
-
+/*
+ * @author: 0xF
+ * www.die.lu
+ */
 class MethodProxies {
 
     static class NotifyChange extends MethodProxy {
@@ -85,6 +92,31 @@ class MethodProxies {
         }
     }
 
+    public static class UnregisterContentObserver extends MethodProxy
+    {
+        @Override
+        public String getMethodName()
+        {
+            return "unregisterContentObserver";
+        }
+
+        @Override
+        public Object call(Object who, Method method, Object... args) throws Throwable
+        {
+            if(args==null||args.length==0)return null;
+            IContentObserver observer = (IContentObserver) args[0];
+            if(observer==null)return null;
+            VContentService.get().unregisterContentObserver(observer);
+            try{
+                return super.call(who, method, args);
+            }catch (Exception e)
+            {
+                e.printStackTrace();
+                if(!(e.getCause() instanceof SecurityException))throw e;
+            }
+            return null;
+        }
+    }
 
     static class RegisterContentObserver extends ReplaceLastUidMethodProxy {
         private static final String TAG = RegisterContentObserver.class.getSimpleName();
@@ -100,12 +132,28 @@ class MethodProxies {
 
         @Override
         public Object call(Object who, Method method, Object... args) throws Throwable {
-            try {
-                return super.call(who, method, args);
-            } catch (Throwable se) {
-                VLog.e(TAG,"Fuck! registerContentObserver with fatal exception "+se.getMessage());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                if (args.length >= 5) {
+                    args[4] = Build.VERSION_CODES.LOLLIPOP_MR1;
+                }
             }
-            return 0;
+            Uri uri = (Uri) args[0];
+            boolean notifyForDescendents = (boolean) args[1];
+            IContentObserver observer = (IContentObserver) args[2];
+            if (VPackageManager.get().resolveContentProvider(uri.getAuthority(),
+                    0, VUserHandle.myUserId())!=null) {
+                VContentService.get().registerContentObserver(uri, notifyForDescendents, observer);
+                return 0;
+            } else {
+                try{
+                    return super.call(who, method, args);
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                    if(!(e.getCause() instanceof SecurityException))throw e;
+                }
+                return null;
+            }
         }
 
         @Override

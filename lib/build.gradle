@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion "android-S"
+    compileSdkVersion 31
     buildToolsVersion '30.0.3'
 
     defaultConfig {
@@ -53,6 +53,7 @@ gradle.startParameter.getTaskNames().each { task ->
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
     api 'com.trend.lazyinject:lib:3.4.0-beta'
+    implementation 'com.swift.sandhook:nativehook:4.2.1'
     implementation 'me.weishu:free_reflection:3.0.1'
     annotationProcessor 'com.trend.lazyinject:compiler:3.4.0-beta'
 }

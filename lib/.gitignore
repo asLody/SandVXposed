@@ -4,6 +4,8 @@ obj/
 src/main/jni/sk/
 src/main/java/com/swift/
 src/main/java/de/
+src/main/java/com/lody/virtual/client/hook/am/
+src/main/java/com/lody/virtual/client/VClientImpl.java
 libs/
 src/main/jniLibs/arm64-v8a/libepic.so
 src/main/jniLibs/armeabi/libdexposed.so

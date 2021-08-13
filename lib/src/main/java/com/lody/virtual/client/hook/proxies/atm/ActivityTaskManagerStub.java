@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import com.lody.virtual.client.hook.base.BinderInvocationProxy;
 import com.lody.virtual.client.hook.base.Inject;
 import com.lody.virtual.client.hook.base.MethodProxy;
+import com.lody.virtual.client.hook.base.ReplaceCallingPkgMethodProxy;
 import com.lody.virtual.client.hook.base.StaticMethodProxy;
 
 import java.lang.reflect.Method;
@@ -30,5 +31,6 @@ public class ActivityTaskManagerStub extends BinderInvocationProxy {
         super.onBindMethods();
 
         addMethodProxy(new com.lody.virtual.client.hook.proxies.am.MethodProxies.GetContentProvider());
+        addMethodProxy(new ReplaceCallingPkgMethodProxy("getAppTasks"));
     }
 }
