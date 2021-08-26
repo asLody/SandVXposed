@@ -21,11 +21,8 @@ public class ShortcutAppActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
+    private void launchActivityInternal()
     {
-        super.onCreate(savedInstanceState);
-        finish();
         Bundle lpBundle = getIntent().getExtras();
         if(lpBundle!=null)
         {
@@ -50,5 +47,20 @@ public class ShortcutAppActivity extends AppCompatActivity
             }
         }
         launchActivity("com.tencent.mm",0);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        try{
+            launchActivityInternal();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally {
+            finish();
+        }
     }
 }
