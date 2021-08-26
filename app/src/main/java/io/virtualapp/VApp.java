@@ -2,6 +2,7 @@ package io.virtualapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Binder;
 import android.os.Build;
 
 import androidx.multidex.MultiDexApplication;
@@ -34,6 +35,7 @@ public class VApp extends MultiDexApplication {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+        Binder.getCallingUid();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             SandXposed.freeReflection(base);
         }

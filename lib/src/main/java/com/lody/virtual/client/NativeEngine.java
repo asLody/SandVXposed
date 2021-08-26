@@ -305,7 +305,12 @@ public class NativeEngine {
     public static native boolean nativeGetIsX86();
 
     public static int onGetUid(int uid) {
-        return VClientImpl.get().getBaseVUid();
+        try {
+            return VClientImpl.get().getBaseVUid();
+        }catch (Throwable t)
+        {
+            return uid;
+        }
     }
 
     public static native String[] nativeDetectEmulatorAndPass(String[] args, int windowedEmulator);
