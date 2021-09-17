@@ -93,17 +93,26 @@ public class VApp extends MultiDexApplication {
                 virtualCore.setTaskDescriptionDelegate(new MyTaskDescriptionDelegate());
             }
 
+            // 不再添加。
+            //virtualCore.addVisibleOutsidePackage("com.tencent.mobileqq");
+            //virtualCore.addVisibleOutsidePackage("com.tencent.mobileqqi");
+            //virtualCore.addVisibleOutsidePackage("com.tencent.minihd.qq");
+            //virtualCore.addVisibleOutsidePackage("com.tencent.qqlite");
+
             @Override
             public void onServerProcess() {
                 virtualCore.setAppRequestListener(new MyAppRequestListener(VApp.this));
-                virtualCore.addVisibleOutsidePackage("com.tencent.mobileqq");
-                virtualCore.addVisibleOutsidePackage("com.tencent.mobileqqi");
-                virtualCore.addVisibleOutsidePackage("com.tencent.minihd.qq");
-                virtualCore.addVisibleOutsidePackage("com.tencent.qqlite");
+                virtualCore.addVisibleOutsidePackage("com.eg.android.AlipayGphone");
+                virtualCore.addVisibleOutsidePackage("com.alibaba.android.rimet");
+                virtualCore.addVisibleOutsidePackage("com.autonavi.minimap");
                 virtualCore.addVisibleOutsidePackage("com.facebook.katana");
                 virtualCore.addVisibleOutsidePackage("com.whatsapp");
                 virtualCore.addVisibleOutsidePackage("com.tencent.mm");
                 virtualCore.addVisibleOutsidePackage("com.immomo.momo");
+                virtualCore.addVisibleOutsidePackage("com.baidu.BaiduMap");
+                virtualCore.addVisibleOutsidePackage("cn.xuexi.android");
+                virtualCore.addVisibleOutsidePackage("com.taobao.taobao");
+                virtualCore.addVisibleOutsidePackage("com.jingdong.app.mall");
             }
         });
     }
