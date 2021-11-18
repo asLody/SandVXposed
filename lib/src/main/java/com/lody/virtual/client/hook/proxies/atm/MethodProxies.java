@@ -241,7 +241,7 @@ public class MethodProxies {
                     return 0;
                 }
 
-                if(BuildCompat.isS())
+                if(BuildCompat.isR())
                 {
                     MethodParameterUtils.replaceFirstAppPkg(args);
                 }
